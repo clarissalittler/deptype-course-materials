@@ -482,6 +482,112 @@ stack build
 stack test
 ```
 
+## Real-World Connections
+
+Algebraic Data Types (ADTs) are everywhere in modern programming. Understanding ADTs from Chapter 3 helps you recognize and effectively use patterns in Rust, TypeScript, Haskell, Swift, Kotlin, and many other languages.
+
+### Where You've Seen This
+
+#### **Rust (Enums = Sum Types + Product Types)**
+```rust
+// Sum types (enums/variants)
+enum Option<T> {
+    None,              // Unit variant
+    Some(T)            // Product: carries a value
+}
+
+// Pattern matching is native
+match user_id {
+    Some(id) => println!("User: {}", id),
+    None => println!("Not logged in")
+}
+
+// Result type (Either in Haskell)
+enum Result<T, E> {
+    Ok(T),
+    Err(E)
+}
+```
+
+#### **TypeScript (Union Types + Discriminated Unions)**
+```typescript
+// Sum types via union types
+type Option<T> = { kind: 'none' } | { kind: 'some'; value: T };
+
+// Product types (tuples and records)
+type Pair<A, B> = [A, B];
+type User = { name: string; email: string; age: number };
+
+// Pattern matching via discriminated unions
+function unwrap<T>(opt: Option<T>): T | null {
+    switch (opt.kind) {
+        case 'none': return null;
+        case 'some': return opt.value;
+    }
+}
+```
+
+#### **Haskell / OCaml / F# (Native ADTs)**
+```haskell
+-- Sum types (data)
+data Maybe a = Nothing | Just a
+data Either a b = Left a | Right b
+
+-- Product types (tuples and records)
+type Pair a b = (a, b)
+data User = User { name :: String, email :: String }
+
+-- Pattern matching
+case maybeValue of
+    Nothing -> "not found"
+    Just x -> "found: " ++ show x
+```
+
+#### **Swift (Enums with Associated Values)**
+```swift
+// Swift enums are true sum types
+enum Option<T> {
+    case none
+    case some(T)
+}
+
+// Pattern matching with switch
+switch result {
+case .success(let value):
+    print("Success: \(value)")
+case .failure(let error):
+    print("Error: \(error)")
+}
+```
+
+### Problems ADTs Solve
+
+| Problem | Without ADTs | With ADTs |
+|---------|--------------|-----------|
+| **Null safety** | `null` can appear anywhere → NPE | `Option<T>` makes absence explicit |
+| **Error handling** | Exceptions, error codes | `Result<T, E>` type-safe errors |
+| **State machines** | Booleans, magic numbers | Variants represent states |
+| **Heterogeneous collections** | `Object[]`, type casts | Sum types with type safety |
+
+### Key Concept Mappings
+
+| Chapter 3 Concept | Real-World Feature |
+|-------------------|-------------------|
+| **Product types** `τ₁ × τ₂` | Tuples, structs, classes |
+| **Sum types** `τ₁ + τ₂` | Enums, unions, Either |
+| **Records** `{x: τ₁, y: τ₂}` | Objects, structs with named fields |
+| **Variants** `<left: τ₁, right: τ₂>` | Tagged unions, discriminated unions |
+| **Lists** | Arrays, vectors, linked lists |
+| **Pattern matching** | `switch`, `match`, destructuring |
+
+### Why ADTs Matter
+
+1. **Type Safety**: Compiler catches missing cases
+2. **Documentation**: Types describe data structure precisely
+3. **Refactoring**: Change data type → compiler finds all affected code
+4. **No Null**: Option/Maybe replaces null
+5. **No Exceptions**: Result/Either for type-safe errors
+
 ## References
 
 ### Essential Reading

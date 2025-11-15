@@ -296,6 +296,96 @@ let Right term = parseTerm "(/\\A. \\x:A. x) [Bool] true"
 eval term  -- → TmTrue
 ```
 
+## Real-World Connections
+
+System F's explicit polymorphism influences generics in Java, C#, TypeScript, and Rust. While no mainstream language implements pure System F, its ideas are everywhere.
+
+### Where You've Seen This
+
+#### **Java Generics**
+```java
+// Explicit type parameters (like System F type abstraction)
+public <T> T identity(T x) { return x; }     // ΛT. λx:T. x
+
+// Type application at call site
+String s = identity<String>("hello");        // (Not required, inferred)
+Integer n = identity<Integer>(42);
+```
+
+#### **C# Generics**
+```csharp
+// Similar to System F
+public T Identity<T>(T x) => x;              // ΛT. λx:T. x
+
+// Constraints (bounded quantification)
+public T Max<T>(T a, T b) where T : IComparable<T>
+```
+
+#### **TypeScript**
+```typescript
+// Explicit type parameters
+function identity<T>(x: T): T { return x; }  // ΛT. λx:T. x
+
+// Type application
+const n = identity<number>(5);               // identity [number] 5
+```
+
+#### **Rust**
+```rust
+// Explicit generics
+fn identity<T>(x: T) -> T { x }              // ΛT. λx:T. x
+
+// Trait bounds (type classes)
+fn max<T: Ord>(a: T, b: T) -> T { ... }
+```
+
+### Church Encodings in Practice
+
+**System F theory** influences how we think about data:
+
+```typescript
+// Option type (Church-encoded)
+type Option<T> = <R>(none: R, some: (x: T) => R) => R;
+
+const none = <T>(): Option<T> =>
+  <R>(n: R, s: (x: T) => R) => n;
+
+const some = <T>(x: T): Option<T> =>
+  <R>(n: R, s: (x: T) => R) => s(x);
+```
+
+### Parametricity in Real Languages
+
+**Free theorems** guide API design:
+
+```typescript
+// f : <T>(xs: T[]) => T[]
+// By parametricity: f can only rearrange/duplicate/drop elements!
+// Cannot: modify elements, inspect values
+
+// Examples:
+reverse    // ✓ Valid
+filter     // ✗ Needs predicate
+map        // ✗ Needs function
+```
+
+### Key Concept Mappings
+
+| System F Concept | Real-World Feature |
+|------------------|-------------------|
+| **Type abstraction** `ΛT. t` | Generic methods `<T>` |
+| **Type application** `t [τ]` | Type parameters (often inferred) |
+| **Parametricity** | Generic constraints, free theorems |
+| **Church encoding** | Visitor pattern, fold |
+| **Existentials** | Abstract types, interfaces |
+
+### Why System F Matters
+
+1. **Generics**: Foundation for Java/C#/TypeScript generics
+2. **Type safety**: Parametricity prevents bugs
+3. **Abstraction**: Existentials enable data hiding
+4. **Theory**: Understanding limits of type systems
+
 ## References
 
 ### Foundational Papers

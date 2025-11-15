@@ -283,6 +283,93 @@ generalize env ty =
   in TypeScheme vars ty
 ```
 
+## Real-World Connections
+
+Hindley-Milner type inference is the secret sauce behind ML, OCaml, Haskell, Rust, and F#. It's why these languages feel magical—you write code without type annotations, yet get complete type safety.
+
+### Where You've Seen This
+
+#### **Haskell**
+```haskell
+-- No type annotations needed!
+identity x = x                  -- Inferred: a -> a
+compose f g x = f (g x)         -- Inferred: (b -> c) -> (a -> b) -> a -> c
+
+-- Let-polymorphism in action
+let id = \x -> x in (id 5, id True)  -- Works! id is polymorphic
+```
+
+#### **OCaml / F#**
+```ocaml
+(* Type inference everywhere *)
+let identity x = x;;            (* val identity : 'a -> 'a *)
+let map f lst = ...;;           (* val map : ('a -> 'b) -> 'a list -> 'b list *)
+
+(* Polymorphic let *)
+let id = fun x -> x in (id 5, id true)  (* ✓ Works *)
+```
+
+#### **Rust**
+```rust
+// Type inference for local variables
+let x = 5;                      // i32 inferred
+let v = vec![1, 2, 3];         // Vec<i32> inferred
+
+// Generic functions with inference
+fn identity<T>(x: T) -> T { x }
+let y = identity(5);            // T = i32 inferred
+```
+
+#### **TypeScript (Limited HM)**
+```typescript
+// Partial type inference
+const identity = <T>(x: T) => x;     // Generic parameter needed
+const x = identity(5);               // T = number inferred from usage
+
+// But can't infer generic parameters themselves
+const map = (f, arr) => arr.map(f);  // Types too general without annotations
+```
+
+### The Magic: Let-Polymorphism
+
+#### **Works in HM:**
+```ocaml
+let id = fun x -> x in
+  (id 5, id true)               (* ✓ id : ∀a. a → a *)
+```
+
+#### **Doesn't work in STLC:**
+```
+(λid. (id 5, id true)) (λx. x)  (* ✗ Type error! *)
+```
+
+**Why?** Let generalizes, lambda doesn't!
+
+### Key Concept Mappings
+
+| HM Concept | Real-World Feature |
+|------------|-------------------|
+| **Type inference** | No annotations in Haskell/OCaml |
+| **Let-polymorphism** | Polymorphic let bindings |
+| **Unification** | Type checking algorithm |
+| **Principal types** | Most general type inferred |
+| **Occurs check** | Prevents infinite types |
+
+### Algorithm W in Practice
+
+Most ML-family compilers use variants of Algorithm W:
+- **OCaml**: Classic Algorithm W with extensions
+- **Haskell**: Algorithm W + type classes + extensions
+- **Rust**: Local type inference (not full HM)
+- **F#**: Algorithm W on .NET
+
+### Why HM Matters
+
+1. **Productivity**: Write less, get same safety
+2. **Refactoring**: Change signature → errors show where to update
+3. **Documentation**: Inferred types are documentation
+4. **Generics for free**: No manual type parameters
+
 ## References
 
 ### Essential Reading
