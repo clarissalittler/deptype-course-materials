@@ -526,6 +526,83 @@ See [EXERCISES.md](exercises/EXERCISES.md) for detailed exercises including:
 
 Complete solutions in [exercises/Solutions.hs](exercises/Solutions.hs).
 
+## Real-World Connections
+
+Dependent types allow types to depend on values, enabling powerful compile-time guarantees. Languages like Idris, Agda, Coq, Lean, and F* use dependent types for verified programming.
+
+### Where You've Seen This
+
+#### **Idris (Practical Dependent Types)**
+```idris
+-- Vector: length is part of the type!
+data Vect : Nat -> Type -> Type where
+  Nil  : Vect Z a
+  (::) : a -> Vect n a -> Vect (S n) a
+
+-- Type-safe head (no runtime check needed!)
+head : Vect (S n) a -> a
+head (x :: xs) = x
+-- head Nil is a TYPE ERROR (can't happen!)
+
+-- Append preserves length in types
+append : Vect n a -> Vect m a -> Vect (n + m) a
+```
+
+#### **Agda (Research Language)**
+```agda
+-- Dependent pairs (Σ types)
+data Σ (A : Set) (B : A → Set) : Set where
+  _,_ : (x : A) → B x → Σ A B
+
+-- Proofs are programs
++-comm : (m n : ℕ) → m + n ≡ n + m
+```
+
+#### **Coq (Proof Assistant)**
+```coq
+(* Verified sorting *)
+Fixpoint insert (x : nat) (l : list nat) : list nat :=
+  match l with
+  | nil => x :: nil
+  | h :: t => if x <=? h then x :: l else h :: insert x t
+  end.
+
+Theorem insert_sorted : forall x l,
+  sorted l -> sorted (insert x l).
+```
+
+#### **Rust (Limited Dependent Types via Const Generics)**
+```rust
+// Array length in type (const generics)
+struct Array<T, const N: usize> {
+    data: [T; N]
+}
+
+// Type-level arithmetic coming to Rust
+fn concat<T, const N: usize, const M: usize>(
+    a: Array<T, N>,
+    b: Array<T, M>
+) -> Array<T, {N + M}> {
+    // Type system knows result length!
+}
+```
+
+### Key Concepts
+
+| Dependent Types Feature | Real-World Use |
+|------------------------|----------------|
+| **Vec n a** | Arrays with compile-time length checking |
+| **Π types** | Functions where return type depends on argument value |
+| **Σ types** | Pairs where second component's type depends on first |
+| **Proofs as programs** | Verified software (CompCert C compiler) |
+
+### Why Dependent Types Matter
+
+1. **Correctness**: Prove properties at compile time
+2. **No Runtime Checks**: Type system guarantees safety
+3. **Verified Software**: CompCert, seL4 microkernel
+4. **Mathematics**: Formalize proofs (Coq, Agda, Lean)
+
 ## References
 
 ### Foundational Papers

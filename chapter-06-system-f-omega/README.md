@@ -403,6 +403,62 @@ See [EXERCISES.md](exercises/EXERCISES.md) for detailed exercises including:
 
 Complete solutions in [exercises/Solutions.hs](exercises/Solutions.hs).
 
+## Real-World Connections
+
+System F-omega's higher-kinded types are the foundation for Haskell's type classes, Scala's type system, and advanced TypeScript features.
+
+### Where You've Seen This
+
+#### **Haskell (Native Higher-Kinded Types)**
+```haskell
+-- Type classes abstract over type constructors
+class Functor (f :: * -> *) where
+  fmap :: (a -> b) -> f a -> f b
+
+-- f has kind * -> *, not kind *
+instance Functor [] where
+  fmap = map
+
+instance Functor Maybe where
+  fmap = ...
+```
+
+#### **Scala (Higher-Kinded Types)**
+```scala
+// F[_] means F has kind * -> *
+trait Functor[F[_]] {
+  def map[A, B](fa: F[A])(f: A => B): F[B]
+}
+
+// Concrete instances
+implicit val listFunctor: Functor[List] = ...
+implicit val optionFunctor: Functor[Option] = ...
+```
+
+#### **TypeScript (Limited Support)**
+```typescript
+// TypeScript doesn't have true higher-kinded types
+// But conditional types provide some power
+type ReturnType<T extends (...args: any) => any> =
+  T extends (...args: any) => infer R ? R : any;
+```
+
+### Key Concepts
+
+| F-omega | Haskell | Scala | Real Impact |
+|---------|---------|-------|-------------|
+| Kind `*` | Proper types | Regular types | `Int`, `String` |
+| Kind `* → *` | Type constructors | `F[_]` | `List`, `Maybe`, `Option` |
+| Type-level λ | Type families | Type lambdas | Generic abstractions |
+| Kinding | Kind checking | Kind inference | Type safety at type level |
+
+### Why F-omega Matters
+
+1. **Type Classes**: Haskell's Functor, Monad, etc.
+2. **Generic Collections**: Abstract over `List`, `Option`, `Either`
+3. **Type-Safe APIs**: Enforce correct usage at compile time
+4. **Category Theory**: Proper encoding of functors, monads
+
 ## References
 
 ### Foundational Papers

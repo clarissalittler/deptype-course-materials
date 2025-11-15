@@ -960,6 +960,94 @@ id0 : Π(A:Type 0). A → A
 id1 : Π(A:Type 1). A → A
 ```
 
+## Real-World Connections
+
+Full dependent types with universe hierarchy form the foundation of modern proof assistants and verified programming systems.
+
+### Where You've Seen This
+
+#### **Coq (Most Widely Used)**
+```coq
+(* Universe hierarchy prevents paradoxes *)
+Type 0 : Type 1 : Type 2 : ...
+
+(* Verified software *)
+- CompCert: Verified C compiler
+- Fiat-Crypto: Verified cryptography
+- Mathematical proofs: Four Color Theorem
+```
+
+#### **Agda (Research & Education)**
+```agda
+-- Equality types with J eliminator
+data _≡_ {A : Set} (x : A) : A → Set where
+  refl : x ≡ x
+
+-- Proofs using equality
+sym : {A : Set} {x y : A} → x ≡ y → y ≡ x
+sym refl = refl
+```
+
+#### **Lean (Modern Proof Assistant)**
+```lean
+-- Mathematical proofs
+theorem add_comm (m n : ℕ) : m + n = n + m :=
+  nat.rec_on n
+    (show m + 0 = 0 + m, from ...)
+    (λ n ih, show m + succ n = succ n + m, from ...)
+
+-- Used to prove theorems in mathlib
+```
+
+#### **F* (Verification-Oriented)**
+```fstar
+// Verified cryptographic code
+val aes_encrypt : key:bytes{length key = 16} ->
+                  plaintext:bytes{length plaintext = 16} ->
+                  Tot (ciphertext:bytes{length ciphertext = 16})
+```
+
+### Real-World Impact
+
+| Project | Language | Achievement |
+|---------|----------|-------------|
+| **CompCert** | Coq | Verified C compiler |
+| **seL4** | Isabelle/HOL | Verified microkernel |
+| **Fiat-Crypto** | Coq | Verified cryptography |
+| **mathlib** | Lean | Digital mathematics library |
+| **HACL*** | F* | Verified crypto (used in Firefox) |
+
+### Key Features
+
+| Feature | Purpose | Example |
+|---------|---------|---------|
+| **Universe hierarchy** | Avoid paradoxes | `Type 0 : Type 1 : ...` |
+| **Equality types** | Propositional equality | `x ≡ y` |
+| **Inductive families** | Indexed types | `Vec n a`, `Fin n` |
+| **Eliminators** | Induction principles | `natElim`, `vecElim` |
+
+### Why Full Dependent Types Matter
+
+1. **Verified Software**: Prove correctness, not just test
+2. **Mathematics**: Digital libraries of proven theorems
+3. **Security**: Verified cryptography (HACL*, Fiat-Crypto)
+4. **Safety-Critical**: seL4 microkernel in autonomous vehicles
+5. **Research**: Foundation for next-generation languages
+
+### The Curry-Howard Correspondence
+
+**Programs are proofs, types are propositions:**
+
+| Logic | Type Theory |
+|-------|-------------|
+| Proposition P | Type τ |
+| Proof of P | Term t : τ |
+| P → Q | Function type τ₁ → τ₂ |
+| P ∧ Q | Product type τ₁ × τ₂ |
+| P ∨ Q | Sum type τ₁ + τ₂ |
+| ∀x. P(x) | Π type Π(x:A). B |
+| ∃x. P(x) | Σ type Σ(x:A). B |
+
 ## References
 
 ### Foundational Papers
