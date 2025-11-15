@@ -1,5 +1,22 @@
 {-# LANGUAGE LambdaCase #-}
 
+{-|
+Module: Solutions
+Description: Complete solutions for Chapter 2 exercises with detailed commentary
+
+This module provides reference implementations for all exercises in Chapter 2.
+Each solution includes:
+- Detailed explanation of the approach
+- Common pitfalls to avoid
+- Examples of usage
+- Type information
+
+IMPORTANT NOTE ON SYNTAX LIMITATIONS:
+Some exercises (product types, sum types, fix) require syntax extensions
+that are not present in the base STLC implementation. These are documented
+with implementation strategies for when you extend the language.
+-}
+
 module Solutions where
 
 import Syntax
@@ -8,12 +25,28 @@ import Eval
 import qualified Data.Map as Map
 
 -- =============================================================================
--- Helper: Create natural number from Int
+-- Helper Functions
 -- =============================================================================
 
+-- | Convert an Int to the Term representation of a natural number
+--
+-- Example:
+--   natFromInt 3 = TmSucc (TmSucc (TmSucc TmZero))
+--
+-- This is a meta-level function (Haskell function) that constructs
+-- object-level terms (STLC terms).
 natFromInt :: Int -> Term
 natFromInt 0 = TmZero
 natFromInt n = TmSucc (natFromInt (n - 1))
+
+-- | Convert a Term back to an Int (if it represents a nat)
+--
+-- Returns Nothing if the term isn't a nat literal.
+-- Useful for testing and displaying results.
+termToInt :: Term -> Maybe Int
+termToInt TmZero = Just 0
+termToInt (TmSucc t) = fmap (+1) (termToInt t)
+termToInt _ = Nothing
 
 -- =============================================================================
 -- Exercise 1: Arithmetic Operations (Easy)
@@ -142,30 +175,116 @@ absDiff = Lam "m" TyNat $ Lam "n" TyNat $
     subNat x y = TmIf (TmIsZero y) x (subNat (TmPred x) (TmPred y))
 
 -- =============================================================================
--- Exercise 5: Let Bindings as Syntactic Sugar (Medium)
+-- Exercise 4: Let Bindings as Syntactic Sugar (Medium)
 -- =============================================================================
 
--- Exercise 5a: Simple let desugaring
--- let x = t1 in t2  ≡  (λx:τ. t2) t1
+{-| Exercise 4: Let Bindings
+
+KEY INSIGHT: In STLC, let bindings are just syntactic sugar!
+
+Desugaring:
+  let x = t₁ in t₂  ≡  (λx:τ. t₂) t₁
+
+where τ is the type of t₁.
+
+WHY THIS WORKS:
+1. (λx:τ. t₂) is a function that takes x and returns t₂
+2. Applying it to t₁ substitutes t₁ for x in t₂
+3. This is exactly what let binding does!
+
+IMPORTANT: In Hindley-Milner (Chapter 4), let will be special because
+it allows polymorphism. But in STLC, it's just sugar.
+
+EXAMPLE:
+  let x = 5 in x + x
+  becomes:
+  (λx:Nat. x + x) 5
+  evaluates to:
+  5 + 5
+
+COMMON PITFALL: Forgetting the type annotation on the lambda.
+✗ (λx. t₂) t₁        -- Missing type!
+✓ (λx:τ. t₂) t₁      -- Correct
+-}
+
+-- | Desugar let binding to lambda application
+--
+-- Arguments:
+--   x: variable name
+--   t1: value to bind
+--   ty: type of t1
+--   t2: body where x is in scope
+--
+-- Returns: (λx:ty. t2) t1
 desugarLet :: Var -> Term -> Type -> Term -> Term
 desugarLet x t1 ty t2 = App (Lam x ty t2) t1
 
--- Exercise 5b: Example using let
--- let x = 2 in let y = 3 in add x y
+-- | Example: let x = 2 in let y = 3 in add x y
+--
+-- Step-by-step desugaring:
+--   let x = 2 in (let y = 3 in add x y)
+--   = (λx:Nat. let y = 3 in add x y) 2
+--   = (λx:Nat. (λy:Nat. add x y) 3) 2
+--
+-- Evaluation:
+--   → (λy:Nat. add 2 y) 3
+--   → add 2 3
+--   → 5
 exampleLet :: Term
 exampleLet =
   desugarLet "x" (natFromInt 2) TyNat $
   desugarLet "y" (natFromInt 3) TyNat $
   addNat (Var "x") (Var "y")
 
--- Exercise 5c: Multiple bindings
+-- | Multiple nested let bindings
+--
 -- let x = 3 in let y = 4 in let z = 5 in add x (add y z)
+--
+-- This demonstrates that let bindings compose naturally.
+-- Each inner let can refer to variables from outer lets.
 exampleLetMultiple :: Term
 exampleLetMultiple =
   desugarLet "x" (natFromInt 3) TyNat $
   desugarLet "y" (natFromInt 4) TyNat $
   desugarLet "z" (natFromInt 5) TyNat $
   addNat (Var "x") (addNat (Var "y") (Var "z"))
+
+-- | Demonstrate that let is call-by-value (argument is evaluated first)
+--
+-- let x = (succ 2) in (succ x)
+--
+-- Evaluation:
+--   (λx:Nat. succ x) (succ 2)
+--   First evaluate argument: succ 2 → 3
+--   Then substitute: (λx:Nat. succ x) 3
+--   Then beta reduce: succ 3
+--   Result: 4
+exampleLetEvaluation :: Term
+exampleLetEvaluation =
+  desugarLet "x" (TmSucc (natFromInt 2)) TyNat $
+  TmSucc (Var "x")
+
+-- | Let with boolean computation
+--
+-- let b = (3 == 3) in if b then 1 else 0
+exampleLetBool :: Term
+exampleLetBool =
+  desugarLet "b" (eqNat (natFromInt 3) (natFromInt 3)) TyBool $
+  TmIf (Var "b") (natFromInt 1) TmZero
+
+{- EXERCISE: Try implementing these yourself!
+
+1. let f = (λx:Nat. succ x) in f 5
+
+2. let compose = (λf:Nat→Nat. λg:Nat→Nat. λx:Nat. f (g x))
+   in let succ2 = (λx:Nat. succ (succ x))
+   in (compose succ2 succ2) 0
+
+3. let double = (λx:Nat. add x x)
+   in double (double 3)
+
+HINT: Use desugarLet and the helper functions from Exercise 1-3.
+-}
 
 -- =============================================================================
 -- Exercise 6: Type Safety Demonstrations (Hard)
