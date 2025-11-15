@@ -28,6 +28,17 @@ library:
   - src
   - exercises
 
+executables:
+  untyped-lambda-repl:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - untyped-lambda
+
 tests:
   untyped-lambda-test:
     main: Spec.hs

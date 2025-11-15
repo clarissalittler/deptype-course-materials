@@ -38,6 +38,23 @@ library
     , text
   default-language: Haskell2010
 
+executable untyped-lambda-repl
+  main-is: Main.hs
+  other-modules:
+      REPL
+      Paths_untyped_lambda
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , megaparsec >=9.0
+    , parser-combinators
+    , text
+    , untyped-lambda
+  default-language: Haskell2010
+
 test-suite untyped-lambda-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
