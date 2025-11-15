@@ -350,6 +350,109 @@ putStrLn $ pretty result ++ " : " ++ prettyType ty
 | Decidable Type Checking | ✓ |
 | Turing Complete | ✗ |
 
+## Real-World Connections
+
+The Simply Typed Lambda Calculus (STLC) is not just theory—it's the foundation of type systems in mainstream programming languages. Understanding STLC helps you grasp why types work the way they do in TypeScript, Java, C++, Go, and many other languages.
+
+### Where You've Seen This
+
+#### **TypeScript**
+```typescript
+// STLC-style function types
+function identity<T>(x: T): T { return x; }     // Close to λx:τ. x : τ → τ
+
+// Type annotations are exactly like STLC
+const add: (x: number) => (y: number) => number =
+    x => y => x + y;                             // λx:Nat. λy:Nat. x + y
+
+// Type errors caught at compile time!
+const wrong: number = "hello";  // ✗ Type error: string ≠ number
+```
+
+#### **Java**
+```java
+// Static typing is STLC
+public Integer identity(Integer x) {              // λx:Int. x : Int → Int
+    return x;
+}
+
+// Generic types (Chapter 5 extends this)
+public <T> T identity(T x) {                     // λx:α. x : α → α (polymorphic!)
+    return x;
+}
+
+// Type safety
+String x = 5;  // ✗ Compile error: incompatible types
+```
+
+#### **Rust**
+```rust
+// Strong static types with inference
+fn identity<T>(x: T) -> T { x }                  // Type annotations + inference
+
+// Ownership types extend STLC
+fn take_ownership(x: String) -> String { x }     // Linear types!
+
+// Type errors prevent common bugs
+let x: i32 = "hello";  // ✗ Compile error
+```
+
+### Concepts in Action
+
+| STLC Concept | Modern Programming Feature |
+|--------------|----------------------------|
+| **Type annotations** | `x: int`, `: string`, `<T>` in TypeScript/Java/C++ |
+| **Type checking** | Compile-time error detection |
+| **Type safety** | No `undefined is not a function` in typed code |
+| **Progress** | Well-typed programs don't get stuck |
+| **Preservation** | Types don't change during evaluation |
+| **Arrow types** | Function signatures `Int -> String` |
+| **Strong normalization** | All programs terminate (not in real languages!) |
+
+### What Problems Does This Solve?
+
+#### **Problem 1: Runtime Type Errors**
+
+**JavaScript (untyped):**
+```javascript
+function add(x, y) { return x + y; }
+add(5, "hello");  // "5hello" (silently wrong!)
+add(5, null);     // 5 (wat?)
+
+// Worse: errors show up far from the source
+function process(data) {
+    return data.toUpperCase();
+}
+process(5);  // ✗ Runtime error: undefined is not a function
+```
+
+**TypeScript (STLC-based):**
+```typescript
+function add(x: number, y: number): number {
+    return x + y;
+}
+add(5, "hello");  // ✗ Compile error: string is not assignable to number
+```
+
+### Historical Impact
+
+STLC laid the foundation for modern type systems:
+
+1. **ML (1973)**: First real language directly based on typed lambda calculus
+2. **Java (1995)**: Brought static typing to mainstream
+3. **TypeScript (2012)**: Added types to JavaScript
+4. **Rust (2015)**: STLC + ownership types
+5. **Modern era**: All languages now include STLC-style type checking
+
+### Limitations of STLC (Fixed in Later Chapters)
+
+| Limitation | Real-World Problem | Solution |
+|------------|-------------------|----------|
+| **No polymorphism** | Can't write generic `identity` | System F (Ch 5), Generics |
+| **No type inference** | Verbose annotations everywhere | Hindley-Milner (Ch 4) |
+| **No data structures** | Can't express Option, List naturally | ADTs (Ch 3) |
+| **All programs terminate** | Can't write servers, loops | Remove strong normalization |
+
 ## References
 
 ### Essential Reading
