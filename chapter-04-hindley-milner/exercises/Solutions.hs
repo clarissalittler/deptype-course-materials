@@ -1,5 +1,48 @@
 {-# LANGUAGE LambdaCase #-}
 
+{-|
+Module: Solutions
+Description: Complete solutions for Chapter 4 exercises with detailed commentary
+
+This module provides reference implementations for all exercises in Chapter 4.
+Chapter 4 introduces Hindley-Milner type inference with let-polymorphism:
+
+- Automatic type inference (Algorithm W)
+- Let-polymorphism (∀α. τ)
+- Type schemes vs simple types
+- Unification with occurs check
+- Generalization and instantiation
+
+KEY DIFFERENCE FROM STLC:
+In STLC, you must write type annotations everywhere.
+In Hindley-Milner, the type checker INFERS types automatically!
+
+KEY DIFFERENCE FROM LAMBDA:
+  let id = λx. x in (id 0, id true)  ✓ Types correctly!
+  (λid. (id 0, id true)) (λx. x)     ✗ Type error!
+
+This is because LET-BINDINGS generalize to type schemes (∀α. τ),
+while LAMBDA-BINDINGS remain monomorphic (τ).
+
+MAJOR LEARNING OBJECTIVES:
+1. Understanding automatic type inference
+2. Recognizing when let-polymorphism applies
+3. Implementing polymorphic list operations
+4. Understanding the limitations of rank-1 polymorphism
+5. Seeing how unification works
+
+COMMON PATTERNS:
+- No type annotations needed on lambdas!
+- Let-bindings create polymorphic values
+- Lambda-bindings create monomorphic values
+- Type inference propagates constraints bidirectionally
+
+LIMITATIONS:
+- Cannot express rank-n types ((∀α. α → α) → Int)
+- Cannot have polymorphic function arguments
+- Type schemes only at top level (prenex polymorphism)
+-}
+
 module Solutions where
 
 import Syntax

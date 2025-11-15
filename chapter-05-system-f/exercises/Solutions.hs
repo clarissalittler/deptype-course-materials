@@ -1,5 +1,56 @@
 {-# LANGUAGE LambdaCase #-}
 
+{-|
+Module: Solutions
+Description: Complete solutions for Chapter 5 exercises with detailed commentary
+
+This module provides reference implementations for all exercises in Chapter 5.
+Chapter 5 introduces System F (polymorphic lambda calculus) with:
+
+- Explicit type abstraction (ΛA. t)
+- Explicit type application (t [τ])
+- Impredicative polymorphism
+- Church encodings for data types
+- Existential types via encoding
+- Parametricity and free theorems
+
+KEY DIFFERENCES FROM HINDLEY-MILNER:
+- Type inference is UNDECIDABLE (must provide annotations)
+- Type application is EXPLICIT (must write [τ])
+- More expressive (rank-n types, impredicativity)
+- Can encode data types as functions (Church encoding)
+
+KEY DIFFERENCES FROM STLC:
+- Polymorphic types (∀α. τ)
+- Type-level computation
+- Self-application of polymorphic functions
+- Abstract data types via existentials
+
+MAJOR LEARNING OBJECTIVES:
+1. Church encodings at the type level
+2. Explicit type abstraction/application
+3. Understanding parametricity
+4. Encoding existential types
+5. Recognizing limitations (no type inference, no recursive types)
+6. Free theorems from types
+
+COMMON PATTERNS:
+- Type abstraction before term abstraction: ΛA. λx:A. ...
+- Type application before term application: f [Nat] 0
+- Church encoding: data type = its eliminator
+- Existential encoding: ∃α. τ ≡ ∀R. (∀α. τ → R) → R
+
+PARAMETRICITY EXAMPLES:
+- f : ∀α. α → α  MUST be identity
+- f : ∀α. List α → List α  can only rearrange/duplicate/drop
+- Cannot implement: ∀α. α → α → Bool (generic equality)
+- Cannot implement: type case, runtime type inspection
+
+IMPREDICATIVITY:
+System F allows ∀α. τ to range over ALL types, including ∀β. β → β.
+This enables self-application: id [∀A. A → A] id
+-}
+
 module Solutions where
 
 import Syntax

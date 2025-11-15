@@ -1,5 +1,34 @@
 {-# LANGUAGE LambdaCase #-}
 
+{-|
+Module: Solutions
+Description: Complete solutions for Chapter 3 exercises with detailed commentary
+
+This module provides reference implementations for all exercises in Chapter 3.
+Chapter 3 builds on STLC with full support for Algebraic Data Types:
+
+- Product types (pairs, tuples)
+- Sum types (disjoint unions)
+- Records (named products)
+- Variants (named sums)
+- Lists (recursive data structures)
+- Pattern matching
+
+All exercises can be fully implemented because ADTs are built into the syntax!
+
+KEY LEARNING OBJECTIVES:
+1. Working with structured data in typed settings
+2. Pattern matching for decomposing data
+3. Recursive operations on inductivedata structures
+4. Type-safe data manipulation
+
+COMMON PATTERNS:
+- Lists: Use PatNil and PatCons for matching
+- Trees: Use variants with leaf/node constructors
+- Options: Encode as Unit + τ
+- Pattern matching: TmMatch for general, TmCaseVariant for variants
+-}
+
 module Solutions where
 
 import Syntax
@@ -9,12 +38,19 @@ import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 
 -- =============================================================================
--- Helper: Create natural number from Int
+-- Helper Functions
 -- =============================================================================
 
+-- | Convert Int to natural number Term
 natFromInt :: Int -> Term
 natFromInt 0 = TmZero
 natFromInt n = TmSucc (natFromInt (n - 1))
+
+-- | Convert Term back to Int
+termToInt :: Term -> Maybe Int
+termToInt TmZero = Just 0
+termToInt (TmSucc t) = fmap (+1) (termToInt t)
+termToInt _ = Nothing
 
 -- =============================================================================
 -- Exercise 1: List Operations (Easy)
