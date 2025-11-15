@@ -29,6 +29,17 @@ library:
   - src
   - exercises
 
+executables:
+  stlc-adt-repl:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - stlc-adt
+
 tests:
   stlc-adt-test:
     main: Spec.hs

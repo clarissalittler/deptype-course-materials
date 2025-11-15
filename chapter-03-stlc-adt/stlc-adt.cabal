@@ -24,6 +24,7 @@ library
       Pretty
       Syntax
       TypeCheck
+      Hints
       Solutions
   other-modules:
       Paths_stlc_adt
@@ -37,6 +38,24 @@ library
     , megaparsec >=9.0
     , mtl
     , parser-combinators
+    , text
+  default-language: Haskell2010
+
+executable stlc-adt-repl
+  main-is: Main.hs
+  other-modules:
+      REPL
+      Paths_stlc_adt
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , megaparsec >=9.0
+    , mtl
+    , parser-combinators
+    , stlc-adt
     , text
   default-language: Haskell2010
 
