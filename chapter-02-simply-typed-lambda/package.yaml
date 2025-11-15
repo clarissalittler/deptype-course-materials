@@ -29,6 +29,17 @@ library:
   - src
   - exercises
 
+executables:
+  simply-typed-lambda-repl:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - simply-typed-lambda
+
 tests:
   simply-typed-lambda-test:
     main: Spec.hs
