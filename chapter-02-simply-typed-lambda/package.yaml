@@ -1,0 +1,42 @@
+name: simply-typed-lambda
+version: 0.1.0.0
+github: "yourusername/simply-typed-lambda"
+license: BSD3
+author: "Your Name"
+maintainer: "example@example.com"
+
+dependencies:
+- base >= 4.7 && < 5
+- containers
+- megaparsec >= 9.0
+- parser-combinators
+- text
+- mtl
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs:
+  - src
+  - exercises
+
+tests:
+  simply-typed-lambda-test:
+    main: Spec.hs
+    source-dirs: test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - simply-typed-lambda
+    - hspec

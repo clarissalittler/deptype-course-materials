@@ -1,0 +1,59 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.37.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           untyped-lambda
+version:        0.1.0.0
+homepage:       https://github.com/yourusername/untyped-lambda#readme
+bug-reports:    https://github.com/yourusername/untyped-lambda/issues
+author:         Your Name
+maintainer:     example@example.com
+license:        BSD3
+build-type:     Simple
+
+source-repository head
+  type: git
+  location: https://github.com/yourusername/untyped-lambda
+
+library
+  exposed-modules:
+      Eval
+      Parser
+      Pretty
+      Syntax
+      Solutions
+  other-modules:
+      Paths_untyped_lambda
+  hs-source-dirs:
+      src
+      exercises
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , megaparsec >=9.0
+    , parser-combinators
+    , text
+  default-language: Haskell2010
+
+test-suite untyped-lambda-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      ExerciseSpec
+      Paths_untyped_lambda
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      QuickCheck
+    , base >=4.7 && <5
+    , containers
+    , hspec
+    , megaparsec >=9.0
+    , parser-combinators
+    , text
+    , untyped-lambda
+  default-language: Haskell2010

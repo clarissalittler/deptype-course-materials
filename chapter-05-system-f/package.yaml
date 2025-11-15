@@ -1,0 +1,26 @@
+name: system-f
+version: 0.1.0.0
+
+dependencies:
+- base >= 4.7 && < 5
+- containers
+- mtl
+- megaparsec >= 9.0
+- parser-combinators
+- text
+
+ghc-options:
+- -Wall
+
+library:
+  source-dirs:
+  - src
+  - exercises
+
+tests:
+  system-f-test:
+    main: Spec.hs
+    source-dirs: test
+    dependencies:
+    - system-f
+    - hspec
