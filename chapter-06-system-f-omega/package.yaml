@@ -17,6 +17,17 @@ library:
   - src
   - exercises
 
+executables:
+  system-f-omega-repl:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - system-f-omega
+
 tests:
   system-f-omega-test:
     main: Spec.hs

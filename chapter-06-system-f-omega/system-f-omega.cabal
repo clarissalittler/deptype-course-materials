@@ -31,6 +31,24 @@ library
     , text
   default-language: Haskell2010
 
+executable system-f-omega-repl
+  main-is: Main.hs
+  other-modules:
+      REPL
+      Paths_system_f_omega
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , megaparsec >=9.0
+    , mtl
+    , parser-combinators
+    , system-f-omega
+    , text
+  default-language: Haskell2010
+
 test-suite system-f-omega-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
