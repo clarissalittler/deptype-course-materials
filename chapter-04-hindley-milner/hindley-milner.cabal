@@ -15,6 +15,7 @@ library
       Parser
       Pretty
       Syntax
+      Hints
       Solutions
   other-modules:
       Paths_hindley_milner
@@ -25,6 +26,24 @@ library
   build-depends:
       base >=4.7 && <5
     , containers
+    , megaparsec >=9.0
+    , mtl
+    , parser-combinators
+    , text
+  default-language: Haskell2010
+
+executable hindley-milner-repl
+  main-is: Main.hs
+  other-modules:
+      REPL
+      Paths_hindley_milner
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , hindley-milner
     , megaparsec >=9.0
     , mtl
     , parser-combinators
