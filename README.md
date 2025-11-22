@@ -236,11 +236,48 @@ Each chapter includes:
 - **Comprehensive comments** in source code
 - **References** to foundational papers
 
+### Self-Study Learning Materials (NEW!)
+
+**All 8 chapters now include comprehensive self-study materials** designed for students to learn independently:
+
+Each chapter contains:
+- **LESSON_PLAN.md** - Structured lesson-by-lesson guide with:
+  - Time estimates (12-20 hours per chapter)
+  - Clear learning objectives for each lesson
+  - Activities and practice exercises
+  - Self-check questions to verify understanding
+  - Progress tracking checklists
+
+- **TUTORIAL.md** - Step-by-step worked examples with:
+  - Plain language explanations
+  - Complete derivations and type checking examples
+  - Practice problems with solutions
+  - Real-world connections to modern languages
+  - Conversational, accessible tone
+
+- **QUIZ.md** - Self-assessment quizzes with:
+  - 20-45 multiple choice questions per chapter
+  - Complete answer keys with explanations
+  - Scoring guides and interpretation
+  - Targeted review recommendations
+
+- **COMMON_MISTAKES.md** - Practical debugging guides with:
+  - 8-11 common pitfalls per chapter
+  - Recognition strategies
+  - How to fix each mistake
+  - Practice problems with solutions
+  - Debugging checklists
+
+**Total Learning Materials**: Over 600KB of educational content across all chapters, designed to make the course immediately accessible to independent learners.
+
 ### Key Documents
 
 - `STATUS.md` - Detailed project status and progress
 - `EXERCISES_SUMMARY.md` - Complete exercise catalog and roadmap
 - `EXERCISES_STATUS.md` - Exercise implementation status
+- `CHAPTER_0_PREREQUISITES.md` - What you need to know before starting
+- `STUDY_GUIDE.md` - Multiple learning paths and study strategies
+- `GLOSSARY.md` - Comprehensive terminology reference
 
 ## Technology Stack
 
@@ -252,7 +289,20 @@ Each chapter includes:
 
 ## Learning Path
 
-### For Beginners
+### Self-Study Track (Recommended for Independent Learners)
+1. **Start with prerequisites**: Read `CHAPTER_0_PREREQUISITES.md`
+2. **Choose your path**: See `STUDY_GUIDE.md` for multiple learning tracks
+3. **For each chapter**:
+   - Follow the `LESSON_PLAN.md` (includes time estimates and structure)
+   - Work through `TUTORIAL.md` for step-by-step examples
+   - Complete exercises from `exercises/EXERCISES.md`
+   - Take the `QUIZ.md` to verify understanding
+   - Reference `COMMON_MISTAKES.md` when stuck
+   - Use the REPL to experiment interactively
+4. **Track progress**: Each lesson plan includes a progress tracker
+5. **Time estimate**: 8-20 hours per chapter (100-160 hours total for all 8 chapters)
+
+### For Beginners (Traditional Approach)
 1. Start with Chapter 1 (Untyped Lambda Calculus)
 2. Read the README for theoretical foundation
 3. Study the implementation in `src/`
@@ -268,10 +318,10 @@ Each chapter includes:
 5. Progress to Chapters 4-5 for advanced topics
 
 ### For Advanced Study
-1. Focus on Chapters 4-5
+1. Focus on Chapters 4-8
 2. Study Algorithm W and unification
 3. Understand parametricity and free theorems
-4. Explore extensions in exercises
+4. Explore dependent types and proof systems
 5. Read referenced papers for depth
 
 ## Build All Chapters
@@ -411,10 +461,12 @@ Perfect for:
 
 ---
 
-**Status**: ✓ ALL 8 CHAPTERS COMPLETE | 282/282 tests passing | ~85+ exercises documented
+**Status**: ✓ ALL 8 CHAPTERS COMPLETE | 282/282 tests passing | ~85+ exercises documented | **NEW: Complete self-study materials for all chapters!**
 
 **Journey**: Untyped Lambda Calculus → Simply Typed → ADTs → Type Inference → System F → System F-omega → Dependent Types → Full Dependent Types with Universe Hierarchy
 
-**Achievement**: Complete implementation from first principles to a foundation for mathematics and verified programming!
+**Achievement**: Complete implementation from first principles to a foundation for mathematics and verified programming - now with comprehensive learning materials for independent study!
 
-Last Updated: 2025-11-14
+**New in 2025**: Phase 1 learning materials (LESSON_PLAN, TUTORIAL, QUIZ, COMMON_MISTAKES) for all 8 chapters, making this course fully self-study ready.
+
+Last Updated: 2025-11-22
