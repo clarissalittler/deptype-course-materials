@@ -268,79 +268,171 @@ D) It requires Church encodings
 - x is bound by λx
 - y and z are free (not bound by any λ)
 
+*Why other answers are wrong:*
+- A) {x, y, z}: x is NOT free — it's bound by the λx
+- C) {x}: Wrong on two counts — x is bound AND y, z are missing
+- D) {z}: Forgot about y, which is also free
+
+> **Key insight**: Look for variables NOT under a λ that binds them.
+
 **Q2: A, C, D**
 - A: Valid ✓
-- B: Invalid - λ must have a parameter
+- B: Invalid - λ must have a parameter name
 - C: Valid ✓ (just applications of variables)
-- D: Valid ✓ (missing parentheses around second lambda, should be `(λx. x x) (λy. y)`, but as written it's `(λx. x x) λy. y` which parses as application of `(λx. x x)` to `λy. y` due to precedence)
-- E: Invalid - λ takes one parameter at a time (should be `λx. λy. x`)
+- D: Valid ✓ (parses as `(λx. x x) (λy. y)`)
+- E: Invalid - should be `λx. λy. x` (one parameter per λ)
+
+*Why B and E are invalid:*
+- B) `λ. x`: Lambda needs a parameter. "What variable are you binding?"
+- E) `λx y. x`: Shorthand some languages allow, but pure λ-calculus requires nested lambdas.
 
 **Q3: B** - `(f g) h`
 - Application associates to the left
 
+*Why other answers are wrong:*
+- A) `f (g h)`: Right-associative — opposite of the convention
+- C) "Cannot be parsed": Left-associativity makes it unambiguous
+- D) Extra parens, same meaning — but not the "canonical" parse
+
+> **Mnemonic**: "Left to right, like reading" — f applied to g, then that result applied to h.
+
 ### Section 2: Substitution
 
 **Q4: A** - `λy. a y`
-- Substitute a for x
-- y is a different variable (bound by λy)
-- x is free in the body, so replace it
+- Substitute a for x in the body
+- y is bound by λy, so only x changes
 
-**Q5: B** - `λz. x`
-- Direct substitution would give `λx. x` (WRONG - variable capture!)
-- Must α-convert first: `λx. y` → `λz. y`
-- Then substitute: `[y ↦ x](λz. y)` = `λz. x`
+*Why other answers are wrong:*
+- B) `λy. x y`: Didn't do the substitution at all
+- C) `λa. a y`: Changed the wrong variable (the parameter, not the body)
+- D) `λy. a a`: Substituted for both x AND y — y is a different variable!
+
+**Q5: B** - `λz. x` (after α-conversion)
+- Direct substitution gives `λx. x` — WRONG (variable capture!)
+- Must rename first: `λx. y` → `λz. y`, then substitute
+
+*Why other answers are wrong:*
+- A) `λx. x`: Variable capture! The free x got "captured" by λx
+- C) `λx. y`: Didn't substitute at all
+- D) `λy. x`: Changed the parameter incorrectly
+
+> **Critical concept**: Always rename bound variables if they conflict with what you're substituting.
 
 **Q6: B** - The term remains unchanged
-- The λx shadows the outer x
-- No substitution happens in the body
+- The inner λx shadows the outer x — no substitution happens
+
+*Why other answers are wrong:*
+- A) Would cause capture — the inner binding protects its x
+- C) Renaming isn't needed when the variable is shadowed
+- D) Not an error — it's valid, just a no-op
 
 ### Section 3: Beta-Reduction
 
 **Q7: B** - `y y`
-- `[x ↦ y](x x)` = `y y`
+- `[x ↦ y](x x)` = `y y` — replace both x's with y
+
+*Why other answers are wrong:*
+- A) `x x`: Didn't substitute at all
+- C) `y x`: Only substituted one x
+- D) `λx. y y`: Added a λ that wasn't there
 
 **Q8: A** - `a`
-- `(λx. λy. x) a` → `λy. a`
-- `(λy. a) b` → `a`
-- The constant function returns first argument
+- Step 1: `(λx. λy. x) a` → `λy. a` (substitute a for x)
+- Step 2: `(λy. a) b` → `a` (substitute b for y, but y isn't in body!)
+
+*Why other answers are wrong:*
+- B) `b`: Returned second argument — that would be `(λx. λy. y) a b`
+- C) `a b`: Stopped reduction too early
+- D) `λy. a b`: Mixed up the structure
+
+> **Key pattern**: This is the K combinator — always returns first argument, ignores second.
 
 **Q9: C** - `λx. x y`
-- A: Has redex `(λx. x) y`
-- B: Has redex `(λy. y) x` inside
-- C: No redex ✓
-- D: Has redex `(λy. y)` if we reduce under application (though some strategies wouldn't reduce this)
+- A: Has redex `(λx. x) y` — can reduce!
+- B: Has redex `(λy. y) x` inside the lambda body
+- C: No redex — `x y` is just application, no λ being applied ✓
+- D: Contains `(λy. y)` which could reduce (depending on strategy)
+
+> **Definition check**: A redex is `(λvar. body) arg` — a lambda immediately applied to an argument.
 
 ### Section 4: Evaluation Strategies
 
 **Q10: B** - Normal-order only
-- Call-by-value tries to evaluate `(λz. z z) (λz. z z)` first → infinite loop
-- Normal-order applies outer function first, discards the infinite term, returns `v`
+- The term `(λz. z z) (λz. z z)` is Ω — it loops forever!
+- **Call-by-value**: Must evaluate argument first → loops on Ω → never terminates
+- **Normal-order**: Applies outer function first → `(λx. λy. y) Ω v` → `(λy. y) v` → `v`
+
+*Why other answers are wrong:*
+- A) Call-by-value only: CBV loops on the Ω argument
+- C) Both: CBV definitely fails here
+- D) Neither: Normal-order succeeds!
+
+> **Insight**: Normal-order can "skip" evaluating arguments that aren't used.
 
 **Q11: C** - Normal-order
-- Normal-order is complete (finds normal form if it exists)
-- Call-by-value can fail to find normal forms that exist
+- **Normal-order is complete**: If a normal form exists, normal-order finds it
+- **Call-by-value is incomplete**: May loop even when a normal form exists (like Q10!)
+
+*Why other answers are wrong:*
+- A) Call-by-value: Not complete — can fail on terms like Q10
+- B) Call-by-name: Similar to normal-order but doesn't reduce under λ
+- D) Not equally complete — normal-order has theoretical guarantees others lack
 
 ### Section 5: Church Booleans
 
 **Q12: B** - `a`
-- `true a b` = `(λt. λf. t) a b` → `(λf. a) b` → `a`
+- Step by step: `true a b` = `(λt. λf. t) a b`
+- Apply a: `(λf. a) b`
+- Apply b: `a`
+- **Church true selects its FIRST argument**
+
+*Why other answers are wrong:*
+- A) `true`: That's the function, not the result of applying it
+- C) `b`: That's what `false a b` returns (selects second)
+- D) `a b`: Didn't finish reduction
+
+> **Pattern**: `true` = "pick first", `false` = "pick second"
 
 **Q13: B** - `λp. λq. p q false`
-- If p is true: return q
-- If p is false: return false
-- This implements AND correctly
+- **If p is true**: `true q false` → `q` (first argument)
+- **If p is false**: `false q false` → `false` (second argument)
+
+*Why other answers are wrong:*
+- A) `λp. λq. p q p`: This is also AND, but returns p not false when p is false (works, but less standard)
+- C) `λp. λq. p false q`: This is OR! If p is true → false, if p is false → q
+- D) `λp. λq. p true q`: If p is true → true, if p is false → q — that's also wrong
+
+> **Verification**: AND should return false if EITHER argument is false.
 
 ### Section 6: Church Numerals
 
 **Q14: C** - 3
-- `λf. λx. f (f (f x))` applies f three times
+- Count the f's: `f (f (f x))` — three applications of f
+- **Church numeral n = "apply f n times to x"**
+
+*Why other answers are wrong:*
+- A) 1: That would be `λf. λx. f x` (one f)
+- B) 2: That would be `λf. λx. f (f x)` (two f's)
+- D) 4: That would have four f's
+
+> **Quick check**: Count nested f applications, that's your number.
 
 **Q15: A** - `λf. λx. x`
-- Apply f zero times, just return x
+- Zero applications of f — just return x unchanged
+
+*Why other answers are wrong:*
+- B) `λf. λx. f x`: That's 1 (one application of f)
+- C) `λx. x`: Missing the f parameter — invalid Church numeral
+- D) `false`: While `false` and `0` look similar (`λt. λf. f` vs `λf. λx. x`), they have different "intended" arguments
 
 **Q16: C** - `λf. λx. f (f (f x))`
-- 1 + 2 = 3
-- This is the Church numeral for 3
+- 1 = `λf. λx. f x`, 2 = `λf. λx. f (f x)`
+- Plus adds the f applications: 1 + 2 = 3 applications
+
+*Why other answers are wrong:*
+- A) `λf. λx. f x`: That's 1
+- B) `λf. λx. f (f x)`: That's 2
+- D) `3` (JavaScript number): λ-calculus has no primitive numbers!
 
 ### Section 7: Lists and Pairs
 
@@ -357,28 +449,63 @@ D) It requires Church encodings
 ### Section 8: Y Combinator
 
 **Q19: B** - `Y f = f (Y f)`
-- This is the fixed-point property
-- Allows recursion: f receives "itself" as an argument
+- This is the **fixed-point property**
+- `Y f` reduces to `f (Y f)` which is `f (f (Y f))` which is `f (f (f ...)))`
+- Gives f a way to "call itself"
 
-**Q20: B** - It immediately expands infinitely
-- Y combinator: `(λx. f (x x)) (λx. f (x x))`
-- With CBV, tries to evaluate `(λx. f (x x)) (λx. f (x x))` before applying
-- This reduces to itself → infinite loop
-- Need Z combinator for CBV
+*Why other answers are wrong:*
+- A) `Y f = f`: Y doesn't just return f — it creates infinite expansion
+- C) `Y f = Y (Y f)`: Y isn't applied to itself
+- D) `Y f = λx. f x`: This is just η-expansion, not the fixed-point property
+
+> **Key insight**: `Y f = f (Y f)` means f "gets itself" as the first argument, enabling recursion.
+
+**Q20: B** - It immediately expands infinitely under call-by-value
+- Y = `(λx. f (x x)) (λx. f (x x))`
+- CBV must evaluate argument `(λx. f (x x))` before substituting
+- But when you apply it to itself: `(λx. f (x x)) (λx. f (x x))` → `f ((λx. f (x x)) (λx. f (x x)))`
+- The argument is the same term! → loops forever
+
+*Why other answers are wrong:*
+- A) Syntax error: The syntax is valid
+- C) Requires named recursion: Y is specifically for ANONYMOUS recursion
+- D) CBV supports recursion — but needs Z combinator (has extra λ delay)
+
+> **Solution**: Z combinator = `λf. (λx. f (λy. x x y)) (λx. f (λy. x x y))` — the extra λy delays evaluation.
 
 ### Section 9: Theory
 
 **Q21: B** - If a term has a normal form, it's unique
-- Confluence means different reduction paths converge
+- **Church-Rosser theorem** = confluence
+- Multiple reduction paths always converge to the same result
 - Normal forms are unique (up to α-equivalence)
 
+*Why other answers are wrong:*
+- A) All terms have normal form: False! Ω has no normal form
+- C) Evaluation always terminates: False! Ω never terminates
+- D) Same number of steps: Different paths can have different lengths
+
+> **Important**: Confluence says the DESTINATION is unique, not the PATH.
+
 **Q22: B** - `(λx. x x) (λx. x x)`
-- This is Ω (omega) - the classic infinite loop
-- Reduces to itself forever
+- This is **Ω (omega)** — the canonical non-terminating term
+- Reduces to itself: `(λx. x x) (λx. x x)` → `(λx. x x) (λx. x x)` → ...
+
+*Why other answers are wrong:*
+- A) `λx. x x`: This is ω (lowercase) — it HAS a normal form (itself — it's a value!)
+- C) `λx. (λy. y) x`: This reduces to `λx. x` — terminates
+- D) `(λx. λy. x) a b`: This reduces to `a` — terminates
+
+> **Key distinction**: ω = `λx. x x` is a value; Ω = `ω ω` is what loops.
 
 **Q23: A** - It can compute anything a Turing machine can
-- Lambda calculus and Turing machines have equivalent computational power
-- Both are universal models of computation
+- **Church-Turing thesis**: λ-calculus = Turing machines in computational power
+- Any computable function can be expressed in λ-calculus
+
+*Why other answers are wrong:*
+- B) Always terminates: False! We just saw Ω doesn't terminate
+- C) Has built-in types: False! This is UNTYPED λ-calculus
+- D) Requires Church encodings: Church encodings are ONE way to compute, not the only way
 
 </details>
 

@@ -434,6 +434,190 @@ typeCheck (Lam x ty t) = Right (TyArr ty ...)
 
 **But remember:** You can learn Haskell AS you go through this course!
 
+---
+
+## Haskell Readiness Self-Assessment
+
+Use this checklist to gauge your Haskell readiness. Don't worry if you can't do everything—you can learn as you go!
+
+### Level 1: Minimum Required (Complete 4/5 to proceed)
+
+- [ ] **Define a simple function**
+  ```haskell
+  -- Can you write: double x = x * 2
+  double :: Int -> Int
+  double = undefined  -- your implementation
+  ```
+
+- [ ] **Use pattern matching**
+  ```haskell
+  -- Can you write a function that returns True for 0, False otherwise?
+  isZero :: Int -> Bool
+  isZero = undefined
+  ```
+
+- [ ] **Read a type signature**
+  ```haskell
+  -- What does this function do? (Takes two Ints, returns an Int)
+  mystery :: Int -> Int -> Int
+  ```
+
+- [ ] **Understand lists**
+  ```haskell
+  -- What is the result of: head [1, 2, 3]
+  -- What is: tail [1, 2, 3]
+  -- What is: [1, 2] ++ [3, 4]
+  ```
+
+- [ ] **Write a recursive function**
+  ```haskell
+  -- Can you write factorial?
+  factorial :: Int -> Int
+  factorial = undefined
+  ```
+
+### Level 2: Comfortable (Complete 3/5 for smooth sailing)
+
+- [ ] **Define a data type**
+  ```haskell
+  -- Define a Shape that can be Circle (radius) or Rectangle (width, height)
+  data Shape = undefined
+  ```
+
+- [ ] **Write a function over a custom data type**
+  ```haskell
+  -- Given: data Maybe a = Nothing | Just a
+  -- Write a function that extracts the value or returns a default
+  fromMaybe :: a -> Maybe a -> a
+  fromMaybe = undefined
+  ```
+
+- [ ] **Use higher-order functions**
+  ```haskell
+  -- Use map to double every element in a list
+  doubleAll :: [Int] -> [Int]
+  doubleAll xs = undefined
+  ```
+
+- [ ] **Understand polymorphism**
+  ```haskell
+  -- What can this function do? (Very limited options!)
+  mystery :: a -> a
+  mystery = undefined
+  ```
+
+- [ ] **Use let/where bindings**
+  ```haskell
+  -- Rewrite using where:
+  circleArea r = 3.14159 * r * r
+  -- becomes:
+  circleArea' r = pi * r * r where pi = undefined
+  ```
+
+### Level 3: Proficient (Nice to have, not required)
+
+- [ ] **Understand type classes**
+  ```haskell
+  -- What does Eq a => mean in: elem :: Eq a => a -> [a] -> Bool
+  ```
+
+- [ ] **Use Maybe/Either for errors**
+  ```haskell
+  -- Write safe division that returns Nothing on divide-by-zero
+  safeDiv :: Int -> Int -> Maybe Int
+  safeDiv = undefined
+  ```
+
+- [ ] **Compose functions**
+  ```haskell
+  -- What does (f . g) x mean?
+  -- Write: double then add 1, using composition
+  doubleThenAddOne = undefined
+  ```
+
+### Quick Self-Test
+
+Try these exercises in GHCi (run `stack ghci` in any chapter directory):
+
+```haskell
+-- 1. Basic arithmetic
+2 + 3 * 4
+
+-- 2. Function application
+max 5 3
+
+-- 3. List operations
+length [1, 2, 3, 4, 5]
+sum [1..10]
+
+-- 4. Define a function
+let square x = x * x
+square 5
+
+-- 5. Pattern matching
+let describe 0 = "zero"; describe n = "non-zero"
+describe 0
+describe 42
+
+-- 6. Recursion
+let fac 0 = 1; fac n = n * fac (n-1)
+fac 5
+```
+
+**Results Interpretation:**
+- **1-3 work?** → You can start Chapter 1
+- **4-5 work?** → You'll be comfortable
+- **All 6 work?** → You're well prepared!
+
+### Answers to Self-Assessment
+
+<details>
+<summary>Click to reveal answers</summary>
+
+**Level 1:**
+```haskell
+double x = x * 2
+
+isZero 0 = True
+isZero _ = False
+
+-- mystery adds two numbers
+
+-- head [1,2,3] = 1
+-- tail [1,2,3] = [2,3]
+-- [1,2] ++ [3,4] = [1,2,3,4]
+
+factorial 0 = 1
+factorial n = n * factorial (n - 1)
+```
+
+**Level 2:**
+```haskell
+data Shape = Circle Double | Rectangle Double Double
+
+fromMaybe def Nothing  = def
+fromMaybe _   (Just x) = x
+
+doubleAll xs = map (*2) xs
+
+-- mystery can only be: mystery x = x (the identity function!)
+
+circleArea' r = pi * r * r where pi = 3.14159
+```
+
+**Level 3:**
+```haskell
+-- Eq a => means "for any type 'a' that supports equality"
+
+safeDiv _ 0 = Nothing
+safeDiv x y = Just (x `div` y)
+
+-- (f . g) x = f (g x)
+doubleThenAddOne = (+1) . (*2)
+```
+
+</details>
+
 ## Study Strategies
 
 ### Time Estimates
