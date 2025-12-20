@@ -226,7 +226,6 @@ Chapters 6-8 additionally include complete `exercises/Solutions.hs` implementati
 **Total**: ~85+ exercise problems across all chapters
 
 See `EXERCISES_SUMMARY.md` for complete overview.
-See `EXERCISES_STATUS.md` for implementation details.
 
 ## Documentation
 
@@ -272,12 +271,10 @@ Each chapter contains:
 
 ### Key Documents
 
-- `STATUS.md` - Detailed project status and progress
-- `EXERCISES_SUMMARY.md` - Complete exercise catalog and roadmap
-- `EXERCISES_STATUS.md` - Exercise implementation status
 - `CHAPTER_0_PREREQUISITES.md` - What you need to know before starting
 - `STUDY_GUIDE.md` - Multiple learning paths and study strategies
 - `GLOSSARY.md` - Comprehensive terminology reference
+- `EXERCISES_SUMMARY.md` - Complete exercise catalog
 
 ## Technology Stack
 
@@ -387,9 +384,7 @@ See individual chapter READMEs for more specific references.
 ```
 deptype-course-materials/
 ├── README.md                          # This file
-├── STATUS.md                          # Detailed project status
 ├── EXERCISES_SUMMARY.md               # Exercise catalog
-├── EXERCISES_STATUS.md                # Exercise implementation status
 ├── chapter-01-untyped-lambda/
 │   ├── src/                          # Core implementation
 │   ├── exercises/                    # ✓ Complete solutions
