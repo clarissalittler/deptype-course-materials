@@ -16,6 +16,8 @@ This course provides **complete, tested implementations** of major type systems,
 6. **System F-omega** ✓ - Higher-kinded types and type operators
 7. **Dependent Types** ✓ - Pi and Sigma types, unified terms and types
 8. **Full Dependent Types** ✓ - Universe hierarchy, equality types, inductive families
+9. **Subtyping** ✓ - Width/depth subtyping, covariance/contravariance, Top/Bot
+10. **Linear Types** ✓ - Resource tracking, multiplicities, bang types
 
 ## Quick Start
 
@@ -36,12 +38,12 @@ stack build && stack test  # 27/27 tests passing
 
 ## Course Statistics
 
-- **8 Complete Chapters** with full implementations
-- **282 Total Tests** (all passing)
-  - 246 implementation tests
+- **10 Complete Chapters** with full implementations
+- **401 Total Tests** (all passing)
+  - 365 implementation tests
   - 36 exercise tests (Chapter 1)
-- **~85+ Exercise Problems** documented across all chapters
-- **Comprehensive Documentation** with formal semantics (~5000+ lines)
+- **~95+ Exercise Problems** documented across all chapters
+- **Comprehensive Documentation** with formal semantics (~6000+ lines)
 - **Extensive References** to foundational papers (100+ references)
 
 ## Chapter Details
@@ -197,6 +199,48 @@ stack build && stack test  # 27/27 tests passing
 
 **Key Achievement**: Consistent foundation for mathematics and verified programming
 
+### Chapter 9: Subtyping ✓
+
+**Features**:
+- Width subtyping (more fields = subtype)
+- Depth subtyping (more specific field types = subtype)
+- Function subtyping (contravariant/covariant)
+- Top and Bot types
+- Subsumption rule
+- Join and meet (LUB/GLB)
+- Type ascription
+
+**Key Files**:
+- `src/Syntax.hs` - Types with Top, Bot, records
+- `src/TypeCheck.hs` - Subtyping algorithm, join/meet
+- `src/Eval.hs` - CBV evaluation with records
+- `exercises/EXERCISES.md` - Variance, bounded quantification
+
+**Tests**: 74/74 passing
+**Exercises**: 10 problems + 3 challenges (variance, row polymorphism, F<:)
+
+**Key Insight**: Subtyping allows implicit upcasting based on structural relationships
+
+### Chapter 10: Linear Types ✓
+
+**Features**:
+- Multiplicities (linear/unrestricted)
+- Usage tracking in type checker
+- Pair types (tensor product)
+- Bang types for unrestricted values
+- Linear/unrestricted function types
+
+**Key Files**:
+- `src/Syntax.hs` - Types with multiplicities
+- `src/TypeCheck.hs` - Usage tracking, linearity enforcement
+- `src/Eval.hs` - CBV evaluation with pairs
+- `exercises/EXERCISES.md` - Session types, graded modalities
+
+**Tests**: 45/45 passing
+**Exercises**: 8 problems + 3 challenges (session types, fractional permissions)
+
+**Key Insight**: Linear types ensure resources are used exactly once
+
 ## Exercises
 
 ### Chapter 1: Fully Implemented ✓
@@ -210,7 +254,7 @@ stack build && stack test  # 27/27 tests passing
 
 See `chapter-01-untyped-lambda/exercises/` for complete solutions.
 
-### Chapters 2-8: Documented
+### Chapters 2-10: Documented
 
 Each chapter includes detailed `exercises/EXERCISES.md` with:
 - Problem descriptions
@@ -420,11 +464,21 @@ deptype-course-materials/
 │   ├── exercises/                    # ✓ Complete solutions
 │   ├── test/                         # ✓ 39 tests
 │   └── README.md                     # ✓ Dependent types theory
-└── chapter-08-full-dependent-types/
-    ├── src/                          # ✓ Universe hierarchy, equality types
-    ├── exercises/                    # ✓ Complete solutions
-    ├── test/                         # ✓ 41 tests
-    └── README.md                     # ✓ Full dependent types, proof theory
+├── chapter-08-full-dependent-types/
+│   ├── src/                          # ✓ Universe hierarchy, equality types
+│   ├── exercises/                    # ✓ Complete solutions
+│   ├── test/                         # ✓ 41 tests
+│   └── README.md                     # ✓ Full dependent types, proof theory
+├── chapter-09-subtyping/
+│   ├── src/                          # ✓ Subtyping, join/meet, records
+│   ├── exercises/                    # ✓ Complete exercises
+│   ├── test/                         # ✓ 74 tests
+│   └── README.md                     # ✓ Subtyping theory, variance
+└── chapter-10-linear-types/
+    ├── src/                          # ✓ Multiplicities, usage tracking
+    ├── exercises/                    # ✓ Complete exercises
+    ├── test/                         # ✓ 45 tests
+    └── README.md                     # ✓ Linear types, session types
 ```
 
 ## Contributing
@@ -456,12 +510,12 @@ Perfect for:
 
 ---
 
-**Status**: ✓ ALL 8 CHAPTERS COMPLETE | 282/282 tests passing | ~85+ exercises documented | **NEW: Complete self-study materials for all chapters!**
+**Status**: ✓ ALL 10 CHAPTERS COMPLETE | 401/401 tests passing | ~100+ exercises documented | **Complete self-study materials for all chapters!**
 
-**Journey**: Untyped Lambda Calculus → Simply Typed → ADTs → Type Inference → System F → System F-omega → Dependent Types → Full Dependent Types with Universe Hierarchy
+**Journey**: Untyped Lambda Calculus → Simply Typed → ADTs → Type Inference → System F → System F-omega → Dependent Types → Full Dependent Types → Subtyping → Linear Types
 
 **Achievement**: Complete implementation from first principles to a foundation for mathematics and verified programming - now with comprehensive learning materials for independent study!
 
-**New in 2025**: Phase 1 learning materials (LESSON_PLAN, TUTORIAL, QUIZ, COMMON_MISTAKES) for all 8 chapters, making this course fully self-study ready.
+**New in 2025**: Chapters 9-10 added: Subtyping (width/depth, variance) and Linear Types (resource tracking, multiplicities). Self-study materials for all 10 chapters.
 
 Last Updated: 2025-12-20

@@ -58,6 +58,8 @@ The chapters build upon each other:
 6. **Chapter 6 (System F-ω)**: Adds `Kind` system and type-level lambdas (`TyLam`/`TyTApp`)
 7. **Chapter 7 (Dependent Types)**: Unified Term for types and values, `Pi`/`Sigma` types, `Type:Type`
 8. **Chapter 8 (Full Dependent)**: Universe hierarchy (`Universe Level`), equality types (`Eq`/`Refl`/`J`), inductive families
+9. **Chapter 9 (Subtyping)**: `TyTop`/`TyBot`, `isSubtype`, join/meet, record width/depth subtyping
+10. **Chapter 10 (Linear Types)**: Multiplicities (`One`/`Many`), `TyFun Mult`, usage tracking, bang types
 
 ### Key Implementation Patterns
 
@@ -75,4 +77,65 @@ The chapters build upon each other:
 
 ## Test Structure
 
-Tests are in `test/Spec.hs` and `test/ExerciseSpec.hs` (where applicable). Run with `stack test`. Total: 282 tests across all chapters.
+Tests are in `test/Spec.hs` and `test/ExerciseSpec.hs` (where applicable). Run with `stack test`. Total: 401 tests across all chapters.
+
+## Completed Expansions
+
+### Chapter 9: Subtyping ✓
+- **Focus**: Subtype relations, covariance/contravariance, width/depth subtyping
+- **Key types**: `isSubtype`, `TyTop`/`TyBot`, join/meet operations
+- **Theory**: Record subtyping, function variance
+- **Tests**: 74 passing
+
+### Chapter 10: Linear Types ✓
+- **Focus**: Resources used exactly once, ownership tracking
+- **Key types**: Linear arrow `-o`, multiplicities (1/ω), bang types `!`
+- **Theory**: Linear logic, usage tracking
+- **Tests**: 45 passing
+
+## Future Expansion (Planned)
+
+### Chapter 11: Refinement Types (TODO)
+- **Focus**: Types with logical predicates, compile-time verification
+- **Key types**: `{x: τ | φ(x)}` where φ is a predicate
+- **Theory**: SMT-based type checking, liquid types
+- **Real-world**: Liquid Haskell, F*, Dafny, Ada SPARK
+
+### Chapter Structure Template
+Each new chapter should include:
+```
+chapter-XX-name/
+├── src/
+│   ├── Syntax.hs      # AST with new type constructs
+│   ├── TypeCheck.hs   # Subtyping/linearity/refinement checking
+│   ├── Eval.hs        # Evaluation (may be unchanged)
+│   ├── Parser.hs      # Extended syntax
+│   └── Pretty.hs      # Pretty printing
+├── exercises/
+│   ├── EXERCISES.md   # Problem descriptions
+│   ├── Solutions.hs   # Reference implementations
+│   └── Hints.hs       # Progressive hints
+├── test/
+│   ├── Spec.hs        # Implementation tests
+│   └── ExerciseSpec.hs
+├── app/
+│   ├── Main.hs
+│   └── REPL.hs
+├── README.md          # Theory, typing rules, references
+├── FAQ.md             # Common questions
+├── TUTORIAL.md        # Step-by-step walkthrough
+├── LESSON_PLAN.md     # Structured lessons
+├── QUIZ.md            # Self-assessment
+├── COMMON_MISTAKES.md # Pitfalls and debugging
+├── PRACTICE_PROBLEMS.md
+├── CHEAT_SHEET.md
+├── REPL_GUIDE.md
+├── QUICK_START.md
+├── package.yaml
+└── stack.yaml
+```
+
+### Implementation Priority
+1. **Chapter 9 (Subtyping)** - Start here, foundational for understanding OOP type systems
+2. **Chapter 10 (Linear Types)** - Build on STLC, add linearity tracking
+3. **Chapter 11 (Refinement Types)** - Most complex, requires SMT concepts
