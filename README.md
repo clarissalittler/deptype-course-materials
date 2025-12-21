@@ -18,6 +18,7 @@ This course provides **complete, tested implementations** of major type systems,
 8. **Full Dependent Types** ✓ - Universe hierarchy, equality types, inductive families
 9. **Subtyping** ✓ - Width/depth subtyping, covariance/contravariance, Top/Bot
 10. **Linear Types** ✓ - Resource tracking, multiplicities, bang types
+11. **Refinement Types** ✓ - Predicate refinements, subtyping via implication
 
 ## Quick Start
 
@@ -38,12 +39,12 @@ stack build && stack test  # 27/27 tests passing
 
 ## Course Statistics
 
-- **10 Complete Chapters** with full implementations
-- **401 Total Tests** (all passing)
-  - 365 implementation tests
+- **11 Complete Chapters** with full implementations
+- **483 Total Tests** (all passing)
+  - 447 implementation tests
   - 36 exercise tests (Chapter 1)
-- **~95+ Exercise Problems** documented across all chapters
-- **Comprehensive Documentation** with formal semantics (~6000+ lines)
+- **~105+ Exercise Problems** documented across all chapters
+- **Comprehensive Documentation** with formal semantics (~6500+ lines)
 - **Extensive References** to foundational papers (100+ references)
 
 ## Chapter Details
@@ -241,6 +242,27 @@ stack build && stack test  # 27/27 tests passing
 
 **Key Insight**: Linear types ensure resources are used exactly once
 
+### Chapter 11: Refinement Types ✓
+
+**Features**:
+- Refinement types {x: T | φ(x)}
+- Predicate language (arithmetic, comparisons, boolean ops)
+- Subtyping via predicate implication
+- Path sensitivity (branch-aware typing)
+- Dependent function types
+- Predicate validity checking
+
+**Key Files**:
+- `src/Syntax.hs` - Types with refinements, predicates
+- `src/TypeCheck.hs` - Subtyping via implication, path sensitivity
+- `src/Eval.hs` - CBV evaluation
+- `exercises/EXERCISES.md` - Liquid types, SMT integration
+
+**Tests**: 82/82 passing
+**Exercises**: 10 problems + 4 challenges (SMT integration, liquid types)
+
+**Key Insight**: Refinement types bridge simple types and full dependent types
+
 ## Exercises
 
 ### Chapter 1: Fully Implemented ✓
@@ -254,7 +276,7 @@ stack build && stack test  # 27/27 tests passing
 
 See `chapter-01-untyped-lambda/exercises/` for complete solutions.
 
-### Chapters 2-10: Documented
+### Chapters 2-11: Documented
 
 Each chapter includes detailed `exercises/EXERCISES.md` with:
 - Problem descriptions
@@ -474,11 +496,16 @@ deptype-course-materials/
 │   ├── exercises/                    # ✓ Complete exercises
 │   ├── test/                         # ✓ 74 tests
 │   └── README.md                     # ✓ Subtyping theory, variance
-└── chapter-10-linear-types/
-    ├── src/                          # ✓ Multiplicities, usage tracking
+├── chapter-10-linear-types/
+│   ├── src/                          # ✓ Multiplicities, usage tracking
+│   ├── exercises/                    # ✓ Complete exercises
+│   ├── test/                         # ✓ 45 tests
+│   └── README.md                     # ✓ Linear types, session types
+└── chapter-11-refinement-types/
+    ├── src/                          # ✓ Refinements, predicates
     ├── exercises/                    # ✓ Complete exercises
-    ├── test/                         # ✓ 45 tests
-    └── README.md                     # ✓ Linear types, session types
+    ├── test/                         # ✓ 82 tests
+    └── README.md                     # ✓ Refinement types, predicate validity
 ```
 
 ## Contributing
@@ -510,12 +537,12 @@ Perfect for:
 
 ---
 
-**Status**: ✓ ALL 10 CHAPTERS COMPLETE | 401/401 tests passing | ~100+ exercises documented | **Complete self-study materials for all chapters!**
+**Status**: ✓ ALL 11 CHAPTERS COMPLETE | 483/483 tests passing | ~105+ exercises documented | **Complete self-study materials for all chapters!**
 
-**Journey**: Untyped Lambda Calculus → Simply Typed → ADTs → Type Inference → System F → System F-omega → Dependent Types → Full Dependent Types → Subtyping → Linear Types
+**Journey**: Untyped Lambda Calculus → Simply Typed → ADTs → Type Inference → System F → System F-omega → Dependent Types → Full Dependent Types → Subtyping → Linear Types → Refinement Types
 
 **Achievement**: Complete implementation from first principles to a foundation for mathematics and verified programming - now with comprehensive learning materials for independent study!
 
-**New in 2025**: Chapters 9-10 added: Subtyping (width/depth, variance) and Linear Types (resource tracking, multiplicities). Self-study materials for all 10 chapters.
+**New in 2025**: Chapters 9-11 added: Subtyping (width/depth, variance), Linear Types (resource tracking, multiplicities), and Refinement Types (predicates, subtyping via implication). Self-study materials for all 11 chapters.
 
 Last Updated: 2025-12-20
