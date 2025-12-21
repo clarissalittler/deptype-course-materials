@@ -1,0 +1,40 @@
+name: hott
+version: 0.1.0.0
+github: "clarissalittler/deptype-course-materials"
+license: BSD3
+author: "Clarissa Littler"
+maintainer: "clarissa.littler@gmail.com"
+
+dependencies:
+- base >= 4.7 && < 5
+- containers
+- megaparsec >= 9.0
+- parser-combinators
+- text
+- mtl
+
+ghc-options:
+- -Wall
+- -Wcompat
+- -Widentities
+- -Wincomplete-record-updates
+- -Wincomplete-uni-patterns
+- -Wmissing-export-lists
+- -Wmissing-home-modules
+- -Wpartial-fields
+- -Wredundant-constraints
+
+library:
+  source-dirs: [src, exercises]
+
+executables:
+  hott-repl:
+    main: Main.hs
+    source-dirs: app
+    dependencies: [hott]
+
+tests:
+  hott-test:
+    main: Spec.hs
+    source-dirs: test
+    dependencies: [hott, hspec, QuickCheck]

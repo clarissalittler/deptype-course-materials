@@ -593,44 +593,54 @@ case .failure(let error):
 ### Essential Reading
 
 1. **Pierce, Benjamin C.** (2002). *Types and Programming Languages*. MIT Press.
-   - Chapter 11: Simple Extensions (Products, Sums, Records, Variants)
-   - Chapter 13: References
-   - The canonical reference for ADTs in typed lambda calculi
+   Chapter 11: Simple Extensions (Products, Sums, Records, Variants). The canonical reference.
+   [MIT Press](https://www.cis.upenn.edu/~bcpierce/tapl/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2853553209915529600)
 
 2. **Harper, Robert** (2016). *Practical Foundations for Programming Languages* (2nd ed.).
-   - Chapter 11: Product Types
-   - Chapter 12: Sum Types
-   - Chapter 14: Generic Programming (patterns)
+   Chapters 11-12: Product and Sum Types. Chapter 14: Generic Programming.
+   [CMU](http://www.cs.cmu.edu/~rwh/pfpl/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16024670421211833203)
 
 3. **Cardelli, Luca** (1984). "A Semantics of Multiple Inheritance." *Semantics of Data Types*.
-   - Early work on record types and subtyping
+   Early work on record types and subtyping.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2867285946453936857)
 
 ### Algebraic Data Types Theory
 
 4. **Burstall, Rod M. and Goguen, Joseph A.** (1977). "Putting Theories Together to Make Specifications." *IJCAI*.
-   - Foundational work on algebraic specifications
+   Foundational work on algebraic specifications.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=14505963356093330681)
 
 5. **Liskov, Barbara and Zilles, Stephen** (1974). "Programming with Abstract Data Types." *SIGPLAN*.
-   - Abstract data types and their importance
+   Abstract data types and their importance.
+   [ACM DL](https://dl.acm.org/doi/10.1145/800233.807045) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=15117159222296592141)
 
 ### Pattern Matching
 
 6. **Augustsson, Lennart** (1985). "Compiling Pattern Matching." *FPCA*.
-   - Classic paper on implementing pattern matching
+   Classic paper on implementing pattern matching.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=17308691548572025569)
 
 7. **Wadler, Philip** (1987). "Views: A Way for Pattern Matching to Cohabit with Data Abstraction." *POPL*.
-   - Extending pattern matching
+   Extending pattern matching.
+   [ACM DL](https://dl.acm.org/doi/10.1145/41625.41653) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=7830854666835613416)
 
 8. **Maranget, Luc** (2008). "Compiling Pattern Matching to Good Decision Trees." *ML Workshop*.
-   - Efficient compilation of pattern matching
+   Efficient compilation of pattern matching.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=9571452458440324664)
 
 ### Records and Variants
 
 9. **Wand, Mitchell** (1987). "Complete Type Inference for Simple Objects." *LICS*.
-   - Type inference for records
+   Type inference for records.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16099086070638748683)
 
 10. **Rémy, Didier** (1989). "Type Checking Records and Variants in a Natural Extension of ML." *POPL*.
-    - Extensible records and variants
+    Extensible records and variants.
+    [Google Scholar](https://scholar.google.com/scholar?cluster=7410270044612679060)
 
 ## Exercises
 

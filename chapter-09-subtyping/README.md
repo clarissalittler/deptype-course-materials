@@ -374,32 +374,48 @@ subtype> :quit              -- Exit
 ### Primary Sources
 
 1. **Cardelli, L.** (1988). "A Semantics of Multiple Inheritance". *Information and Computation*, 76(2-3), 138-164.
-   - Foundational paper on record subtyping and inheritance
+   Foundational paper on record subtyping and inheritance.
+   [ScienceDirect](https://www.sciencedirect.com/science/article/pii/0890540188900071) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=17676687627082148811)
 
 2. **Cardelli, L. & Wegner, P.** (1985). "On Understanding Types, Data Abstraction, and Polymorphism". *Computing Surveys*, 17(4), 471-522.
-   - Classic survey connecting subtyping to OOP concepts
+   Classic survey connecting subtyping to OOP concepts.
+   [ACM DL](https://dl.acm.org/doi/10.1145/6041.6042) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2892005929822900967)
 
-3. **Pierce, B.C.** (2002). *Types and Programming Languages*, Chapters 15-17.
-   - Comprehensive treatment of subtyping theory
+3. **Pierce, B.C.** (2002). *Types and Programming Languages*, Chapters 15-17. MIT Press.
+   Comprehensive treatment of subtyping theory.
+   [MIT Press](https://www.cis.upenn.edu/~bcpierce/tapl/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2853553209915529600)
 
 ### Extended Reading
 
-4. **Cardelli, L.** (1984). "A Semantics of Multiple Inheritance". *Semantics of Data Types*.
-   - Original bounded quantification paper
+4. **Cardelli, L.** (1984). "A Semantics of Multiple Inheritance". *Semantics of Data Types*, LNCS 173.
+   Original bounded quantification paper.
+   [SpringerLink](https://link.springer.com/chapter/10.1007/3-540-13346-1_2) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=3679009043577273957)
 
 5. **Pierce, B.C. & Turner, D.N.** (2000). "Local Type Inference". *ACM TOPLAS*, 22(1), 1-44.
-   - Bidirectional type checking with subtyping
+   Bidirectional type checking with subtyping.
+   [ACM DL](https://dl.acm.org/doi/10.1145/345099.345100) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=7525178091017175279)
 
-6. **Liskov, B.** (1988). "Keynote Address - Data Abstraction and Hierarchy". *OOPSLA '87 Addendum*.
-   - The "Liskov Substitution Principle"
+6. **Liskov, B.** (1988). "Data Abstraction and Hierarchy". *SIGPLAN Notices*, 23(5), 17-34.
+   The "Liskov Substitution Principle".
+   [ACM DL](https://dl.acm.org/doi/10.1145/62139.62141) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=15128806756346720891)
 
 ### Related Systems
 
 7. **Amadio, R. & Cardelli, L.** (1993). "Subtyping Recursive Types". *ACM TOPLAS*, 15(4), 575-631.
-   - Recursive types with subtyping
+   Recursive types with subtyping.
+   [ACM DL](https://dl.acm.org/doi/10.1145/155183.155231) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16422053591793498746)
 
-8. **Hosoya, H. & Pierce, B.C.** (2003). "XDuce: A Statically Typed XML Processing Language". *ACM TWEB*.
-   - Regular expression types with subtyping
+8. **Hosoya, H. & Pierce, B.C.** (2003). "XDuce: A Statically Typed XML Processing Language". *ACM TWEB*, 1(1), 1-44.
+   Regular expression types with subtyping.
+   [ACM DL](https://dl.acm.org/doi/10.1145/1183614.1183620) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=14173436771988780739)
 
 ---
 

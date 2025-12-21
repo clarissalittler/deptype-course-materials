@@ -482,41 +482,46 @@ fetchData(url, data => {             // λdata. processData data
 ### Essential Reading
 
 1. **Barendregt, H. P.** (1984). *The Lambda Calculus: Its Syntax and Semantics*. North-Holland.
-   - The definitive reference on lambda calculus
-   - Comprehensive treatment of theory and metatheory
+   The definitive reference on lambda calculus with comprehensive treatment of theory and metatheory.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=8536428947517588697)
 
 2. **Pierce, Benjamin C.** (2002). *Types and Programming Languages*. MIT Press.
-   - Chapter 5: The Untyped Lambda Calculus
-   - Excellent introduction with implementation focus
-   - Available online: https://www.cis.upenn.edu/~bcpierce/tapl/
+   Chapter 5: The Untyped Lambda Calculus - Excellent introduction with implementation focus.
+   [MIT Press](https://www.cis.upenn.edu/~bcpierce/tapl/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2853553209915529600)
 
 3. **Hankin, Chris** (2004). *An Introduction to Lambda Calculi for Computer Scientists*. College Publications.
-   - Concise introduction
-   - Good balance of theory and practice
+   Concise introduction with good balance of theory and practice.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=17827063328737839947)
 
 ### Additional Resources
 
 4. **Church, Alonzo** (1941). *The Calculi of Lambda Conversion*. Princeton University Press.
-   - Original work introducing lambda calculus
+   Original work introducing lambda calculus.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=14093673424906302135)
 
 5. **Hindley, J. Roger and Seldin, Jonathan P.** (2008). *Lambda-Calculus and Combinators: An Introduction*. Cambridge University Press.
-   - Modern introduction with combinatory logic
+   Modern introduction with combinatory logic.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=9220574068893588976)
 
 6. **Sørensen, Morten Heine and Urzyczyn, Paweł** (2006). *Lectures on the Curry-Howard Isomorphism*. Elsevier.
-   - Connection between lambda calculus and logic
+   Connection between lambda calculus and logic.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16458152610971891441)
 
 ### Online Resources
 
 7. **Lambda Calculus on Wikipedia**: https://en.wikipedia.org/wiki/Lambda_calculus
-   - Good overview and historical context
+   Good overview and historical context.
 
-8. **The Impact of the Lambda Calculus** (Cardone & Hindley, 2006)
-   - Historical perspective on lambda calculus
-   - https://www.sciencedirect.com/science/article/pii/S1570086806800119
+8. **Cardone, Felice & Hindley, J. Roger** (2006). "History of Lambda-calculus and Combinatory Logic". *Handbook of the History of Logic*.
+   Historical perspective on lambda calculus.
+   [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S1570086806800119) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=11366270838458659855)
 
-9. **Raúl Rojas - A Tutorial Introduction to the Lambda Calculus**
-   - Accessible tutorial with examples
-   - https://arxiv.org/abs/1503.09060
+9. **Rojas, Raúl** (2015). "A Tutorial Introduction to the Lambda Calculus". arXiv:1503.09060.
+   Accessible tutorial with examples.
+   [arXiv](https://arxiv.org/abs/1503.09060) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=4134096290685168656)
 
 ## Exercises
 

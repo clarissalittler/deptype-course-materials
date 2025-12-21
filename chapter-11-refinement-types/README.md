@@ -224,11 +224,47 @@ See `exercises/EXERCISES.md` for:
 
 ## References
 
-- Rondon, Kawaguchi, Jhala, "Liquid Types" (PLDI 2008)
-- Vazou et al., "Refinement Types for Haskell" (ICFP 2014)
-- Xi, Pfenning, "Dependent Types in Practical Programming" (POPL 1999)
-- Knowles, Flanagan, "Hybrid Type Checking" (POPL 2006)
-- Freeman, Pfenning, "Refinement Types for ML" (PLDI 1991)
+### Primary Sources
+
+1. **Rondon, P., Kawaguchi, M., & Jhala, R.** (2008). "Liquid Types". *PLDI 2008*.
+   Automated refinement type inference using liquid types.
+   [ACM DL](https://dl.acm.org/doi/10.1145/1375581.1375602) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=13495821343448655899)
+
+2. **Vazou, N., Seidel, E., Jhala, R., Vytiniotis, D., & Peyton Jones, S.** (2014). "Refinement Types for Haskell". *ICFP 2014*.
+   LiquidHaskell: refinement types for practical Haskell programming.
+   [ACM DL](https://dl.acm.org/doi/10.1145/2628136.2628161) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=5469899684247498855)
+
+3. **Xi, H. & Pfenning, F.** (1999). "Dependent Types in Practical Programming". *POPL 1999*.
+   Practical dependent types with refinements in DML.
+   [ACM DL](https://dl.acm.org/doi/10.1145/292540.292560) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=5370597198418459004)
+
+4. **Knowles, K. & Flanagan, C.** (2006). "Hybrid Type Checking". *POPL 2006*.
+   Combining static and dynamic checking for refinement types.
+   [ACM DL](https://dl.acm.org/doi/10.1145/1111037.1111059) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16920521062631097556)
+
+5. **Freeman, T. & Pfenning, F.** (1991). "Refinement Types for ML". *PLDI 1991*.
+   Original refinement types paper for ML.
+   [ACM DL](https://dl.acm.org/doi/10.1145/113445.113468) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=13855455209159556255)
+
+### Extended Reading
+
+6. **Flanagan, C.** (2006). "Hybrid Type Checking". *POPL 2006*.
+   Static and dynamic verification of contracts.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16920521062631097556)
+
+7. **Dunfield, J.** (2007). "Refined Typechecking with Stardust". *PLPV 2007*.
+   Practical refinement type checking.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=7813055753200524945)
+
+8. **Bengtson, J., Bhargavan, K., Fournet, C., Gordon, A., & Maffeis, S.** (2011). "Refinement Types for Secure Implementations". *ACM TOPLAS*, 33(2).
+   Refinement types for security verification.
+   [ACM DL](https://dl.acm.org/doi/10.1145/1890028.1890031) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=15395168108896050067)
 
 ## Project Structure
 

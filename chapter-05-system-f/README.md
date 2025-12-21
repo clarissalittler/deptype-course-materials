@@ -390,42 +390,59 @@ map        // ✗ Needs function
 
 ### Foundational Papers
 
-1. **Girard, Jean-Yves** (1972). "Interprétation fonctionnelle et élimination des coupures de l'arithmétique d'ordre supérieur." PhD thesis.
-   - Independent discovery of System F
+1. **Girard, Jean-Yves** (1972). "Interprétation fonctionnelle et élimination des coupures de l'arithmétique d'ordre supérieur." PhD thesis, Université Paris VII.
+   Independent discovery of System F.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=11981351871779498521)
 
 2. **Reynolds, John C.** (1974). "Towards a Theory of Type Structure." *Programming Symposium*.
-   - Independent discovery, connection to polymorphism
+   Independent discovery, connection to polymorphism.
+   [SpringerLink](https://link.springer.com/chapter/10.1007/3-540-06859-7_148) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=3983577454773522827)
 
 3. **Reynolds, John C.** (1983). "Types, Abstraction and Parametric Polymorphism." *IFIP*.
-   - Parametricity theorem and "theorems for free"
+   Parametricity theorem and "theorems for free".
+   [Google Scholar](https://scholar.google.com/scholar?cluster=9268645497659309771)
 
 4. **Wadler, Philip** (1989). "Theorems for Free!" *FPCA*.
-   - Accessible presentation of parametricity
+   Accessible presentation of parametricity.
+   [ACM DL](https://dl.acm.org/doi/10.1145/99370.99404) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=15441729363503280111)
 
 ### Type Inference
 
 5. **Wells, J. B.** (1999). "Typability and Type Checking in System F are Equivalent and Undecidable." *Annals of Pure and Applied Logic*.
-   - Proves undecidability of type inference
+   Proves undecidability of type inference.
+   [ScienceDirect](https://www.sciencedirect.com/science/article/pii/S0168007298000475) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=10784276429625502641)
 
 6. **Dunfield, Joshua and Krishnaswami, Neelakantan** (2013). "Complete and Easy Bidirectional Typechecking for Higher-Rank Polymorphism." *ICFP*.
-   - Practical bidirectional type checking
+   Practical bidirectional type checking.
+   [ACM DL](https://dl.acm.org/doi/10.1145/2500365.2500582) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2231098294608551327)
 
 ### Books
 
 7. **Girard, Jean-Yves; Lafont, Yves; Taylor, Paul** (1989). *Proofs and Types*. Cambridge University Press.
-   - Deep dive into System F and proof theory
+   Deep dive into System F and proof theory.
+   [PDF](http://www.paultaylor.eu/stable/Proofs+Types.html) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=3529429395025772879)
 
 8. **Pierce, Benjamin C.** (2002). *Types and Programming Languages*. MIT Press.
-   - Chapter 23: Universal Types
-   - Chapter 24: Existential Types
+   Chapter 23: Universal Types. Chapter 24: Existential Types.
+   [MIT Press](https://www.cis.upenn.edu/~bcpierce/tapl/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2853553209915529600)
 
 ### Advanced Topics
 
 9. **Boehm, Hans-J.** (1985). "Partial Polymorphic Type Inference is Undecidable." *FOCS*.
-   - Even partial type inference is hard
+   Even partial type inference is hard.
+   [IEEE](https://ieeexplore.ieee.org/document/4568156) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=13954903279890373519)
 
 10. **Cardelli, Luca and Wegner, Peter** (1985). "On Understanding Types, Data Abstraction, and Polymorphism." *ACM Computing Surveys*.
-    - Classic survey on polymorphism
+    Classic survey on polymorphism.
+    [ACM DL](https://dl.acm.org/doi/10.1145/6041.6042) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=2892005929822900967)
 
 ## Exercises
 

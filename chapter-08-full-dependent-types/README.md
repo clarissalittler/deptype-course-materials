@@ -1053,110 +1053,127 @@ val aes_encrypt : key:bytes{length key = 16} ->
 ### Foundational Papers
 
 1. **Martin-Löf, Per** (1984). *Intuitionistic Type Theory*. Bibliopolis.
-   - Original presentation of dependent type theory
-   - Introduces universes, Pi types, Sigma types, equality types
+   Original presentation of dependent type theory. Introduces universes, Pi types, Sigma types, equality types.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=9207064863129264920)
 
-2. **Coquand, Thierry; Huet, Gérard** (1988). "The Calculus of Constructions". *Information and Computation* 76(2-3): 95-120.
-   - Foundation of Coq proof assistant
-   - Combines dependent types with polymorphism
+2. **Coquand, Thierry; Huet, Gérard** (1988). "The Calculus of Constructions." *Information and Computation* 76(2-3).
+   Foundation of Coq. Combines dependent types with polymorphism.
+   [ScienceDirect](https://www.sciencedirect.com/science/article/pii/0890540188900053) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=3205596489261661697)
 
 3. **Luo, Zhaohui** (1994). *Computation and Reasoning: A Type Theory for Computer Science*. Oxford University Press.
-   - Comprehensive treatment of dependent type theory
-   - UTT (Unified Theory of dependent Types)
+   Comprehensive treatment of dependent type theory (UTT).
+   [Google Scholar](https://scholar.google.com/scholar?cluster=10089970779295728206)
 
 ### Universe Hierarchies
 
-4. **Coquand, Thierry** (1986). "An Analysis of Girard's Paradox". *Proceedings of LICS*.
-   - Explains why Type : Type is inconsistent
-   - Shows how universe hierarchies prevent the paradox
+4. **Coquand, Thierry** (1986). "An Analysis of Girard's Paradox." *LICS*.
+   Explains why Type : Type is inconsistent.
+   [IEEE](https://ieeexplore.ieee.org/document/4567845) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16619146726034287926)
 
-5. **Harper, Robert; Pollack, Robert** (1991). "Type Checking with Universes". *Theoretical Computer Science* 89(1): 107-136.
-   - Practical aspects of implementing universe hierarchies
+5. **Harper, Robert; Pollack, Robert** (1991). "Type Checking with Universes." *TCS* 89(1).
+   Practical aspects of implementing universe hierarchies.
+   [ScienceDirect](https://www.sciencedirect.com/science/article/pii/030439759190061P) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=11096623553888858892)
 
 ### Equality Types
 
-6. **Hofmann, Martin; Streicher, Thomas** (1998). "The Groupoid Interpretation of Type Theory". *Twenty-Five Years of Constructive Type Theory*.
-   - Semantic interpretation of equality types
-   - Groupoid model of types
+6. **Hofmann, Martin; Streicher, Thomas** (1998). "The Groupoid Interpretation of Type Theory." *Twenty-Five Years of Constructive Type Theory*.
+   Semantic interpretation of equality types. Groupoid model.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16459165867051656800)
 
 7. **The Univalent Foundations Program** (2013). *Homotopy Type Theory: Univalent Foundations of Mathematics*.
-   - Modern perspective on equality in type theory
-   - Higher-dimensional equality
-   - Available at: https://homotopytypetheory.org/book/
+   Modern perspective on equality in type theory.
+   [HoTT Book](https://homotopytypetheory.org/book/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=7965636527132643706)
 
 ### Inductive Types
 
-8. **Coquand, Thierry; Paulin, Christine** (1990). "Inductively Defined Types". *COLOG-88*.
-   - Formalization of inductive types in type theory
-   - Inductive families and indexed types
+8. **Coquand, Thierry; Paulin, Christine** (1990). "Inductively Defined Types." *COLOG-88*.
+   Formalization of inductive types in type theory.
+   [SpringerLink](https://link.springer.com/chapter/10.1007/3-540-52335-9_47) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=7879254568979157738)
 
-9. **Dybjer, Peter** (1994). "Inductive Families". *Formal Aspects of Computing* 6(4): 440-465.
-   - Comprehensive treatment of inductive families
-   - Vec and Fin as canonical examples
+9. **Dybjer, Peter** (1994). "Inductive Families." *Formal Aspects of Computing* 6(4).
+   Comprehensive treatment of inductive families. Vec and Fin.
+   [SpringerLink](https://link.springer.com/article/10.1007/BF01211308) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=5851085224276083426)
 
-10. **McBride, Conor; McKinna, James** (2004). "The View from the Left". *Journal of Functional Programming* 14(1): 69-111.
-    - Dependent pattern matching
-    - Compilation to eliminators
+10. **McBride, Conor; McKinna, James** (2004). "The View from the Left." *JFP* 14(1).
+    Dependent pattern matching. Compilation to eliminators.
+    [Cambridge](https://www.cambridge.org/core/journals/journal-of-functional-programming/article/view-from-the-left/3DAE3D6E5DA8A1FC5CC8DB4F0AF0C5E8) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=12231859628990685232)
 
 ### Pattern Matching
 
-11. **Coquand, Thierry** (1992). "Pattern Matching with Dependent Types". *Proceedings of the Workshop on Types for Proofs and Programs*.
-    - Theory of dependent pattern matching
+11. **Coquand, Thierry** (1992). "Pattern Matching with Dependent Types." *Types for Proofs and Programs*.
+    Theory of dependent pattern matching.
+    [Google Scholar](https://scholar.google.com/scholar?cluster=8168284927953888458)
 
-12. **Goguen, Healfdene; McBride, Conor; McKinna, James** (2006). "Eliminating Dependent Pattern Matching". *Algebra, Meaning, and Computation*.
-    - How to compile pattern matching to eliminators
-    - Coverage checking
+12. **Goguen, Healfdene; McBride, Conor; McKinna, James** (2006). "Eliminating Dependent Pattern Matching." *Algebra, Meaning, and Computation*.
+    Compiling pattern matching to eliminators. Coverage checking.
+    [SpringerLink](https://link.springer.com/chapter/10.1007/11780274_27) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=12231859628990685232)
 
 ### Proof Assistants
 
-13. **Norell, Ulf** (2007). "Towards a Practical Programming Language Based on Dependent Type Theory". PhD thesis, Chalmers University.
-    - Agda: practical dependent types
-    - Mixfix operators, instance arguments
+13. **Norell, Ulf** (2007). "Towards a Practical Programming Language Based on Dependent Type Theory." PhD thesis, Chalmers.
+    Agda: practical dependent types.
+    [Chalmers](https://www.cse.chalmers.se/~ulfn/papers/thesis.pdf) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=11787413397362878341)
 
-14. **The Coq Development Team** (2023). *The Coq Proof Assistant Reference Manual*. Version 8.17.
-    - Comprehensive manual for Coq
-    - Available at: https://coq.inria.fr/
+14. **The Coq Development Team** (2023). *The Coq Proof Assistant Reference Manual*.
+    [Coq](https://coq.inria.fr/) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=16890529309851284129)
 
-15. **de Moura, Leonardo; Kong, Soonho; Avigad, Jeremy; van Doorn, Floris; von Raumer, Jakob** (2015). "The Lean Theorem Prover". *CADE-25*.
-    - Modern proof assistant with dependent types
-    - Focus on automation
+15. **de Moura, Leonardo et al.** (2015). "The Lean Theorem Prover." *CADE-25*.
+    Modern proof assistant with dependent types.
+    [SpringerLink](https://link.springer.com/chapter/10.1007/978-3-319-21401-6_26) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=10880568587505839893)
 
-16. **Brady, Edwin** (2013). "Idris, a General-Purpose Dependently Typed Programming Language: Design and Implementation". *Journal of Functional Programming* 23(5): 552-593.
-    - Practical dependent programming language
-    - First-class types, totality checking
+16. **Brady, Edwin** (2013). "Idris, a General-Purpose Dependently Typed Programming Language." *JFP* 23(5).
+    Practical dependent programming language.
+    [Cambridge](https://www.cambridge.org/core/journals/journal-of-functional-programming/article/idris-a-generalpurpose-dependently-typed-programming-language-design-and-implementation/E0F23BFAE9E34A5E4C94E087C02B69F3) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=11628936203266632654)
 
 ### Logical Foundations
 
-17. **Howard, William A.** (1980). "The Formulae-as-Types Notion of Construction". In *To H.B. Curry: Essays on Combinatory Logic, Lambda Calculus, and Formalism*.
-    - Classic paper on Curry-Howard correspondence
+17. **Howard, William A.** (1980). "The Formulae-as-Types Notion of Construction." In *To H.B. Curry*.
+    Classic paper on Curry-Howard correspondence.
+    [Google Scholar](https://scholar.google.com/scholar?cluster=15991881543698967061)
 
-18. **Wadler, Philip** (2015). "Propositions as Types". *Communications of the ACM* 58(12): 75-84.
-    - Modern exposition of Curry-Howard
-    - Historical perspective
+18. **Wadler, Philip** (2015). "Propositions as Types." *CACM* 58(12).
+    Modern exposition of Curry-Howard.
+    [ACM DL](https://dl.acm.org/doi/10.1145/2699407) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=14430234472936129425)
 
 ### Implementation
 
-19. **Löh, Andres; McBride, Conor; Swierstra, Wouter** (2010). "A Tutorial Implementation of a Dependently Typed Lambda Calculus". *Fundamenta Informaticae* 102(2): 177-207.
-    - Step-by-step implementation guide
-    - Available at: https://www.andres-loeh.de/LambdaPi/
+19. **Löh, Andres; McBride, Conor; Swierstra, Wouter** (2010). "A Tutorial Implementation of a Dependently Typed Lambda Calculus." *Fundamenta Informaticae* 102(2).
+    Step-by-step implementation guide.
+    [LambdaPi](https://www.andres-loeh.de/LambdaPi/) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=16063276671918451765)
 
-20. **Augustsson, Lennart; Coquand, Thierry** (2007). "A Small Type Checker for a Language with Dependent Types". Video lecture.
-    - Minimal implementation of dependent types
-    - ~200 lines of Haskell
+20. **Augustsson, Lennart; Coquand, Thierry** (2007). "A Small Type Checker for a Language with Dependent Types." Video lecture.
+    Minimal implementation of dependent types (~200 lines).
 
 ### Advanced Topics
 
-21. **Sozeau, Matthieu; Mangin, Cyprien** (2019). "Equations Reloaded: High-Level Dependently-Typed Functional Programming and Proving in Coq". *Proceedings of the ACM on Programming Languages* 3(ICFP): 86.
-    - Advanced pattern matching in Coq
-    - Well-founded recursion
+21. **Sozeau, Matthieu; Mangin, Cyprien** (2019). "Equations Reloaded." *PACMPL* 3(ICFP).
+    Advanced pattern matching in Coq. Well-founded recursion.
+    [ACM DL](https://dl.acm.org/doi/10.1145/3341690) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=16469920605620048954)
 
-22. **Altenkirch, Thorsten; McBride, Conor; Swierstra, Wouter** (2007). "Observational Equality, Now!" *PLPV '07*.
-    - Alternative approaches to equality
-    - Extensional vs intensional equality
+22. **Altenkirch, Thorsten; McBride, Conor; Swierstra, Wouter** (2007). "Observational Equality, Now!" *PLPV*.
+    Alternative approaches to equality.
+    [ACM DL](https://dl.acm.org/doi/10.1145/1292597.1292608) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=5099850890325070600)
 
-23. **Licata, Daniel R.; Harper, Robert** (2012). "Canonicity for 2-Dimensional Type Theory". *POPL '12*.
-    - Computational interpretation of HoTT
-    - Canonicity for equality types
+23. **Licata, Daniel R.; Harper, Robert** (2012). "Canonicity for 2-Dimensional Type Theory." *POPL*.
+    Computational interpretation of HoTT.
+    [ACM DL](https://dl.acm.org/doi/10.1145/2103656.2103691) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=12310413168096419419)
 
 ## Summary
 

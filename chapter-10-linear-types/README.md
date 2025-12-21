@@ -268,22 +268,45 @@ linear> :quit              -- Exit
 ### Primary Sources
 
 1. **Girard, J.-Y.** (1987). "Linear Logic". *Theoretical Computer Science*, 50(1), 1-102.
-   - The foundational work on linear logic
+   The foundational work on linear logic.
+   [ScienceDirect](https://www.sciencedirect.com/science/article/pii/0304397587900454) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=3036007850515906639)
 
-2. **Wadler, P.** (1990). "Linear Types Can Change the World!". *IFIP TC 2*.
-   - Connecting linear logic to programming
+2. **Wadler, P.** (1990). "Linear Types Can Change the World!". *IFIP TC 2 Working Conference*.
+   Connecting linear logic to programming.
+   [CiteSeerX](https://citeseerx.ist.psu.edu/viewdoc/summary?doi=10.1.1.31.5002) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=15710024600893386777)
 
-3. **Bernardy, J.-P., Boespflug, M., Newton, R., Peyton Jones, S., & Spiwack, A.** (2017). "Linear Haskell: Practical Linearity in a Higher-Order Polymorphic Language". *POPL*.
-   - Linear types in GHC
+3. **Bernardy, J.-P., Boespflug, M., Newton, R., Peyton Jones, S., & Spiwack, A.** (2017). "Linear Haskell: Practical Linearity in a Higher-Order Polymorphic Language". *POPL 2018*.
+   Linear types in GHC.
+   [ACM DL](https://dl.acm.org/doi/10.1145/3158093) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=7513674687229476929)
 
 4. **Walker, D.** (2005). "Substructural Type Systems". In *Advanced Topics in Types and Programming Languages*.
-   - Comprehensive overview
+   Comprehensive overview of linear, affine, and ordered types.
+   [MIT Press](https://mitpress.mit.edu/9780262162289/advanced-topics-in-types-and-programming-languages/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=5700694467541167730)
+
+5. **Barendregt, H. & Ghilezan, S.** (2000). "Lambda Terms for Natural Deduction, Sequent Calculus and Cut Elimination". *Journal of Functional Programming*, 10(1), 121-134.
+   Connection between linear logic and type theory.
+   [Cambridge](https://www.cambridge.org/core/journals/journal-of-functional-programming/article/lambda-terms-for-natural-deduction-sequent-calculus-and-cut-elimination/1FC2F71C5BFC3C3808A5AA5BD139B3F4) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=13453453628859030633)
+
+6. **Atkey, R.** (2018). "Syntax and Semantics of Quantitative Type Theory". *LICS 2018*.
+   Foundation for Idris 2's quantitative types.
+   [ACM DL](https://dl.acm.org/doi/10.1145/3209108.3209189) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=4161449034258826770)
 
 ### Related Systems
 
-5. **Rust Programming Language** - Ownership and borrowing
-6. **Clean** - Uniqueness types
-7. **Idris 2** - Quantitative Type Theory
+7. **Rust Programming Language** - Ownership and borrowing
+   [Rust Book](https://doc.rust-lang.org/book/)
+
+8. **Clean Language** - Uniqueness types for functional I/O
+   [Clean Home](https://clean.cs.ru.nl/)
+
+9. **Idris 2** - Quantitative Type Theory implementation
+   [Idris 2 Docs](https://idris2.readthedocs.io/)
 
 ---
 

@@ -375,40 +375,55 @@ Most ML-family compilers use variants of Algorithm W:
 ### Essential Reading
 
 1. **Damas, Luis and Milner, Robin** (1982). "Principal Type-Schemes for Functional Programs." *POPL*.
-   - Original paper on Algorithm W
-   - Proves soundness, completeness, and principal types
+   Original paper on Algorithm W. Proves soundness, completeness, and principal types.
+   [ACM DL](https://dl.acm.org/doi/10.1145/582153.582176) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=7453965783765422042)
 
-2. **Hindley, J. Roger** (1969). "The Principal Type-Scheme of an Object in Combinatory Logic." *Transactions of the AMS*.
-   - Independent discovery of type inference
+2. **Hindley, J. Roger** (1969). "The Principal Type-Scheme of an Object in Combinatory Logic." *Trans. AMS*.
+   Independent discovery of type inference.
+   [AMS](https://www.ams.org/journals/tran/1969-146-00/S0002-9947-1969-0253905-6/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16871187286604568900)
 
 3. **Milner, Robin** (1978). "A Theory of Type Polymorphism in Programming." *JCSS*.
-   - Foundational paper on ML type system
+   Foundational paper on ML type system.
+   [ScienceDirect](https://www.sciencedirect.com/science/article/pii/0022000078900144) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=4334544669712632498)
 
 4. **Pierce, Benjamin C.** (2002). *Types and Programming Languages*. MIT Press.
-   - Chapter 22: Type Reconstruction
-   - Excellent presentation of Algorithm W
+   Chapter 22: Type Reconstruction. Excellent presentation of Algorithm W.
+   [MIT Press](https://www.cis.upenn.edu/~bcpierce/tapl/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2853553209915529600)
 
 5. **Cardelli, Luca** (1987). "Basic Polymorphic Typechecking." *Science of Computer Programming*.
-   - Clear algorithmic presentation
+   Clear algorithmic presentation.
+   [ScienceDirect](https://www.sciencedirect.com/science/article/pii/0167642387900190) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=4664725779762600556)
 
 ### Advanced Topics
 
-6. **Rémy, Didier** (1992). "Extension of ML Type System with a Sorted Equational Theory on Types." *INRIA Research Report*.
-   - Row polymorphism for records
+6. **Rémy, Didier** (1992). "Extension of ML Type System with a Sorted Equational Theory on Types." *INRIA*.
+   Row polymorphism for records.
+   [HAL](https://hal.inria.fr/inria-00077006) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=7410270044612679060)
 
 7. **Jones, Mark P.** (1992). "A Theory of Qualified Types." *ESOP*.
-   - Type classes for Haskell
+   Type classes for Haskell.
+   [SpringerLink](https://link.springer.com/chapter/10.1007/3-540-55253-7_17) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=8556090399082029493)
 
 8. **Odersky, Martin and Läufer, Konstantin** (1996). "Putting Type Annotations to Work." *POPL*.
-   - Local type inference
+   Local type inference.
+   [ACM DL](https://dl.acm.org/doi/10.1145/237721.237729) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=11364467204887709896)
 
 ### Implementation
 
 9. **Heeren, Bastiaan; Hage, Jurriaan; Swierstra, Doaitse** (2002). "Generalizing Hindley-Milner Type Inference Algorithms." *Utrecht University Technical Report*.
-   - Modern treatment of type inference algorithms
+   Modern treatment of type inference algorithms.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=5731157297390955667)
 
 10. **Online Resources**:
-    - Stephen Diehl's "Write You a Haskell": http://dev.stephendiehl.com/fun/006_hindley_milner.html
+    - [Write You a Haskell](http://dev.stephendiehl.com/fun/006_hindley_milner.html) by Stephen Diehl
     - Algorithm W Step by Step by Martin Grabmüller
 
 ## Exercises

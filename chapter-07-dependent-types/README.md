@@ -607,54 +607,67 @@ fn concat<T, const N: usize, const M: usize>(
 
 ### Foundational Papers
 
-1. **Martin-Löf, Per** (1984). *Intuitionistic Type Theory*
-   - Foundational work on dependent types
-   - Notes by Giovanni Sambin
+1. **Martin-Löf, Per** (1984). *Intuitionistic Type Theory*. Notes by Giovanni Sambin.
+   Foundational work on dependent types.
+   [PDF](http://www.cse.chalmers.se/research/group/logic/book/book.pdf) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=9207064863129264920)
 
-2. **de Bruijn, N.G.** (1970). "The Mathematical Language AUTOMATH"
-   - First implementation of dependent types
-   - Automated Mathematics
+2. **de Bruijn, N.G.** (1970). "The Mathematical Language AUTOMATH." *Symposium on Automatic Demonstration*.
+   First implementation of dependent types.
+   [SpringerLink](https://link.springer.com/chapter/10.1007/BFb0060623) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=13059430215555836929)
 
-3. **Coquand, Thierry; Huet, Gérard** (1988). "The Calculus of Constructions"
-   - Combines dependent types with System F
-   - Foundation of Coq
+3. **Coquand, Thierry; Huet, Gérard** (1988). "The Calculus of Constructions." *Information and Computation*.
+   Combines dependent types with System F. Foundation of Coq.
+   [ScienceDirect](https://www.sciencedirect.com/science/article/pii/0890540188900053) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=3205596489261661697)
 
-4. **Luo, Zhaohui** (1994). *Computation and Reasoning: A Type Theory for Computer Science*
-   - Modern treatment of dependent type theory
+4. **Luo, Zhaohui** (1994). *Computation and Reasoning: A Type Theory for Computer Science*. Oxford University Press.
+   Modern treatment of dependent type theory.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=10089970779295728206)
 
 ### Practical Systems
 
-5. **Norell, Ulf** (2007). "Towards a practical programming language based on dependent type theory"
-   - PhD thesis on Agda
-   - University of Gothenburg
+5. **Norell, Ulf** (2007). "Towards a practical programming language based on dependent type theory." PhD thesis, University of Gothenburg.
+   PhD thesis on Agda.
+   [Chalmers](https://www.cse.chalmers.se/~ulfn/papers/thesis.pdf) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=11787413397362878341)
 
-6. **Brady, Edwin** (2013). "Idris, a general-purpose dependently typed programming language"
-   - JFP 23(5)
-   - Practical dependent types
+6. **Brady, Edwin** (2013). "Idris, a general-purpose dependently typed programming language." *JFP* 23(5).
+   Practical dependent types.
+   [Cambridge](https://www.cambridge.org/core/journals/journal-of-functional-programming/article/idris-a-generalpurpose-dependently-typed-programming-language-design-and-implementation/E0F23BFAE9E34A5E4C94E087C02B69F3) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=11628936203266632654)
 
-7. **The Coq Development Team** (2021). *The Coq Proof Assistant Reference Manual*
-   - Version 8.13
-   - https://coq.inria.fr
+7. **The Coq Development Team** (2021). *The Coq Proof Assistant Reference Manual*.
+   [Coq](https://coq.inria.fr) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16890529309851284129)
 
-8. **de Moura, Leonardo; et al.** (2015). "The Lean Theorem Prover"
-   - CADE-25
-   - Modern proof assistant
+8. **de Moura, Leonardo; et al.** (2015). "The Lean Theorem Prover." *CADE-25*.
+   Modern proof assistant.
+   [SpringerLink](https://link.springer.com/chapter/10.1007/978-3-319-21401-6_26) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=10880568587505839893)
 
 ### Tutorials and Books
 
-9. **Nordström, Bengt; Petersson, Kent; Smith, Jan M.** (1990). *Programming in Martin-Löf's Type Theory*
-   - Excellent introduction with examples
+9. **Nordström, Bengt; Petersson, Kent; Smith, Jan M.** (1990). *Programming in Martin-Löf's Type Theory*.
+   Excellent introduction with examples.
+   [PDF](http://www.cse.chalmers.se/research/group/logic/book/book.pdf) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=18093583098241024990)
 
-10. **Bertot, Yves; Castéran, Pierre** (2004). *Interactive Theorem Proving and Program Development: Coq'Art*
-    - Practical introduction to Coq
+10. **Bertot, Yves; Castéran, Pierre** (2004). *Interactive Theorem Proving and Program Development: Coq'Art*. Springer.
+    Practical introduction to Coq.
+    [SpringerLink](https://link.springer.com/book/10.1007/978-3-662-07964-5) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=8898676432185858068)
 
-11. **Stump, Aaron** (2016). *Verified Functional Programming in Agda*
-    - ACM Books
-    - Learn Agda through examples
+11. **Stump, Aaron** (2016). *Verified Functional Programming in Agda*. ACM Books.
+    Learn Agda through examples.
+    [ACM DL](https://dl.acm.org/doi/book/10.1145/2841316) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=3621736063867259614)
 
-12. **Wadler, Philip** (2015). "Propositions as Types"
-    - Communications of the ACM 58(12)
-    - Beautiful explanation of Curry-Howard
+12. **Wadler, Philip** (2015). "Propositions as Types." *Communications of the ACM* 58(12).
+    Beautiful explanation of Curry-Howard.
+    [ACM DL](https://dl.acm.org/doi/10.1145/2699407) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=14430234472936129425)
 
 ## Next Chapter
 

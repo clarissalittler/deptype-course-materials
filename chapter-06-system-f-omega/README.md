@@ -463,51 +463,55 @@ type ReturnType<T extends (...args: any) => any> =
 
 ### Foundational Papers
 
-1. **Girard, Jean-Yves** (1972). "Interprétation fonctionnelle et élimination des coupures de l'arithmétique d'ordre supérieur"
-   - Original presentation of System F-omega
-   - PhD thesis, Université Paris VII
+1. **Girard, Jean-Yves** (1972). "Interprétation fonctionnelle et élimination des coupures de l'arithmétique d'ordre supérieur." PhD thesis, Université Paris VII.
+   Original presentation of System F-omega.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=11981351871779498521)
 
-2. **Reynolds, John C.** (1985). "Three Approaches to Type Structure"
-   - Alternative presentation of F-omega
-   - *Mathematical Foundations of Software Development*
+2. **Reynolds, John C.** (1985). "Three Approaches to Type Structure." *Mathematical Foundations of Software Development*.
+   Alternative presentation of F-omega.
+   [SpringerLink](https://link.springer.com/chapter/10.1007/3-540-15198-2_7) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=14937629694168523507)
 
-3. **Barendregt, Henk** (1992). "Lambda Calculi with Types"
-   - Comprehensive treatment in *Handbook of Logic in Computer Science*, Vol. 2
-   - Covers System F, F-omega, and beyond
+3. **Barendregt, Henk** (1992). "Lambda Calculi with Types." *Handbook of Logic in Computer Science*, Vol. 2.
+   Comprehensive treatment covering System F, F-omega, and beyond.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=11654927772893943213)
 
-4. **Mitchell, John C.** (1996). *Foundations for Programming Languages*
-   - Chapter 11: Higher-Order Type Systems
-   - MIT Press
+4. **Mitchell, John C.** (1996). *Foundations for Programming Languages*. MIT Press.
+   Chapter 11: Higher-Order Type Systems.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2908587526117199295)
 
 ### Applications
 
-5. **Jones, Mark P.; Peyton Jones, Simon; Meijer, Erik** (1997). "Type Classes: An Exploration of the Design Space"
-   - Shows how Haskell's type classes relate to F-omega
-   - *Haskell Workshop*
+5. **Jones, Mark P.; Peyton Jones, Simon; Meijer, Erik** (1997). "Type Classes: An Exploration of the Design Space." *Haskell Workshop*.
+   Shows how Haskell's type classes relate to F-omega.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16289167170168545720)
 
-6. **Pierce, Benjamin C.** (2002). *Types and Programming Languages*
-   - Chapter 30: Higher-Order Polymorphism
-   - Accessible introduction with examples
-   - MIT Press
+6. **Pierce, Benjamin C.** (2002). *Types and Programming Languages*. MIT Press.
+   Chapter 30: Higher-Order Polymorphism.
+   [MIT Press](https://www.cis.upenn.edu/~bcpierce/tapl/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2853553209915529600)
 
-7. **Wadler, Philip; Blott, Stephen** (1989). "How to Make Ad-hoc Polymorphism Less Ad Hoc"
-   - Type classes in Haskell
-   - Shows practical use of higher-kinded types
-   - *POPL '89*
+7. **Wadler, Philip; Blott, Stephen** (1989). "How to Make Ad-hoc Polymorphism Less Ad Hoc." *POPL*.
+   Type classes in Haskell. Shows practical use of higher-kinded types.
+   [ACM DL](https://dl.acm.org/doi/10.1145/75277.75283) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=4466886255570393883)
 
 ### Modern Perspectives
 
-8. **Yallop, Jeremy; White, Leo** (2014). "Lightweight Higher-Kinded Polymorphism"
-   - Encoding higher-kinded types in ML
-   - *FLOPS 2014*
+8. **Yallop, Jeremy; White, Leo** (2014). "Lightweight Higher-Kinded Polymorphism." *FLOPS*.
+   Encoding higher-kinded types in ML.
+   [SpringerLink](https://link.springer.com/chapter/10.1007/978-3-319-07151-0_8) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2107896892396454966)
 
-9. **Chakravarty, Manuel M. T.** et al. (2005). "Associated Types with Class"
-   - Extension of type classes
-   - *POPL '05*
+9. **Chakravarty, Manuel M. T. et al.** (2005). "Associated Types with Class." *POPL*.
+   Extension of type classes.
+   [ACM DL](https://dl.acm.org/doi/10.1145/1040305.1040306) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=11507021098888180095)
 
-10. **Eisenberg, Richard A.** (2016). "Dependent Types in Haskell: Theory and Practice"
-    - Connection between F-omega and dependent types
-    - PhD Thesis, University of Pennsylvania
+10. **Eisenberg, Richard A.** (2016). "Dependent Types in Haskell: Theory and Practice." PhD Thesis, University of Pennsylvania.
+    Connection between F-omega and dependent types.
+    [UPenn](https://www.cis.upenn.edu/~sweirich/papers/eisenberg-thesis.pdf) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=16153728211248108959)
 
 ## Next Chapter
 

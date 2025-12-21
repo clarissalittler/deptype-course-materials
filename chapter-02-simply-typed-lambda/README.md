@@ -458,53 +458,62 @@ STLC laid the foundation for modern type systems:
 ### Essential Reading
 
 1. **Pierce, Benjamin C.** (2002). *Types and Programming Languages*. MIT Press.
-   - Chapter 9: Simply Typed Lambda Calculus
-   - Chapter 11: Simple Extensions
-   - The standard reference for typed λ-calculi
+   Chapter 9: Simply Typed Lambda Calculus. Chapter 11: Simple Extensions. The standard reference.
+   [MIT Press](https://www.cis.upenn.edu/~bcpierce/tapl/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=2853553209915529600)
 
 2. **Sørensen, Morten Heine and Urzyczyn, Paweł** (2006). *Lectures on the Curry-Howard Isomorphism*. Elsevier.
-   - Chapter 2: The Simply Typed Lambda Calculus
-   - Connects types to logic via Curry-Howard
+   Chapter 2: The Simply Typed Lambda Calculus. Connects types to logic via Curry-Howard.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16458152610971891441)
 
 3. **Harper, Robert** (2016). *Practical Foundations for Programming Languages* (2nd ed.). Cambridge University Press.
-   - Chapter 10: Function Definitions and Values
-   - Modern perspective on type theory
+   Chapter 10: Function Definitions and Values. Modern perspective on type theory.
+   [CMU](http://www.cs.cmu.edu/~rwh/pfpl/) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=16024670421211833203)
 
 ### Theoretical Foundations
 
 4. **Church, Alonzo** (1940). "A Formulation of the Simple Theory of Types." *Journal of Symbolic Logic*, 5(2): 56-68.
-   - Original formulation of simple type theory
+   Original formulation of simple type theory.
+   [JSTOR](https://www.jstor.org/stable/2266170) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=8909585676148014330)
 
 5. **Curry, Haskell B. and Feys, Robert** (1958). *Combinatory Logic, Volume I*. North-Holland.
-   - Early development of typed combinatory logic
+   Early development of typed combinatory logic.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=8737970900188352623)
 
 6. **Girard, Jean-Yves; Lafont, Yves; and Taylor, Paul** (1989). *Proofs and Types*. Cambridge University Press.
-   - Deep dive into the theory of typed systems
-   - Available free online
+   Deep dive into the theory of typed systems.
+   [PDF](http://www.paultaylor.eu/stable/Proofs+Types.html) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=3529429395025772879)
 
 ### Strong Normalization
 
 7. **Tait, William W.** (1967). "Intensional Interpretations of Functionals of Finite Type I." *Journal of Symbolic Logic*, 32(2): 198-212.
-   - Classic proof of strong normalization for STLC
+   Classic proof of strong normalization for STLC.
+   [JSTOR](https://www.jstor.org/stable/2271658) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=12306989206865600254)
 
-8. **Barendregt, Henk** (1992). "Lambda Calculi with Types." In *Handbook of Logic in Computer Science*, Volume 2.
-   - Comprehensive coverage including normalization proofs
+8. **Barendregt, Henk** (1992). "Lambda Calculi with Types." *Handbook of Logic in Computer Science*, Vol. 2.
+   Comprehensive coverage including normalization proofs.
+   [Google Scholar](https://scholar.google.com/scholar?cluster=11654927772893943213)
 
 ### Implementation
 
-9. **Augustsson, Lennart** (1998). "Cayenne—a language with dependent types." In *ICFP*.
-   - Practical implementation insights
+9. **Augustsson, Lennart** (1998). "Cayenne—a language with dependent types." *ICFP*.
+   Practical implementation insights.
+   [ACM DL](https://dl.acm.org/doi/10.1145/289423.289451) |
+   [Google Scholar](https://scholar.google.com/scholar?cluster=3454832571259547278)
 
 ### Online Resources
 
 10. **Software Foundations** (Pierce et al.)
-    - Vol 2: Programming Language Foundations
-    - Coq formalization of STLC
-    - https://softwarefoundations.cis.upenn.edu/
+    Vol 2: Programming Language Foundations. Coq formalization of STLC.
+    [Website](https://softwarefoundations.cis.upenn.edu/) |
+    [Google Scholar](https://scholar.google.com/scholar?cluster=12178744100667215946)
 
 11. **Type Theory Study Group Resources**
-    - https://github.com/type-theory
-    - Implementations and tutorials
+    [GitHub](https://github.com/type-theory) - Implementations and tutorials
 
 ## Exercises
 
