@@ -15,9 +15,11 @@
 
 ## What is This Course About?
 
-This course teaches you to **implement type systems from scratch**. You'll build 8 different type checkers and evaluators, each more sophisticated than the last:
+This course teaches you to **implement type systems from scratch**. You'll build 22 different type checkers and evaluators, each exploring different aspects of type theory:
 
 ```
+CORE PROGRESSION (Chapters 1-8):
+─────────────────────────────────
 Untyped λ-calculus
     ↓ (add types)
 Simply Typed λ-calculus
@@ -33,13 +35,64 @@ System F-omega
 Dependent Types
     ↓ (add universe hierarchy)
 Full Dependent Types
+
+ADVANCED TYPE FEATURES (Chapters 9-16):
+───────────────────────────────────────
+Subtyping              ← width/depth subtyping, variance
+Linear Types           ← resource tracking, multiplicities
+Refinement Types       ← predicate refinements, SMT-style
+Effect Systems         ← tracking computational effects
+Gradual Typing         ← mixing static and dynamic
+Row Types              ← extensible records, polymorphic variants
+Recursive Types        ← iso/equi-recursive, μ-types
+Homotopy Type Theory   ← univalence, higher inductive types
+
+IMPLEMENTATION TECHNIQUES (Chapters 17-22):
+───────────────────────────────────────────
+Abstract Machines      ← CEK, SECD, Krivine machines
+Normalization by Eval  ← semantic normalization
+Bidirectional Typing   ← inference/checking modes
+Denotational Semantics ← domain theory, fixed points
+Module Systems         ← structures, signatures, functors
+Constraint Inference   ← two-phase inference, constraint solving
 ```
 
 **By the end**, you'll understand the foundations of:
-- Programming language design
-- Type checking and inference
+- Programming language design and type system implementation
+- Type checking, inference, and constraint solving
 - Proof assistants (Coq, Agda, Lean)
-- Verified programming
+- Verified programming and formal methods
+- Modern language features (subtyping, linear types, effects)
+- Compiler implementation techniques (abstract machines, NbE)
+- Module systems and large-scale program organization
+- Cutting-edge research (HoTT, refinement types, gradual typing)
+
+### Complete Chapter Overview
+
+| Chapter | Topic | Key Concepts |
+|---------|-------|--------------|
+| 1 | Untyped Lambda Calculus | Variables, abstraction, application, substitution |
+| 2 | Simply Typed Lambda | Base types, function types, type checking |
+| 3 | STLC with ADTs | Products, sums, records, pattern matching |
+| 4 | Hindley-Milner | Algorithm W, unification, let-polymorphism |
+| 5 | System F | Explicit polymorphism, ∀ types, parametricity |
+| 6 | System F-omega | Kinds, type operators, higher-kinded types |
+| 7 | Dependent Types | Pi types, Sigma types, unified terms/types |
+| 8 | Full Dependent Types | Universe hierarchy, equality types, inductive families |
+| 9 | Subtyping | Width/depth subtyping, variance, Top/Bot |
+| 10 | Linear Types | Multiplicities, usage tracking, resource safety |
+| 11 | Refinement Types | Predicate refinements, dependent refinements |
+| 12 | Effect Systems | Effect tracking, effect polymorphism, handlers |
+| 13 | Gradual Typing | Dynamic type, consistency, casts, blame |
+| 14 | Row Types | Extensible records, row polymorphism, variants |
+| 15 | Recursive Types | Mu types, fold/unfold, iso-recursive |
+| 16 | Homotopy Type Theory | Identity types, univalence, HITs |
+| 17 | Abstract Machines | CEK, SECD, Krivine machines |
+| 18 | Normalization by Evaluation | Semantic domains, quotation, reflection |
+| 19 | Bidirectional Typing | Inference/checking modes, annotations |
+| 20 | Denotational Semantics | Domains, CPOs, fixed points |
+| 21 | Module Systems | Structures, signatures, functors, sealing |
+| 22 | Constraint Inference | Constraint generation, solving, elaboration |
 
 ## Why Study Type Systems?
 
@@ -91,11 +144,30 @@ add("hello", 5)  # TypeError: can only concatenate str (not "int") to str
 
 ### Real Languages Use These Systems
 
+**Core Type Systems (Chapters 1-8):**
 - **Chapter 1-2 (STLC)**: C, Java, Go, TypeScript (basic mode)
 - **Chapter 4 (Hindley-Milner)**: Haskell, OCaml, F#, Rust (inference)
 - **Chapter 5 (System F)**: Haskell (under the hood), Java generics
 - **Chapter 6 (F-omega)**: Haskell type families, Scala higher-kinded types
 - **Chapter 7-8 (Dependent Types)**: Agda, Coq, Idris, Lean
+
+**Advanced Type Features (Chapters 9-16):**
+- **Chapter 9 (Subtyping)**: Java, TypeScript, Scala, OOP languages
+- **Chapter 10 (Linear Types)**: Rust (ownership), Haskell (linear arrows), Clean
+- **Chapter 11 (Refinement Types)**: Liquid Haskell, F*, Dafny, Ada/SPARK
+- **Chapter 12 (Effect Systems)**: Koka, Eff, OCaml 5.0 (effects), Frank
+- **Chapter 13 (Gradual Typing)**: TypeScript, Python (mypy), Racket, Typed Clojure
+- **Chapter 14 (Row Types)**: PureScript, OCaml (objects), Elm (records)
+- **Chapter 15 (Recursive Types)**: ML family, OCaml, Haskell (data types)
+- **Chapter 16 (HoTT)**: Cubical Agda, RedTT, cooltt, Arend
+
+**Implementation Techniques (Chapters 17-22):**
+- **Chapter 17 (Abstract Machines)**: Compiler backends, interpreters, VMs
+- **Chapter 18 (NbE)**: Agda, Lean, modern proof assistants
+- **Chapter 19 (Bidirectional)**: Agda, Idris, GHC, modern type checkers
+- **Chapter 20 (Denotational)**: Language specification, semantics research
+- **Chapter 21 (Module Systems)**: OCaml, SML, Rust (modules), Haskell (modules)
+- **Chapter 22 (Constraint Inference)**: GHC, rustc, Scala 3, modern compilers
 
 ## Prerequisites
 
@@ -439,15 +511,15 @@ typeCheck (Lam x ty t) = Right (TyArr ty ...)
 ### Time Estimates
 
 **Casual Pace:** 2-3 hours per week
-- Complete course in ~6 months
+- Complete course in ~12-18 months (22 chapters)
 - Great for self-study alongside other commitments
 
 **Moderate Pace:** 5-10 hours per week
-- Complete course in ~2 months
-- Suitable for semester-long independent study
+- Complete course in ~5-6 months
+- Suitable for semester-long or year-long independent study
 
 **Intensive Pace:** 20+ hours per week
-- Complete course in ~3-4 weeks
+- Complete course in ~10-12 weeks
 - Full-time immersion
 
 ### Suggested Schedules
@@ -456,18 +528,27 @@ typeCheck (Lam x ty t) = Right (TyArr ty ...)
 - Saturday: Read theory (2 hours)
 - Sunday: Code and exercises (3 hours)
 - 1 chapter every 2-3 weeks
+- ~44-66 weeks for all 22 chapters
 
 **Daily Learner (1 hour/day):**
 - Mon/Wed/Fri: Theory and reading
 - Tue/Thu: Coding and exercises
 - Weekends: Review and experiments
 - 1 chapter per week
+- ~22 weeks for all chapters
 
 **Bootcamp Style (40 hours/week):**
-- Week 1: Chapters 1-2
-- Week 2: Chapters 3-4
-- Week 3: Chapters 5-6
-- Week 4: Chapters 7-8
+- Week 1: Chapters 1-2 (Untyped, Simply Typed)
+- Week 2: Chapters 3-4 (ADTs, Hindley-Milner)
+- Week 3: Chapters 5-6 (System F, F-omega)
+- Week 4: Chapters 7-8 (Dependent Types, Full Dependent)
+- Week 5: Chapters 9-10 (Subtyping, Linear Types)
+- Week 6: Chapters 11-12 (Refinement Types, Effects)
+- Week 7: Chapters 13-14 (Gradual Typing, Row Types)
+- Week 8: Chapters 15-16 (Recursive Types, HoTT)
+- Week 9: Chapters 17-18 (Abstract Machines, NbE)
+- Week 10: Chapters 19-20 (Bidirectional, Denotational)
+- Week 11: Chapters 21-22 (Modules, Constraints)
 
 ### When You Get Stuck
 
@@ -545,6 +626,23 @@ Ready to begin? Here's your path forward:
 **Researcher/Expert** (interested in dependent types):
 → Jump to **Chapter 7: Dependent Types**
 
+**Interested in Practical Type Features:**
+→ Jump to **Chapter 9: Subtyping** (OOP-style types)
+→ Jump to **Chapter 10: Linear Types** (Rust-style ownership)
+→ Jump to **Chapter 11: Refinement Types** (Liquid Haskell-style)
+→ Jump to **Chapter 13: Gradual Typing** (TypeScript-style)
+
+**Interested in Implementation Techniques:**
+→ Jump to **Chapter 17: Abstract Machines** (VM/interpreter design)
+→ Jump to **Chapter 18: Normalization by Evaluation** (modern normalization)
+→ Jump to **Chapter 19: Bidirectional Typing** (practical type checking)
+→ Jump to **Chapter 22: Constraint Inference** (modern compilers)
+
+**Interested in Theory/Research:**
+→ Jump to **Chapter 16: Homotopy Type Theory** (cutting-edge foundations)
+→ Jump to **Chapter 20: Denotational Semantics** (mathematical foundations)
+→ Jump to **Chapter 21: Module Systems** (large-scale programming)
+
 ### First Steps
 
 1. **Read the main [README.md](README.md)** for course overview
@@ -579,9 +677,13 @@ Each chapter references foundational papers - read them for deeper understanding
 
 ## Ready?
 
-Now that you're prepared, choose your starting chapter and begin the journey from untyped lambda calculus to full dependent types!
+Now that you're prepared, choose your starting chapter and begin the journey through 22 chapters of type system implementation:
 
-**Good luck, and enjoy the adventure!** 🚀
+**Core Track:** Chapters 1-8 take you from untyped lambda calculus to full dependent types
+**Applied Track:** Chapters 9-16 explore practical type system features used in modern languages
+**Implementation Track:** Chapters 17-22 teach you how type systems are implemented in real compilers
+
+**Good luck, and enjoy the adventure!**
 
 ---
 
