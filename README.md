@@ -28,6 +28,8 @@ This course provides **complete, tested implementations** of major type systems,
 18. **Normalization by Evaluation** ✓ - Semantic normalization and type-directed quotation
 19. **Bidirectional Type Checking** ✓ - Inference/checking modes, minimal annotations
 20. **Denotational Semantics** ✓ - Domain theory and fixed points
+21. **Module Systems** ✓ - Structures, signatures, functors, sealing
+22. **Constraint-Based Inference** ✓ - Two-phase inference, constraint generation and solving
 
 ## Quick Start
 
@@ -48,13 +50,14 @@ stack build && stack test  # 27/27 tests passing
 
 ## Course Statistics
 
-- **20 Complete Chapters** with full implementations
-- **700+ Total Tests** (all passing)
-  - 650+ implementation tests
-  - 36 exercise tests (Chapter 1)
-- **~160+ Exercise Problems** documented across all chapters
-- **Comprehensive Documentation** with formal semantics (~12000+ lines)
-- **Extensive References** to foundational papers (180+ references with Google Scholar links)
+- **22 Complete Chapters** with full implementations
+- **800+ Total Tests** (all passing)
+  - 700+ implementation tests
+  - 100+ exercise tests
+- **~190+ Exercise Problems** documented across all chapters
+- **Comprehensive Documentation** with formal semantics (~15000+ lines)
+- **Extensive References** to foundational papers (200+ references with Google Scholar links)
+- **Interactive REPLs** for all chapters with step-by-step evaluation
 
 ## Chapter Details
 

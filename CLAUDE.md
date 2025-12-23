@@ -60,6 +60,18 @@ The chapters build upon each other:
 8. **Chapter 8 (Full Dependent)**: Universe hierarchy (`Universe Level`), equality types (`Eq`/`Refl`/`J`), inductive families
 9. **Chapter 9 (Subtyping)**: `TyTop`/`TyBot`, `isSubtype`, join/meet, record width/depth subtyping
 10. **Chapter 10 (Linear Types)**: Multiplicities (`One`/`Many`), `TyFun Mult`, usage tracking, bang types
+11. **Chapter 11 (Refinement Types)**: Predicate refinements `{x:T | p}`, SMT-style validity checking
+12. **Chapter 12 (Effect Systems)**: Effect rows, handlers, perform/handle
+13. **Chapter 13 (Gradual Typing)**: Dynamic type `?`, consistency, casts
+14. **Chapter 14 (Row Types)**: Extensible records, row variables, variants
+15. **Chapter 15 (Recursive Types)**: `μα.T`, fold/unfold, iso-recursive
+16. **Chapter 16 (HoTT)**: Identity types, J eliminator, paths, transport
+17. **Chapter 17 (Abstract Machines)**: CEK, SECD, Krivine machines
+18. **Chapter 18 (NbE)**: Normalization by evaluation, semantic domains
+19. **Chapter 19 (Bidirectional)**: Inference/checking modes, annotations
+20. **Chapter 20 (Denotational)**: Domain theory, fixed points, CPOs
+21. **Chapter 21 (Module Systems)**: Structures, signatures, functors, sealing
+22. **Chapter 22 (Constraint Inference)**: Two-phase inference, constraint generation/solving
 
 ### Key Implementation Patterns
 
@@ -77,7 +89,7 @@ The chapters build upon each other:
 
 ## Test Structure
 
-Tests are in `test/Spec.hs` and `test/ExerciseSpec.hs` (where applicable). Run with `stack test`. Total: 401 tests across all chapters.
+Tests are in `test/Spec.hs` and `test/ExerciseSpec.hs` (where applicable). Run with `stack test`. Total: 800+ tests across all 22 chapters.
 
 ## Completed Expansions
 
