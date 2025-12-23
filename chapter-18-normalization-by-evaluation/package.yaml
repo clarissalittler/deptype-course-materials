@@ -1,0 +1,41 @@
+name:                nbe
+version:             0.1.0.0
+synopsis:            Normalization by Evaluation
+license:             BSD3
+author:              Type Systems Course
+maintainer:          example@example.com
+category:            Education
+build-type:          Simple
+
+dependencies:
+  - base >= 4.7 && < 5
+  - containers
+  - mtl
+  - megaparsec
+  - text
+
+library:
+  source-dirs: src
+  exposed-modules:
+    - Syntax
+    - Semantic
+    - NbE
+    - TypeCheck
+    - Parser
+    - Pretty
+
+executables:
+  nbe-repl:
+    main:                Main.hs
+    source-dirs:         app
+    dependencies:
+      - nbe
+      - haskeline
+
+tests:
+  nbe-test:
+    main:                Spec.hs
+    source-dirs:         test
+    dependencies:
+      - nbe
+      - hspec

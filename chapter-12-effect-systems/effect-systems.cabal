@@ -24,6 +24,7 @@ library
       Pretty
       Syntax
       TypeCheck
+      Solutions
   other-modules:
       Paths_effect_systems
   hs-source-dirs:

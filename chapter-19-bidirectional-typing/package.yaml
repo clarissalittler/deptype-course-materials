@@ -1,0 +1,41 @@
+name:                bidirectional
+version:             0.1.0.0
+synopsis:            Bidirectional Type Checking
+license:             BSD3
+author:              Type Systems Course
+maintainer:          example@example.com
+category:            Education
+build-type:          Simple
+
+dependencies:
+  - base >= 4.7 && < 5
+  - containers
+  - mtl
+  - megaparsec
+  - parser-combinators
+  - text
+
+library:
+  source-dirs: src
+  exposed-modules:
+    - Syntax
+    - TypeCheck
+    - Eval
+    - Parser
+    - Pretty
+
+executables:
+  bidirectional-repl:
+    main:                Main.hs
+    source-dirs:         app
+    dependencies:
+      - bidirectional
+      - haskeline
+
+tests:
+  bidirectional-test:
+    main:                Spec.hs
+    source-dirs:         test
+    dependencies:
+      - bidirectional
+      - hspec

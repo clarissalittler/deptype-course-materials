@@ -24,6 +24,7 @@ library
       Pretty
       Syntax
       TypeCheck
+      Solutions
   other-modules:
       Paths_linear_types
   hs-source-dirs:

@@ -1,0 +1,68 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.37.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           denotational
+version:        0.1.0.0
+synopsis:       Denotational Semantics
+category:       Education
+author:         Type Systems Course
+maintainer:     example@example.com
+license:        BSD3
+build-type:     Simple
+
+library
+  exposed-modules:
+      Syntax
+      Domain
+      Denotation
+      Parser
+      Pretty
+  other-modules:
+      Paths_denotational
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , megaparsec
+    , mtl
+    , parser-combinators
+    , text
+  default-language: Haskell2010
+
+executable denotational-repl
+  main-is: Main.hs
+  other-modules:
+      Paths_denotational
+  hs-source-dirs:
+      app
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , denotational
+    , megaparsec
+    , mtl
+    , parser-combinators
+    , text
+  default-language: Haskell2010
+
+test-suite denotational-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_denotational
+  hs-source-dirs:
+      test
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , denotational
+    , hspec
+    , megaparsec
+    , mtl
+    , parser-combinators
+    , text
+  default-language: Haskell2010

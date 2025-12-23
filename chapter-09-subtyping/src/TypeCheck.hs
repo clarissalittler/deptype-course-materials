@@ -8,6 +8,9 @@ module TypeCheck
     -- * Subtyping
   , isSubtype
   , (<:)
+    -- * Join and Meet
+  , join
+  , meet
     -- * Type context
   , TypeContext
   , emptyContext

@@ -10,6 +10,7 @@ module TypeCheck
   , rowContains
   , rowUnion
   , rowRemove
+  , rowSubset
     -- * Errors
   , TypeError(..)
     -- * Context

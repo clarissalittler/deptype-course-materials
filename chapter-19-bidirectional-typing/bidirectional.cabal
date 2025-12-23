@@ -1,0 +1,69 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.37.0.
+--
+-- see: https://github.com/sol/hpack
+
+name:           bidirectional
+version:        0.1.0.0
+synopsis:       Bidirectional Type Checking
+category:       Education
+author:         Type Systems Course
+maintainer:     example@example.com
+license:        BSD3
+build-type:     Simple
+
+library
+  exposed-modules:
+      Syntax
+      TypeCheck
+      Eval
+      Parser
+      Pretty
+  other-modules:
+      Paths_bidirectional
+  hs-source-dirs:
+      src
+  build-depends:
+      base >=4.7 && <5
+    , containers
+    , megaparsec
+    , mtl
+    , parser-combinators
+    , text
+  default-language: Haskell2010
+
+executable bidirectional-repl
+  main-is: Main.hs
+  other-modules:
+      Paths_bidirectional
+  hs-source-dirs:
+      app
+  build-depends:
+      base >=4.7 && <5
+    , bidirectional
+    , containers
+    , haskeline
+    , megaparsec
+    , mtl
+    , parser-combinators
+    , text
+  default-language: Haskell2010
+
+test-suite bidirectional-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_bidirectional
+  hs-source-dirs:
+      test
+  build-depends:
+      base >=4.7 && <5
+    , bidirectional
+    , containers
+    , hspec
+    , megaparsec
+    , mtl
+    , parser-combinators
+    , text
+  default-language: Haskell2010

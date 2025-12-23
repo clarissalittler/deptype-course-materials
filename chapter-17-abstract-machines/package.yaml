@@ -1,0 +1,42 @@
+name:                abstract-machines
+version:             0.1.0.0
+synopsis:            Abstract Machines - CEK, SECD, Krivine
+license:             BSD3
+author:              Type Systems Course
+maintainer:          example@example.com
+category:            Education
+build-type:          Simple
+
+dependencies:
+  - base >= 4.7 && < 5
+  - containers
+  - mtl
+  - megaparsec
+  - parser-combinators
+  - text
+
+library:
+  source-dirs: src
+  exposed-modules:
+    - Syntax
+    - CEK
+    - SECD
+    - Krivine
+    - Parser
+    - Pretty
+
+executables:
+  abstract-machines-repl:
+    main:                Main.hs
+    source-dirs:         app
+    dependencies:
+      - abstract-machines
+      - haskeline
+
+tests:
+  abstract-machines-test:
+    main:                Spec.hs
+    source-dirs:         test
+    dependencies:
+      - abstract-machines
+      - hspec
