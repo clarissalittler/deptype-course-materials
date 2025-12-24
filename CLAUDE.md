@@ -120,10 +120,16 @@ Each Agda formalization follows this pattern:
 |---------|------------|
 | 1. Untyped Lambda | Determinism, Ω diverges |
 | 2. Simply Typed | Progress, Preservation, Type Safety |
+| 3. STLC with ADTs | Progress, Determinism (products, sums) |
+| 5. System F | Polymorphic types, type abstraction/application |
+| 7. Dependent Types | Pi/Sigma types, well-scoped terms, Type:Type |
 
 ### Intrinsic vs Extrinsic Typing
 
-The Haskell implementations use **extrinsic typing**: terms are defined separately, then a type checker validates them. The Agda formalizations use **intrinsic typing**: terms are indexed by their types, so ill-typed terms cannot be constructed. This makes preservation trivial but requires more sophisticated term representations.
+The Haskell implementations use **extrinsic typing**: terms are defined separately, then a type checker validates them. The Agda formalizations use different approaches:
+
+- **Chapters 1-3, 5**: Use **intrinsic typing** where terms are indexed by their types. Ill-typed terms cannot be constructed, making preservation trivial.
+- **Chapter 7**: Uses **extrinsic typing** with well-scoped terms. This matches how real dependent type checkers work and allows stating properties about type checking.
 
 ## Test Structure
 
