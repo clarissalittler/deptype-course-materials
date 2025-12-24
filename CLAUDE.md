@@ -86,6 +86,44 @@ The chapters build upon each other:
 - Parser: Megaparsec
 - Testing: Hspec
 - Core libraries: containers, mtl, text
+- Agda 2.6.x (for formal proofs)
+
+## Agda Formalizations
+
+Select chapters include Agda formalizations with machine-checked proofs. These are in the `agda/` subdirectory of each chapter.
+
+### Building Agda Files
+
+```bash
+cd chapter-01-untyped-lambda/agda  # or any chapter with agda/
+
+# Type-check all modules
+agda All.agda
+
+# Type-check individual module
+agda Syntax.agda
+```
+
+### Agda Module Structure
+
+Each Agda formalization follows this pattern:
+- `Syntax.agda` - AST definition (using de Bruijn indices)
+- `Evaluation.agda` - Small-step operational semantics
+- `Progress.agda` - Progress theorem (typed chapters)
+- `Preservation.agda` - Preservation theorem (typed chapters)
+- `Properties.agda` - Additional properties (determinism, etc.)
+- `All.agda` - Re-exports all modules
+
+### Chapters with Agda Formalizations
+
+| Chapter | Key Proofs |
+|---------|------------|
+| 1. Untyped Lambda | Determinism, Ω diverges |
+| 2. Simply Typed | Progress, Preservation, Type Safety |
+
+### Intrinsic vs Extrinsic Typing
+
+The Haskell implementations use **extrinsic typing**: terms are defined separately, then a type checker validates them. The Agda formalizations use **intrinsic typing**: terms are indexed by their types, so ill-typed terms cannot be constructed. This makes preservation trivial but requires more sophisticated term representations.
 
 ## Test Structure
 
@@ -123,6 +161,13 @@ chapter-XX-name/
 │   ├── Eval.hs        # Evaluation (may be unchanged)
 │   ├── Parser.hs      # Extended syntax
 │   └── Pretty.hs      # Pretty printing
+├── agda/              # Optional: Agda formalization
+│   ├── Syntax.agda    # De Bruijn indexed terms
+│   ├── Evaluation.agda # Small-step semantics
+│   ├── Progress.agda  # Progress theorem
+│   ├── Preservation.agda # Preservation theorem
+│   ├── All.agda       # Re-exports all modules
+│   └── README.md      # Formalization guide
 ├── exercises/
 │   ├── EXERCISES.md   # Problem descriptions
 │   ├── Solutions.hs   # Reference implementations
