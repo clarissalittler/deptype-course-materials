@@ -45,9 +45,9 @@ TyNat ≟Ty (_ ⇒ _) = no (λ ())
 -- | Typing context: a list of types (using de Bruijn indices)
 data Context : Set where
   ∅   : Context                    -- Empty context
-  _,_ : Context → Type → Context   -- Extend context with a type
+  _▸_ : Context → Type → Context   -- Extend context with a type
 
-infixl 5 _,_
+infixl 5 _▸_
 
 ------------------------------------------------------------------------
 -- Context Membership (de Bruijn indices as proofs)
@@ -56,11 +56,11 @@ infixl 5 _,_
 -- This is essentially a de Bruijn index with a type annotation
 data _∋_ : Context → Type → Set where
   Z : ∀ {Γ τ}
-    → (Γ , τ) ∋ τ                  -- Most recent binding
+    → (Γ ▸ τ) ∋ τ                  -- Most recent binding
 
   S : ∀ {Γ τ σ}
     → Γ ∋ τ
-    → (Γ , σ) ∋ τ                  -- Skip past a binding
+    → (Γ ▸ σ) ∋ τ                  -- Skip past a binding
 
 infix 4 _∋_
 
@@ -78,7 +78,7 @@ data _⊢_ : Context → Type → Set where
 
   -- Lambda abstraction (T-Abs)
   ƛ_ : ∀ {Γ τ₁ τ₂}
-    → (Γ , τ₁) ⊢ τ₂
+    → (Γ ▸ τ₁) ⊢ τ₂
     → Γ ⊢ (τ₁ ⇒ τ₂)
 
   -- Application (T-App)
@@ -150,7 +150,7 @@ toNat = ƛ if (` Z) then (`suc `zero) else `zero
 -- | Extension of a renaming past a bound variable
 ext : ∀ {Γ Δ}
   → (∀ {τ} → Γ ∋ τ → Δ ∋ τ)
-  → (∀ {τ σ} → (Γ , σ) ∋ τ → (Δ , σ) ∋ τ)
+  → (∀ {τ σ} → (Γ ▸ σ) ∋ τ → (Δ ▸ σ) ∋ τ)
 ext ρ Z = Z
 ext ρ (S x) = S (ρ x)
 
@@ -172,7 +172,7 @@ rename ρ (`iszero t) = `iszero (rename ρ t)
 -- | Extension of a substitution past a bound variable
 exts : ∀ {Γ Δ}
   → (∀ {τ} → Γ ∋ τ → Δ ⊢ τ)
-  → (∀ {τ σ} → (Γ , σ) ∋ τ → (Δ , σ) ⊢ τ)
+  → (∀ {τ σ} → (Γ ▸ σ) ∋ τ → (Δ ▸ σ) ⊢ τ)
 exts σ Z = ` Z
 exts σ (S x) = rename S (σ x)
 
@@ -193,11 +193,11 @@ subst σ (`iszero t) = `iszero (subst σ t)
 
 -- | Single substitution: [N/x]M
 _[_] : ∀ {Γ τ σ}
-  → (Γ , σ) ⊢ τ
+  → (Γ ▸ σ) ⊢ τ
   → Γ ⊢ σ
   → Γ ⊢ τ
 _[_] {Γ} {τ} {σ} M N = subst σ-sub M
   where
-  σ-sub : ∀ {τ'} → (Γ , σ) ∋ τ' → Γ ⊢ τ'
+  σ-sub : ∀ {τ'} → (Γ ▸ σ) ∋ τ' → Γ ⊢ τ'
   σ-sub Z = N
   σ-sub (S x) = ` x

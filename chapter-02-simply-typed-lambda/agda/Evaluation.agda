@@ -20,7 +20,7 @@ open import Data.Empty using (⊥; ⊥-elim)
 
 -- | A term is a value (canonical form)
 data Value : ∀ {Γ τ} → Γ ⊢ τ → Set where
-  V-ƛ     : ∀ {Γ τ₁ τ₂} {t : (Γ , τ₁) ⊢ τ₂}
+  V-ƛ     : ∀ {Γ τ₁ τ₂} {t : (Γ ▸ τ₁) ⊢ τ₂}
           → Value (ƛ t)
 
   V-true  : ∀ {Γ}
@@ -56,11 +56,13 @@ numeric-is-value (NV-suc nv) = V-suc (numeric-is-value nv)
 ------------------------------------------------------------------------
 -- Small-step Operational Semantics (Call-by-Value)
 
+infix 4 _⟶_
+
 -- | Single-step reduction: t ⟶ t'
 data _⟶_ : ∀ {Γ τ} → Γ ⊢ τ → Γ ⊢ τ → Set where
 
   -- Beta reduction: (λx. t) v ⟶ t[x := v]
-  β-ƛ : ∀ {Γ τ₁ τ₂} {t : (Γ , τ₁) ⊢ τ₂} {v : Γ ⊢ τ₁}
+  β-ƛ : ∀ {Γ τ₁ τ₂} {t : (Γ ▸ τ₁) ⊢ τ₂} {v : Γ ⊢ τ₁}
     → Value v
     → (ƛ t) · v ⟶ t [ v ]
 
@@ -151,16 +153,16 @@ trans* (t₁ ⟶⟨ step ⟩ r₁) r₂ = t₁ ⟶⟨ step ⟩ trans* r₁ r₂
 
 -- | (λx:Bool. x) true ⟶* true
 example1 : (ƛ (` Z)) · `true ⟶* `true
-example1 = (ƛ (` Z)) · `true ⟶⟨ β-ƛ V-true ⟩ `true ∎
+example1 = (ƛ (` Z)) · `true ⟶⟨ β-ƛ V-true ⟩ (_∎ {∅} `true)
 
 -- | if true then zero else (suc zero) ⟶* zero
 example2 : if `true then `zero else (`suc `zero) ⟶* `zero
-example2 = if `true then `zero else (`suc `zero) ⟶⟨ β-if-true ⟩ `zero ∎
+example2 = if `true then `zero else (`suc `zero) ⟶⟨ β-if-true ⟩ (_∎ {∅} `zero)
 
 -- | pred (suc zero) ⟶* zero
 example3 : `pred (`suc `zero) ⟶* `zero
-example3 = `pred (`suc `zero) ⟶⟨ β-pred-suc V-zero ⟩ `zero ∎
+example3 = `pred (`suc `zero) ⟶⟨ β-pred-suc V-zero ⟩ (_∎ {∅} `zero)
 
 -- | iszero zero ⟶* true
 example4 : `iszero `zero ⟶* `true
-example4 = `iszero `zero ⟶⟨ β-iszero-zero ⟩ `true ∎
+example4 = `iszero `zero ⟶⟨ β-iszero-zero ⟩ (_∎ {∅} `true)

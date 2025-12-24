@@ -13,9 +13,10 @@ module Progress where
 open import Syntax
 open import Evaluation
 open import Data.Sum using (_⊎_; inj₁; inj₂)
-open import Data.Product using (_×_; _,_; ∃; ∃-syntax)
+open import Data.Product using (_×_; ∃; ∃-syntax; _,_)
 open import Data.Empty using (⊥; ⊥-elim)
 open import Relation.Nullary using (¬_)
+open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 
 ------------------------------------------------------------------------
 -- Progress Definition
@@ -37,8 +38,6 @@ data Progress {τ} (t : ∅ ⊢ τ) : Set where
 canonical-Bool : ∀ {v : ∅ ⊢ TyBool}
   → Value v
   → (v ≡ `true) ⊎ (v ≡ `false)
-  where
-  open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 canonical-Bool V-true = inj₁ refl
 canonical-Bool V-false = inj₂ refl
 
@@ -46,18 +45,14 @@ canonical-Bool V-false = inj₂ refl
 canonical-Fun : ∀ {τ₁ τ₂} {v : ∅ ⊢ (τ₁ ⇒ τ₂)}
   → Value v
   → ∃[ t ] (v ≡ ƛ t)
-  where
-  open import Relation.Binary.PropositionalEquality using (_≡_; refl)
-canonical-Fun V-ƛ = _ , refl
+canonical-Fun V-ƛ = (_ , refl)
 
 -- | If ∅ ⊢ v : Nat and v is a value, then v is zero or suc
 canonical-Nat : ∀ {v : ∅ ⊢ TyNat}
   → Value v
   → (v ≡ `zero) ⊎ (∃[ v' ] (v ≡ `suc v' × Value v'))
-  where
-  open import Relation.Binary.PropositionalEquality using (_≡_; refl)
 canonical-Nat V-zero = inj₁ refl
-canonical-Nat (V-suc val) = inj₂ (_ , refl , val)
+canonical-Nat (V-suc val) = inj₂ (_ , (refl , val))
 
 ------------------------------------------------------------------------
 -- Progress Theorem
@@ -115,25 +110,18 @@ progress (`iszero t) with progress t
 ------------------------------------------------------------------------
 -- Corollaries
 
--- | No closed value gets stuck
-value-no-step : ∀ {τ} {t t' : ∅ ⊢ τ}
+-- | Values cannot step (for any context)
+value-no-step : ∀ {Γ τ} {t t' : Γ ⊢ τ}
   → Value t
   → ¬ (t ⟶ t')
 value-no-step V-ƛ ()
 value-no-step V-true ()
 value-no-step V-false ()
 value-no-step V-zero ()
-value-no-step (V-suc v) (ξ-suc step) = value-no-step v step
+value-no-step (V-suc v) (ξ-suc s) = value-no-step v s
 
--- | A term can take at most one step (determinism for progress)
-progress-deterministic : ∀ {τ} {t : ∅ ⊢ τ}
-  → (p₁ p₂ : Progress t)
-  → (∀ {t'} → (s₁ s₂ : t ⟶ t') → s₁ ≡ s₂)  -- Assuming step determinism
-  → p₁ ≡ p₂ ⊎ ∃[ t' ] ∃[ t'' ] (t ⟶ t' × t ⟶ t'' × ¬ (t' ≡ t''))
-  where
-  open import Relation.Binary.PropositionalEquality using (_≡_; refl)
--- Note: This requires dependent elimination, simplified here
-progress-deterministic (done v) (done v') _ = inj₁ refl  -- Simplified
-progress-deterministic (step s) (done v) _ = ⊥-elim (value-no-step v s)
-progress-deterministic (done v) (step s) _ = ⊥-elim (value-no-step v s)
-progress-deterministic (step s₁) (step s₂) det = inj₁ refl  -- Simplified
+-- | Values and steps are mutually exclusive (for closed terms)
+value-or-step : ∀ {τ} {t : ∅ ⊢ τ}
+  → Value t
+  → (∀ {t'} → ¬ (t ⟶ t'))
+value-or-step v {t'} s = value-no-step v s
