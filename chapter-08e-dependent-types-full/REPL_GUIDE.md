@@ -577,7 +577,7 @@ J                  = Induction principle
 
 ### Problem: "Dependent pattern match required"
 **Cause**: Simple pattern match insufficient
-**Solution**: Use appropriate eliminator
+**Solution**: Use `match t return P with ...` (or an eliminator)
 
 ### Problem: "Equality proof doesn't normalize"
 **Cause**: Complex proof term

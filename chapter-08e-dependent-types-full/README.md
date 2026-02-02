@@ -418,7 +418,7 @@ In dependent types, pattern matching can refine types:
 
 ```haskell
 head : Π(A:Type 0). Π(n:Nat). Vec (succ n) A → A
-head A n v = match v with
+head A n v = match v return (λ_. A) with
   | Cons _ x xs -> x
   -- No Nil case needed—type system knows v : Vec (succ n) A
 ```
@@ -889,7 +889,7 @@ add_zero_right = λ(n:Nat).
 ```haskell
 head : Π(A:Type 0). Π(n:Nat). Vec (succ n) A → A
 head = λ(A:Type 0). λ(n:Nat). λ(v:Vec (succ n) A).
-         match v with
+         match v return (λ_. A) with
            | Cons _ x xs -> x
            -- No Nil case: type system knows it's impossible
 
@@ -905,7 +905,7 @@ head Nat 2 (Cons Nat 1 42 (Cons Nat 0 17 (Nil Nat)))  -- Returns 42
 ```haskell
 lookup : Π(A:Type 0). Π(n:Nat). Vec n A → Fin n → A
 lookup = λ(A:Type 0). λ(n:Nat). λ(v:Vec n A). λ(i:Fin n).
-           match v with
+           match v return (λ_. A) with
              | Cons _ x xs ->
                  match i with
                    | FZ _ -> x

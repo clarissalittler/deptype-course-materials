@@ -137,12 +137,15 @@ main = hspec $ do
         `shouldBe` Right (App (App (Ind "Vec") Nat) (Succ Zero))
 
     it "types match with non-dependent branches" $ do
-      let scrut = Con "Nil" [Nat]
+      let ctx =
+            extendCtx "n" Nat
+              (extendCtx "xs" (App (App (Ind "Vec") Nat) (Var "n")) emptyCtx)
+      let scrut = Var "xs"
       let branches =
             [ (PCon "Nil" [PVar "A"], Zero)
             , (PCon "Cons" [PVar "A", PVar "n", PVar "x", PVar "xs"], Succ Zero)
             ]
-      typeOf emptyCtx (Match scrut Nothing branches) `shouldBe` Right Nat
+      typeOf ctx (Match scrut Nothing branches) `shouldBe` Right Nat
 
     it "types match on Nat" $ do
       let branches =
@@ -152,12 +155,31 @@ main = hspec $ do
       typeOf emptyCtx (Match Zero Nothing branches) `shouldBe` Right Nat
 
     it "rejects dependent branch types" $ do
-      let scrut = Con "Nil" [Nat]
+      let ctx =
+            extendCtx "n" Nat
+              (extendCtx "xs" (App (App (Ind "Vec") Nat) (Var "n")) emptyCtx)
+      let scrut = Var "xs"
       let branches =
             [ (PCon "Nil" [PVar "A"], Lam "y" (Var "A") (Var "y"))
             , (PCon "Cons" [PVar "A", PVar "n", PVar "x", PVar "xs"], Lam "y" (Var "A") (Var "y"))
             ]
+      typeOf ctx (Match scrut Nothing branches) `shouldSatisfy` isPatternError
+
+    it "rejects impossible Nil branch for Vec (succ n)" $ do
+      let nil = Con "Nil" [Nat]
+      let scrut = Con "Cons" [Nat, Zero, Zero, nil]
+      let branches =
+            [ (PCon "Nil" [PVar "A"], Zero)
+            , (PCon "Cons" [PVar "A", PVar "n", PVar "x", PVar "xs"], Succ Zero)
+            ]
       typeOf emptyCtx (Match scrut Nothing branches) `shouldSatisfy` isPatternError
+
+    it "rejects missing Cons branch for Vec n" $ do
+      let ctx =
+            extendCtx "n" Nat
+              (extendCtx "xs" (App (App (Ind "Vec") Nat) (Var "n")) emptyCtx)
+      let branches = [ (PCon "Nil" [PVar "A"], Zero) ]
+      typeOf ctx (Match (Var "xs") Nothing branches) `shouldSatisfy` isPatternError
 
     it "types dependent match with indexed motive" $ do
       let vecN = App (App (Ind "Vec") Nat) (Var "n")

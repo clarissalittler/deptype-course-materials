@@ -250,6 +250,7 @@ inferMatch ctx scrutinee motive branches = case motive of
 inferMatchNonDependent :: Context -> Term -> [(Pattern, Term)] -> Either TypeError Term
 inferMatchNonDependent ctx scrutinee branches = do
   scrutTy <- infer ctx scrutinee
+  checkCoverage scrutTy (map fst branches)
   case branches of
     [] -> Left (PatternError "empty match")
     (pat, rhs):rest -> do
@@ -270,6 +271,7 @@ inferMatchNonDependent ctx scrutinee branches = do
 inferMatchDependent :: Context -> Term -> Term -> [(Pattern, Term)] -> Either TypeError Term
 inferMatchDependent ctx scrutinee motive branches = do
   scrutTy <- infer ctx scrutinee
+  checkCoverage scrutTy (map fst branches)
   let vecInfoM = vecInfoMaybe scrutTy
   motiveKind <- checkMotive ctx scrutTy vecInfoM motive
   let scrutIndex = case (motiveKind, vecInfoM) of
@@ -295,6 +297,61 @@ checkNonDependent patVars ty =
   if Set.null (freeVars ty `Set.intersection` patVars)
     then Right ()
     else Left (PatternError "branch type depends on pattern variables")
+
+checkCoverage :: Term -> [Pattern] -> Either TypeError ()
+checkCoverage scrutTy pats =
+  case normalize scrutTy of
+    App (App (Ind "Vec") _) n -> checkVecCoverage n pats
+    _ -> Right ()
+
+checkVecCoverage :: Term -> [Pattern] -> Either TypeError ()
+checkVecCoverage n pats
+  | null pats = Right ()
+  | otherwise = do
+      mapM_ (checkVecPatternPossible n) pats
+      let (allowNil, allowCons) = vecAllowedConstructors n
+      if any patternCoversAll pats
+        then Right ()
+        else do
+          let hasNil = any patternIsNil pats
+          let hasCons = any patternIsCons pats
+          if allowNil && not hasNil
+            then Left (PatternError "non-exhaustive patterns: missing Nil")
+            else if allowCons && not hasCons
+              then Left (PatternError "non-exhaustive patterns: missing Cons")
+              else Right ()
+
+checkVecPatternPossible :: Term -> Pattern -> Either TypeError ()
+checkVecPatternPossible n pat =
+  let (allowNil, allowCons) = vecAllowedConstructors n
+  in case pat of
+    PCon "Nil" _ | not allowNil ->
+      Left (PatternError "impossible pattern: Nil does not match Vec (succ n)")
+    PCon "Cons" _ | not allowCons ->
+      Left (PatternError "impossible pattern: Cons does not match Vec 0")
+    _ -> Right ()
+
+vecAllowedConstructors :: Term -> (Bool, Bool)
+vecAllowedConstructors n = case normalize n of
+  Zero -> (True, False)
+  Succ _ -> (False, True)
+  _ -> (True, True)
+
+patternCoversAll :: Pattern -> Bool
+patternCoversAll = \case
+  PVar _ -> True
+  PWild -> True
+  _ -> False
+
+patternIsNil :: Pattern -> Bool
+patternIsNil = \case
+  PCon "Nil" _ -> True
+  _ -> False
+
+patternIsCons :: Pattern -> Bool
+patternIsCons = \case
+  PCon "Cons" _ -> True
+  _ -> False
 
 vecInfoMaybe :: Term -> Maybe (Term, Term)
 vecInfoMaybe scrutTy = case normalize scrutTy of
