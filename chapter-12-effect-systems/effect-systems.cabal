@@ -43,6 +43,7 @@ library
 executable effect-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_effect_systems
   hs-source-dirs:
       app

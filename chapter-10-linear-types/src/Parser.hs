@@ -116,7 +116,7 @@ pAtom = choice
   , pIf
   , TmTrue <$ reserved "true"
   , TmFalse <$ reserved "false"
-  , TmZero <$ symbol "0"
+  , pNat
   , TmSucc <$> (reserved "succ" *> pAtom)
   , TmPred <$> (reserved "pred" *> pAtom)
   , TmIsZero <$> (reserved "iszero" *> pAtom)
@@ -140,9 +140,19 @@ pLambda = do
 pMult :: Parser Mult
 pMult = choice
   [ One <$ symbol "1"
+  , Many <$ symbol "ω"
   , Many <$ symbol "w"
   , pure Many  -- Default to Many if not specified
   ]
+
+pNat :: Parser Term
+pNat = do
+  n <- (lexeme L.decimal :: Parser Integer)
+  return $ natFromInteger n
+  where
+    natFromInteger k
+      | k <= 0 = TmZero
+      | otherwise = TmSucc (natFromInteger (k - 1))
 
 pIf :: Parser Term
 pIf = do

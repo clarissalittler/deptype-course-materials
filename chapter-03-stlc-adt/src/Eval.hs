@@ -17,6 +17,8 @@ module Eval
 import Syntax
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map)
+import qualified Data.Set as Set
+import Data.Set (Set)
 
 -- | Substitution environment for pattern matching
 type Substitution = Map Var Term
@@ -84,10 +86,10 @@ step = \case
     | not (isValue t2) -> TmPair t1 <$> step t2
     | otherwise -> Nothing
 
-  TmFst (TmPair v1 _) | isValue v1 -> Just v1
+  TmFst (TmPair v1 v2) | isValue v1 && isValue v2 -> Just v1
   TmFst t -> TmFst <$> step t
 
-  TmSnd (TmPair _ v2) | isValue v2 -> Just v2
+  TmSnd (TmPair v1 v2) | isValue v1 && isValue v2 -> Just v2
   TmSnd t -> TmSnd <$> step t
 
   -- Sums
@@ -116,25 +118,26 @@ step = \case
           Just (l, t') -> Just (TmRecord (Map.insert l t' fields))
           Nothing -> Nothing
 
-  TmProj (TmRecord fields) label
-    | all isValue (Map.elems fields) ->
-        Map.lookup label fields
-    | otherwise -> Nothing
-  TmProj t label -> (\t' -> TmProj t' label) <$> step t
+  TmProj t label ->
+    case t of
+      TmRecord fields
+        | all isValue (Map.elems fields) ->
+            Map.lookup label fields
+      _ -> (\t' -> TmProj t' label) <$> step t
 
   -- Variants
   TmTag label t ty
     | not (isValue t) -> TmTag label <$> step t <*> pure ty
     | otherwise -> Nothing
 
-  TmCaseVariant (TmTag label v varTy) cases
-    | isValue v ->
-        case lookupVariantCase label cases of
-          Just (x, body) -> Just (substVar x v body)
-          Nothing -> Nothing
-    | otherwise -> Nothing
   TmCaseVariant t cases ->
-    (\t' -> TmCaseVariant t' cases) <$> step t
+    case t of
+      TmTag label v _
+        | isValue v ->
+            case lookupVariantCase label cases of
+              Just (x, body) -> Just (substVar x v body)
+              Nothing -> Nothing
+      _ -> (\t' -> TmCaseVariant t' cases) <$> step t
 
   -- Lists
   TmNil _ -> Nothing
@@ -145,13 +148,13 @@ step = \case
     | otherwise -> Nothing
 
   TmIsNil (TmNil _) -> Just TmTrue
-  TmIsNil (TmCons _ _) -> Just TmFalse
+  TmIsNil (TmCons v vs) | isValue v && isValue vs -> Just TmFalse
   TmIsNil t -> TmIsNil <$> step t
 
-  TmHead (TmCons v _) | isValue v -> Just v
+  TmHead (TmCons v vs) | isValue v && isValue vs -> Just v
   TmHead t -> TmHead <$> step t
 
-  TmTail (TmCons _ vs) | isValue vs -> Just vs
+  TmTail (TmCons v vs) | isValue v && isValue vs -> Just vs
   TmTail t -> TmTail <$> step t
 
   -- Pattern matching
@@ -195,42 +198,61 @@ matchPattern pat val = case (pat, val) of
 
 -- | Apply a substitution to a term
 applySubst :: Substitution -> Term -> Term
-applySubst subst = go
+applySubst subst = go subst
   where
-    go t@(Var x) = Map.findWithDefault t x subst
-    go (Lam x ty body)
-      | x `Map.member` subst = Lam x ty body  -- Don't substitute bound vars
-      | otherwise = Lam x ty (go body)
-    go (App t1 t2) = App (go t1) (go t2)
-    go TmTrue = TmTrue
-    go TmFalse = TmFalse
-    go (TmIf t1 t2 t3) = TmIf (go t1) (go t2) (go t3)
-    go TmZero = TmZero
-    go (TmSucc t) = TmSucc (go t)
-    go (TmPred t) = TmPred (go t)
-    go (TmIsZero t) = TmIsZero (go t)
-    go TmUnit = TmUnit
-    go (TmPair t1 t2) = TmPair (go t1) (go t2)
-    go (TmFst t) = TmFst (go t)
-    go (TmSnd t) = TmSnd (go t)
-    go (TmInl ty t) = TmInl ty (go t)
-    go (TmInr ty t) = TmInr ty (go t)
-    go (TmCase t x1 t1 x2 t2) =
-      TmCase (go t)
-        x1 (if x1 `Map.member` subst then t1 else go t1)
-        x2 (if x2 `Map.member` subst then t2 else go t2)
-    go (TmRecord fields) = TmRecord (fmap go fields)
-    go (TmProj t label) = TmProj (go t) label
-    go (TmTag label t ty) = TmTag label (go t) ty
-    go (TmCaseVariant t cases) =
-      TmCaseVariant (go t)
-        [(l, x, if x `Map.member` subst then ti else go ti) | (l, x, ti) <- cases]
-    go (TmNil ty) = TmNil ty
-    go (TmCons t1 t2) = TmCons (go t1) (go t2)
-    go (TmIsNil t) = TmIsNil (go t)
-    go (TmHead t) = TmHead (go t)
-    go (TmTail t) = TmTail (go t)
-    go (TmMatch t cases) = TmMatch (go t) cases  -- Pattern vars handled separately
+    go s t@(Var x) = Map.findWithDefault t x s
+    go s (Lam x ty body) = Lam x ty (go (Map.delete x s) body)
+    go s (App t1 t2) = App (go s t1) (go s t2)
+    go _ TmTrue = TmTrue
+    go _ TmFalse = TmFalse
+    go s (TmIf t1 t2 t3) = TmIf (go s t1) (go s t2) (go s t3)
+    go _ TmZero = TmZero
+    go s (TmSucc t) = TmSucc (go s t)
+    go s (TmPred t) = TmPred (go s t)
+    go s (TmIsZero t) = TmIsZero (go s t)
+    go _ TmUnit = TmUnit
+    go s (TmPair t1 t2) = TmPair (go s t1) (go s t2)
+    go s (TmFst t) = TmFst (go s t)
+    go s (TmSnd t) = TmSnd (go s t)
+    go s (TmInl ty t) = TmInl ty (go s t)
+    go s (TmInr ty t) = TmInr ty (go s t)
+    go s (TmCase t x1 t1 x2 t2) =
+      TmCase (go s t)
+        x1 (go (Map.delete x1 s) t1)
+        x2 (go (Map.delete x2 s) t2)
+    go s (TmRecord fields) = TmRecord (fmap (go s) fields)
+    go s (TmProj t label) = TmProj (go s t) label
+    go s (TmTag label t ty) = TmTag label (go s t) ty
+    go s (TmCaseVariant t cases) =
+      TmCaseVariant (go s t)
+        [(l, x, go (Map.delete x s) ti) | (l, x, ti) <- cases]
+    go _ (TmNil ty) = TmNil ty
+    go s (TmCons t1 t2) = TmCons (go s t1) (go s t2)
+    go s (TmIsNil t) = TmIsNil (go s t)
+    go s (TmHead t) = TmHead (go s t)
+    go s (TmTail t) = TmTail (go s t)
+    go s (TmMatch t cases) =
+      TmMatch (go s t)
+        [ (p, go (dropPatternVars s p) ti) | (p, ti) <- cases ]
+
+    dropPatternVars :: Substitution -> Pattern -> Substitution
+    dropPatternVars s p = Set.foldr Map.delete s (patternVars p)
+
+    patternVars :: Pattern -> Set Var
+    patternVars = \case
+      PatVar x -> Set.singleton x
+      PatWild -> Set.empty
+      PatUnit -> Set.empty
+      PatTrue -> Set.empty
+      PatFalse -> Set.empty
+      PatZero -> Set.empty
+      PatSucc p -> patternVars p
+      PatPair p1 p2 -> patternVars p1 `Set.union` patternVars p2
+      PatInl p -> patternVars p
+      PatInr p -> patternVars p
+      PatVariant _ p -> patternVars p
+      PatNil -> Set.empty
+      PatCons p ps -> patternVars p `Set.union` patternVars ps
 
 -- | Normalize to a value
 normalize :: Term -> Term

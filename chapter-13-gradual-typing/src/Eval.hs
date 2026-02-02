@@ -131,9 +131,9 @@ evalStep = \case
     | otherwise -> applyCast t ty1 ty2 l
 
   -- Ascription (remove if value)
-  TmAscribe t _
+  TmAscribe t ty
     | isValue t -> Just t
-    | otherwise -> (\t' -> TmAscribe t' undefined) <$> evalStep t
+    | otherwise -> (\t' -> TmAscribe t' ty) <$> evalStep t
 
   -- Blame propagates
   TmBlame _ _ -> Nothing

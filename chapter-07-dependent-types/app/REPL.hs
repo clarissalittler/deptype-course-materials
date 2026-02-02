@@ -139,7 +139,7 @@ handleTypeOf input state = do
 
 -- | Handle :normalize command
 handleNormalize :: String -> REPLState -> IO ()
-handleNormalize input state = do
+handleNormalize input _state = do
   case parseTerm input of
     Left err -> putStrLn $ "Parse error: " ++ err
     Right t -> do

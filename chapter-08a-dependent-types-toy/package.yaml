@@ -1,0 +1,37 @@
+name: dependent-types-toy
+version: 0.1.0.0
+
+dependencies:
+- base >= 4.7 && < 5
+- containers
+- mtl
+- megaparsec >= 9.0
+- parser-combinators
+- text
+
+ghc-options:
+- -Wall
+
+library:
+  source-dirs:
+  - src
+  - exercises
+
+executables:
+  dependent-types-toy-repl:
+    main: Main.hs
+    source-dirs: app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - dependent-types-toy
+
+tests:
+  dependent-types-toy-test:
+    main: Spec.hs
+    source-dirs: test
+    dependencies:
+    - dependent-types-toy
+    - hspec

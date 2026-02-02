@@ -155,7 +155,7 @@ pAtom = choice
   , pIf
   , pTrue
   , pFalse
-  , pZero
+  , pNat
   , pSucc
   , pPred
   , pIsZero
@@ -192,8 +192,14 @@ pTrue = TmTrue <$ reserved "true"
 pFalse :: Parser Term
 pFalse = TmFalse <$ reserved "false"
 
-pZero :: Parser Term
-pZero = TmZero <$ symbol "0"
+pNat :: Parser Term
+pNat = do
+  n <- (lexeme L.decimal :: Parser Integer)
+  return $ natFromInteger n
+  where
+    natFromInteger k
+      | k <= 0 = TmZero
+      | otherwise = TmSucc (natFromInteger (k - 1))
 
 pSucc :: Parser Term
 pSucc = TmSucc <$> (reserved "succ" *> pAtom)

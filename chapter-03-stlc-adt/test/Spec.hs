@@ -135,6 +135,61 @@ main = hspec $ do
       parseTerm "{x=true, y=0}" `shouldBe`
         Right (TmRecord $ Map.fromList [("x", TmTrue), ("y", TmZero)])
 
+    it "parses list cons chains" $ do
+      parseTerm "0::succ 0::[]:Nat" `shouldBe`
+        Right (TmCons TmZero (TmCons (TmSucc TmZero) (TmNil TyNat)))
+
+    it "parses match with cons patterns" $ do
+      parseTerm "match 0::[]:Nat with h::t => h | [] => 0" `shouldBe`
+        Right (TmMatch (TmCons TmZero (TmNil TyNat))
+          [ (PatCons (PatVar "h") (PatVar "t"), Var "h")
+          , (PatNil, TmZero)
+          ])
+
+    it "parses case with patterns" $ do
+      parseTerm "case 0::[]:Nat of h::t => h | [] => 0" `shouldBe`
+        Right (TmMatch (TmCons TmZero (TmNil TyNat))
+          [ (PatCons (PatVar "h") (PatVar "t"), Var "h")
+          , (PatNil, TmZero)
+          ])
+
+    it "parses variant patterns" $ do
+      let variantTy = TyVariant (Map.fromList [("some", TyNat), ("none", TyUnit)])
+      parseTerm "case <some=0> as <some:Nat, none:Unit> of <some=x> => x | <none=_> => 0"
+        `shouldBe`
+          Right (TmMatch (TmTag "some" TmZero variantTy)
+            [ (PatVariant "some" (PatVar "x"), Var "x")
+            , (PatVariant "none" PatWild, TmZero)
+            ])
+
+    it "parses succ and sum patterns" $ do
+      parseTerm "match inl[Nat] true with inl x => x | inr y => false" `shouldBe`
+        Right (TmMatch (TmInl TyNat TmTrue)
+          [ (PatInl (PatVar "x"), Var "x")
+          , (PatInr (PatVar "y"), TmFalse)
+          ])
+
+      parseTerm "match succ 0 with succ x => x | 0 => 0" `shouldBe`
+        Right (TmMatch (TmSucc TmZero)
+          [ (PatSucc (PatVar "x"), Var "x")
+          , (PatZero, TmZero)
+          ])
+
+    it "rejects duplicate record labels" $ do
+      case parseTerm "{x=true, x=false}" of
+        Left _ -> return ()
+        Right _ -> expectationFailure "Expected duplicate record labels to fail parsing"
+
+    it "rejects duplicate record types" $ do
+      case parseType "{x:Bool, x:Nat}" of
+        Left _ -> return ()
+        Right _ -> expectationFailure "Expected duplicate record type labels to fail parsing"
+
+    it "rejects duplicate variant types" $ do
+      case parseType "<a:Nat, a:Bool>" of
+        Left _ -> return ()
+        Right _ -> expectationFailure "Expected duplicate variant type labels to fail parsing"
+
     it "parses product types" $ do
       parseType "Bool * Nat" `shouldBe` Right (TyProd TyBool TyNat)
 
@@ -158,7 +213,6 @@ main = hspec $ do
       -- None = inl[Nat] ()
       let some5 = TmInr TyUnit (TmSucc (TmSucc (TmSucc (TmSucc (TmSucc TmZero)))))
       let none = TmInl TyNat TmUnit
-      let optType = TySum TyUnit TyNat
 
       -- case some5 of inl _ => 0 | inr n => n
       let extract = TmCase some5 "u" TmZero "n" (Var "n")

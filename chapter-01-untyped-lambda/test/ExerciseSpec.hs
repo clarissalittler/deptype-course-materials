@@ -11,56 +11,6 @@ import qualified Solutions as S
 applyChurchBool :: Term -> Term -> Term -> Term
 applyChurchBool b t f = eval $ App (App b t) f
 
--- | Helper: convert Church numeral to Int
--- Apply to (succ 0) and 0, then count how many times succ was applied
-churchToInt :: Term -> Int
-churchToInt n = countSucc $ eval $ App (App n S.churchSucc) S.churchZero
-  where
-    countSucc :: Term -> Int
-    countSucc (Lam "n" (Lam "f" (Lam "x" (Var "x")))) = 0  -- zero
-    countSucc (Lam "n" (Lam "f" (Lam "x" body))) = 1 + countSucc (Lam "n" (Lam "f" (Lam "x" (removeOneApp body))))
-    countSucc _ = 0
-
-    removeOneApp :: Term -> Term
-    removeOneApp (App (Var "f") rest) = rest
-    removeOneApp t = t
-
--- | Helper: convert Church numeral to Int more reliably
--- We'll evaluate n (λx. x+1) 0 by using a custom "increment" function
-churchNumToInt :: Term -> Int
-churchNumToInt n = go 0 (eval $ App (App n incrementer) S.churchZero)
-  where
-    incrementer = Lam "x" (App S.churchSucc (Var "x"))
-    go :: Int -> Term -> Int
-    go acc term
-      | alphaEq term S.churchZero = acc
-      | otherwise = case term of
-          App (Lam _ _) arg -> go (acc + 1) arg
-          _ -> acc
-
--- | Better approach: apply to succ and 0 from untyped LC
--- and count the structure
-churchToInt' :: Term -> Int
-churchToInt' n =
-  let result = eval $ App (App n (Lam "x" (Lam "n" (App (Var "n") (Var "x"))))) (Lam "y" (Var "y"))
-  in countNesting result
-  where
-    countNesting :: Term -> Int
-    countNesting (Lam "y" (Var "y")) = 0
-    countNesting (Lam "n" body) = 1 + countNesting body
-    countNesting (App (Var "n") inner) = 1 + countNesting inner
-    countNesting _ = 0
-
--- | Most direct approach: evaluate with Haskell succ and 0
-evalChurchNum :: Term -> Int
-evalChurchNum cn = count $ eval $ App (App cn inc) zero
-  where
-    inc = Lam "x" (Var "succ_x")  -- marker
-    zero = Var "zero"  -- marker
-    count (Var "zero") = 0
-    count (App (Lam "x" (Var "succ_x")) rest) = 1 + count rest
-    count _ = error "Not a valid church numeral result"
-
 -- | Check if two church booleans are equivalent
 churchBoolEq :: Term -> Term -> Bool
 churchBoolEq b1 b2 =

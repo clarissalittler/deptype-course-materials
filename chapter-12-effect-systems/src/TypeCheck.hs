@@ -14,7 +14,7 @@ module TypeCheck
     -- * Errors
   , TypeError(..)
     -- * Context
-  , Context
+  , Context(..)
   , emptyContext
   , EffectEnv
   ) where

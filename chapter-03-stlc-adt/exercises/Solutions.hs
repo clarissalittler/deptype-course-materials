@@ -19,7 +19,7 @@ All exercises can be fully implemented because ADTs are built into the syntax!
 KEY LEARNING OBJECTIVES:
 1. Working with structured data in typed settings
 2. Pattern matching for decomposing data
-3. Recursive operations on inductivedata structures
+3. Recursive operations on inductive data structures
 4. Type-safe data manipulation
 
 COMMON PATTERNS:
@@ -27,15 +27,18 @@ COMMON PATTERNS:
 - Trees: Use variants with leaf/node constructors
 - Options: Encode as Unit + τ
 - Pattern matching: TmMatch for general, TmCaseVariant for variants
+
+NOTE ON RECURSION:
+Many of the definitions below (e.g., list and tree helpers) use meta-level
+recursion in Haskell to build terms. Pure STLC with ADTs cannot define
+general recursion without an explicit fixpoint operator, so read these as
+schematic encodings rather than definable closed terms.
 -}
 
-module Solutions where
+module Solutions (module Solutions) where
 
 import Syntax
-import TypeCheck
-import Eval
 import qualified Data.Map.Strict as Map
-import qualified Data.Set as Set
 
 -- =============================================================================
 -- Helper Functions
@@ -216,7 +219,7 @@ mkNone ty = TmInl ty TmUnit
 
 -- some : τ → Option τ
 mkSome :: Type -> Term -> Term
-mkSome ty val = TmInr TyUnit val
+mkSome _ty val = TmInr TyUnit val
 
 -- Exercise 3a: Option map
 -- map : (τ₁ → τ₂) → Option τ₁ → Option τ₂
@@ -340,7 +343,7 @@ updateRecordX xTy yTy =
 
 -- Exercise 5b: Generic record field update
 updateField :: Label -> Type -> Term
-updateField field recTy =
+updateField _field recTy =
   Lam "rec" recTy $
   Lam "newVal" TyUnit $  -- Would need proper typing for this to be generic
   Var "rec"  -- Simplified version

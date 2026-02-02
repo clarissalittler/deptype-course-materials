@@ -36,6 +36,7 @@ library
 executable bidirectional-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_bidirectional
   hs-source-dirs:
       app

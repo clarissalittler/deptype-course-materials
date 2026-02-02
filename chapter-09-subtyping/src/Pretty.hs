@@ -81,10 +81,10 @@ prettyTerm = go 0
         "{" ++ intercalate ", " [l ++ " = " ++ go 0 t | (l, t) <- Map.toList fields] ++ "}"
 
       TmProj t label ->
-        go 2 t ++ "." ++ label
+        goArg t ++ "." ++ label
 
       TmAscribe t ty ->
-        go 1 t ++ " as " ++ prettyType ty
+        ascribeLHS t ++ " as " ++ prettyType ty
 
     -- Argument position: wrap complex terms in parens
     goArg :: Term -> String
@@ -98,6 +98,13 @@ prettyTerm = go 0
     goArg t@(TmRecord _) = go 0 t
     goArg t@(TmProj _ _) = go 0 t
     goArg t = "(" ++ go 0 t ++ ")"
+
+    ascribeLHS :: Term -> String
+    ascribeLHS t = case t of
+      Lam {} -> "(" ++ go 0 t ++ ")"
+      TmIf {} -> "(" ++ go 0 t ++ ")"
+      TmAscribe {} -> "(" ++ go 0 t ++ ")"
+      _ -> go 1 t
 
 -- | Try to convert a term to a natural number
 toNat :: Term -> Maybe Int

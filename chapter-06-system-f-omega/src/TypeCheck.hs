@@ -7,6 +7,7 @@ module TypeCheck
   ) where
 
 import Syntax
+import Eval (normalizeType)
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map)
 import Control.Monad (unless)
@@ -93,11 +94,11 @@ typeOf kctx ctx = \case
   App t1 t2 -> do
     ty1 <- typeOf kctx ctx t1
     ty2 <- typeOf kctx ctx t2
-    case ty1 of
+    case normalizeType ty1 of
       TyArr argTy resTy -> do
-        unless (ty2 == argTy) $ Left (TypeMismatch argTy ty2)
+        unless (typesEqual ty2 argTy) $ Left (TypeMismatch argTy ty2)
         return resTy
-      _ -> Left (NotAFunctionType ty1)
+      _ -> Left (NotAFunctionType (normalizeType ty1))
 
   -- Type abstraction: check body under extended kind context
   TyAbs a k t -> do
@@ -107,12 +108,12 @@ typeOf kctx ctx = \case
   -- Type application: instantiate forall type with argument
   TyAppTerm t ty -> do
     termTy <- typeOf kctx ctx t
-    case termTy of
+    case normalizeType termTy of
       TyForall a k body -> do
         tyKind <- kinding kctx ty
         unless (tyKind == k) $ Left (KindMismatch k tyKind)
-        return (substTyVarType a ty body)
-      _ -> Left (NotAForallType termTy)
+        return (normalizeType (substTyVarType a ty body))
+      _ -> Left (NotAForallType (normalizeType termTy))
 
   -- Boolean literals
   TmTrue -> Right TyBool
@@ -123,8 +124,8 @@ typeOf kctx ctx = \case
     ty1 <- typeOf kctx ctx t1
     ty2 <- typeOf kctx ctx t2
     ty3 <- typeOf kctx ctx t3
-    unless (ty1 == TyBool) $ Left (TypeMismatch TyBool ty1)
-    unless (ty2 == ty3) $ Left (TypeMismatch ty2 ty3)
+    unless (typesEqual ty1 TyBool) $ Left (TypeMismatch TyBool ty1)
+    unless (typesEqual ty2 ty3) $ Left (TypeMismatch ty2 ty3)
     return ty2
 
   -- Natural number literals and operations
@@ -132,21 +133,24 @@ typeOf kctx ctx = \case
 
   TmSucc t -> do
     ty <- typeOf kctx ctx t
-    unless (ty == TyNat) $ Left (TypeMismatch TyNat ty)
+    unless (typesEqual ty TyNat) $ Left (TypeMismatch TyNat ty)
     return TyNat
 
   TmPred t -> do
     ty <- typeOf kctx ctx t
-    unless (ty == TyNat) $ Left (TypeMismatch TyNat ty)
+    unless (typesEqual ty TyNat) $ Left (TypeMismatch TyNat ty)
     return TyNat
 
   TmIsZero t -> do
     ty <- typeOf kctx ctx t
-    unless (ty == TyNat) $ Left (TypeMismatch TyNat ty)
+    unless (typesEqual ty TyNat) $ Left (TypeMismatch TyNat ty)
     return TyBool
 
 -- | Type check a term against an expected type
 typeCheck :: KindCtx -> TypeCtx -> Term -> Type -> Either TypeError ()
 typeCheck kctx ctx t expected = do
   actual <- typeOf kctx ctx t
-  unless (actual == expected) $ Left (TypeMismatch expected actual)
+  unless (typesEqual actual expected) $ Left (TypeMismatch expected actual)
+
+typesEqual :: Type -> Type -> Bool
+typesEqual t1 t2 = normalizeType t1 == normalizeType t2

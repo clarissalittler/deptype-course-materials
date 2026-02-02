@@ -17,7 +17,6 @@ import qualified Data.Text as T
 import Data.Text (Text)
 import System.IO (hFlush, stdout)
 import Control.Monad (when, unless)
-import Data.List (intercalate)
 import Control.Exception (IOException, catch)
 
 -- | REPL state tracks bindings and settings
@@ -169,7 +168,7 @@ handleEvalMode :: Term -> REPLState -> IO ()
 handleEvalMode term state = do
   if showSteps state
     then do
-      let steps = take (maxSteps state) $ normalizeSteps term
+      let steps = normalizeStepsWith (maxSteps state) (evalStep state) term
       mapM_ (\t -> putStrLn $ "  " ++ pretty t) steps
       when (length steps >= maxSteps state) $
         putStrLn "  (stopped: max steps reached)"
@@ -193,14 +192,14 @@ evalStep :: REPLState -> Term -> Maybe Term
 evalStep state = case evalStrategy state of
   Normal -> stepNormal
   CallByValue -> stepCallByValue
-  CallByName -> stepNormal  -- Call-by-name uses normal order reduction
+  CallByName -> stepCallByName
 
 -- | Evaluate with strategy
 evalWith :: EvalStrategy -> Int -> Term -> Term
-evalWith strategy maxSteps' term = case strategy of
-  Normal -> evalNormal term
-  CallByValue -> evalCallByValue term
-  CallByName -> evalCallByName term
+evalWith strategy maxStepsLimit term = case strategy of
+  Normal -> maybe term id (normalizeWith maxStepsLimit stepNormal term)
+  CallByValue -> maybe term id (normalizeWith maxStepsLimit stepCallByValue term)
+  CallByName -> maybe term id (normalizeWith maxStepsLimit stepCallByName term)
 
 -- | Handle let binding
 handleLet :: String -> Text -> REPLState -> IO ()

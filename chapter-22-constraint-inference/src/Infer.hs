@@ -5,6 +5,7 @@ module Infer
     infer
   , inferType
   , InferenceError(..)
+  , showInferenceError
     -- * Re-exports
   , module Constraint
   , module Solve

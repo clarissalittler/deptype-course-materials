@@ -46,10 +46,10 @@ step = \case
     App v1 <$> step t2
 
   -- Pair projections
-  Fst (Pair v1 _) | isValue v1 -> Just v1
+  Fst (Pair v1 v2) | isValue v1 && isValue v2 -> Just v1
   Fst t | not (isValue t) -> Fst <$> step t
 
-  Snd (Pair _ v2) | isValue v2 -> Just v2
+  Snd (Pair v1 v2) | isValue v1 && isValue v2 -> Just v2
   Snd t | not (isValue t) -> Snd <$> step t
 
   -- Reduce inside pairs

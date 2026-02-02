@@ -6,7 +6,6 @@ import TypeCheck
 import Eval
 import Parser
 import Pretty
-import qualified Data.Map.Strict as Map
 
 main :: IO ()
 main = hspec $ do
@@ -138,14 +137,20 @@ main = hspec $ do
     it "parses Pi type with symbol" $ do
       parseTerm "Pi(x:Nat). Nat" `shouldBe` Right (Pi "x" Nat Nat)
 
-    it "parses Pi type (note: arrow sugar conflicts with pairs, using Pi syntax)" $ do
+    it "parses Pi type with binder arrow sugar" $ do
       parseTerm "Pi(x:Nat). Nat" `shouldBe` Right (Pi "x" Nat Nat)
+
+    it "parses non-dependent arrow sugar" $ do
+      parseTerm "Nat -> Nat" `shouldBe` Right (Pi "_" Nat Nat)
 
     it "parses Sigma type" $ do
       parseTerm "Sigma(x:Nat). Nat" `shouldBe` Right (Sigma "x" Nat Nat)
 
     it "parses pairs" $ do
       parseTerm "(zero, succ zero)" `shouldBe` Right (Pair Zero (Succ Zero))
+
+    it "parses numeric literal 0" $ do
+      parseTerm "0" `shouldBe` Right Zero
 
     it "parses projections" $ do
       parseTerm "fst p" `shouldBe` Right (Fst (Var "p"))

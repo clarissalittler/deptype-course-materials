@@ -1,10 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Test.Hspec
-import Test.QuickCheck
 import qualified Data.Map.Strict as Map
 
-import Syntax
+import Syntax hiding (Spec)
 import TypeCheck
 import Eval
 import Parser

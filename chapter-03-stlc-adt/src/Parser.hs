@@ -11,10 +11,10 @@ import Text.Megaparsec
 import Text.Megaparsec.Char
 import qualified Text.Megaparsec.Char.Lexer as L
 import Data.Text (Text)
-import qualified Data.Text as T
 import Data.Void (Void)
 import Control.Monad (void)
 import qualified Data.Map.Strict as Map
+import qualified Data.Set as Set
 
 type Parser = Parsec Void Text
 
@@ -51,7 +51,7 @@ labelName = varName
 
 -- Type parser
 typeParser :: Parser Type
-typeParser = makeTypeExpr typeAtom
+typeParser = makeTypeExpr
   where
     typeAtom = choice
       [ TyBool <$ symbol "Bool"
@@ -63,36 +63,47 @@ typeParser = makeTypeExpr typeAtom
       , variantType
       ]
 
-    makeTypeExpr atom = do
-      t <- prodType atom
+    makeTypeExpr = do
+      t <- prodType
       rest t
 
-    prodType atom = do
-      t <- atom
-      ts <- many (symbol "*" *> atom)
+    prodType = do
+      t <- typeAtom
+      ts <- many (symbol "*" *> typeAtom)
       return $ foldl TyProd t ts
 
     rest t = do
-      symbol "->"
+      void (symbol "->")
       t' <- typeParser
       return (TyArr t t')
       <|> return t
 
     recordType = do
-      symbol "{"
+      void (symbol "{")
       fields <- ((,) <$> labelName <*> (symbol ":" *> typeParser)) `sepBy` symbol ","
-      symbol "}"
+      void (symbol "}")
+      ensureUniqueLabels (map fst fields)
       return $ TyRecord (Map.fromList fields)
 
     variantType = do
-      symbol "<"
+      void (symbol "<")
       fields <- ((,) <$> labelName <*> (symbol ":" *> typeParser)) `sepBy` symbol ","
-      symbol ">"
+      void (symbol ">")
+      ensureUniqueLabels (map fst fields)
       return $ TyVariant (Map.fromList fields)
 
 -- Term parser
 term :: Parser Term
-term = choice [ifThenElse, matchExpr, caseExpr, application]
+term = choice [ifThenElse, matchExpr, caseExpr, consExpr]
+
+consExpr :: Parser Term
+consExpr = do
+  t <- application
+  rest t
+  where
+    rest t =
+      (symbol "::" >> (TmCons t <$> consExpr))
+        <|> return t
 
 application :: Parser Term
 application = do
@@ -132,14 +143,11 @@ lambda :: Parser Term
 lambda = do
   void (symbol "λ" <|> symbol "\\")
   x <- varName
-  symbol ":"
+  void (symbol ":")
   ty <- typeParser
   void (symbol "." <|> symbol "->")
   body <- term
   return $ Lam x ty body
-
-lambdaSymbol :: Parser ()
-lambdaSymbol = void (symbol "λ" <|> symbol "\\")
 
 parens :: Parser a -> Parser a
 parens = between (symbol "(") (symbol ")")
@@ -153,11 +161,11 @@ tmFalse = TmFalse <$ symbol "false"
 
 ifThenElse :: Parser Term
 ifThenElse = do
-  symbol "if"
-  t1 <- application
-  symbol "then"
-  t2 <- application
-  symbol "else"
+  void (symbol "if")
+  t1 <- term
+  void (symbol "then")
+  t2 <- term
+  void (symbol "else")
   t3 <- term
   return $ TmIf t1 t2 t3
 
@@ -182,7 +190,7 @@ tmUnit = TmUnit <$ symbol "()"
 pair :: Parser Term
 pair = parens $ do
   t1 <- term
-  symbol ","
+  void (symbol ",")
   t2 <- term `sepBy1` symbol ","
   return $ foldl TmPair t1 t2
 
@@ -195,62 +203,70 @@ tmSnd = symbol "snd" >> TmSnd <$> atom
 -- Sums
 tmInl :: Parser Term
 tmInl = do
-  symbol "inl"
-  symbol "["
+  void (symbol "inl")
+  void (symbol "[")
   ty <- typeParser
-  symbol "]"
+  void (symbol "]")
   TmInl ty <$> atom
 
 tmInr :: Parser Term
 tmInr = do
-  symbol "inr"
-  symbol "["
+  void (symbol "inr")
+  void (symbol "[")
   ty <- typeParser
-  symbol "]"
+  void (symbol "]")
   TmInr ty <$> atom
 
 caseExpr :: Parser Term
 caseExpr = do
-  symbol "case"
-  t <- application
-  symbol "of"
-  symbol "inl"
-  x1 <- varName
-  symbol "=>"
-  t1 <- term
-  symbol "|"
-  symbol "inr"
-  x2 <- varName
-  symbol "=>"
-  t2 <- term
-  return $ TmCase t x1 t1 x2 t2
+  void (symbol "case")
+  t <- term
+  void (symbol "of")
+  try (sumCase t) <|> matchCase t
+  where
+    sumCase t = do
+      void (symbol "inl")
+      x1 <- varName
+      void (symbol "=>")
+      t1 <- term
+      void (symbol "|")
+      void (symbol "inr")
+      x2 <- varName
+      void (symbol "=>")
+      t2 <- term
+      return $ TmCase t x1 t1 x2 t2
+
+    matchCase t = do
+      cases <- patternCase `sepBy1` symbol "|"
+      return $ TmMatch t cases
 
 -- Records
 record :: Parser Term
 record = do
-  symbol "{"
+  void (symbol "{")
   fields <- ((,) <$> labelName <*> (symbol "=" *> term)) `sepBy` symbol ","
-  symbol "}"
+  void (symbol "}")
+  ensureUniqueLabels (map fst fields)
   return $ TmRecord (Map.fromList fields)
 
 -- Variants
 variant :: Parser Term
 variant = do
-  symbol "<"
-  label <- labelName
-  symbol "="
+  void (symbol "<")
+  lbl <- labelName
+  void (symbol "=")
   t <- term
-  symbol ">"
-  symbol "as"
+  void (symbol ">")
+  void (symbol "as")
   ty <- typeParser
-  return $ TmTag label t ty
+  return $ TmTag lbl t ty
 
 -- Lists
 tmNil :: Parser Term
 tmNil = do
-  symbol "["
-  symbol "]"
-  symbol ":"
+  void (symbol "[")
+  void (symbol "]")
+  void (symbol ":")
   TmNil <$> typeParser
 
 tmIsNil :: Parser Term
@@ -265,21 +281,42 @@ tmTail = symbol "tail" >> TmTail <$> atom
 -- Pattern matching
 matchExpr :: Parser Term
 matchExpr = do
-  symbol "match"
-  t <- application
-  symbol "with"
+  void (symbol "match")
+  t <- term
+  void (symbol "with")
   cases <- patternCase `sepBy1` symbol "|"
   return $ TmMatch t cases
 
 patternCase :: Parser (Pattern, Term)
 patternCase = do
-  pat <- pattern'
-  symbol "=>"
+  pat <- pattern
+  void (symbol "=>")
   t <- term
   return (pat, t)
 
-pattern' :: Parser Pattern
-pattern' = choice
+pattern :: Parser Pattern
+pattern = patternCons
+
+patternCons :: Parser Pattern
+patternCons = do
+  p <- patternNoCons
+  rest p
+  where
+    rest p =
+      (symbol "::" >> (PatCons p <$> patternCons))
+        <|> return p
+
+patternNoCons :: Parser Pattern
+patternNoCons = choice
+  [ PatSucc <$> (symbol "succ" *> patternNoCons)
+  , PatInl <$> (symbol "inl" *> patternNoCons)
+  , PatInr <$> (symbol "inr" *> patternNoCons)
+  , variantPattern
+  , patternAtom
+  ]
+
+patternAtom :: Parser Pattern
+patternAtom = choice
   [ PatWild <$ symbol "_"
   , PatUnit <$ symbol "()"
   , PatTrue <$ symbol "true"
@@ -287,15 +324,25 @@ pattern' = choice
   , PatZero <$ symbol "0"
   , PatNil <$ (symbol "[" >> symbol "]")
   , try $ parens pairPattern
+  , parens pattern
   , PatVar <$> varName
   ]
 
 pairPattern :: Parser Pattern
 pairPattern = do
-  p1 <- pattern'
-  symbol ","
-  p2 <- pattern'
-  return $ PatPair p1 p2
+  p1 <- pattern
+  void (symbol ",")
+  ps <- pattern `sepBy1` symbol ","
+  return $ foldl PatPair p1 ps
+
+variantPattern :: Parser Pattern
+variantPattern = do
+  void (symbol "<")
+  lbl <- labelName
+  void (symbol "=")
+  pat <- pattern
+  void (symbol ">")
+  return $ PatVariant lbl pat
 
 -- Parse functions
 parseTerm :: Text -> Either String Term
@@ -309,3 +356,17 @@ parseType input =
   case runParser (sc *> typeParser <* eof) "" input of
     Left err -> Left (errorBundlePretty err)
     Right t -> Right t
+
+ensureUniqueLabels :: [Label] -> Parser ()
+ensureUniqueLabels labels =
+  case firstDuplicate labels of
+    Just dup -> fail ("duplicate label: " ++ dup)
+    Nothing -> return ()
+
+firstDuplicate :: Ord a => [a] -> Maybe a
+firstDuplicate = go Set.empty
+  where
+    go _ [] = Nothing
+    go seen (x:xs)
+      | Set.member x seen = Just x
+      | otherwise = go (Set.insert x seen) xs

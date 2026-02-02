@@ -6,8 +6,6 @@ import Syntax
 import Constraint
 import Solve
 import Infer
-import qualified Data.Map.Strict as Map
-import qualified Data.Set as Set
 
 -- ============================================================================
 -- Exercise 1: Constraint Generation

@@ -125,9 +125,9 @@ evalStep = \case
       _ -> Nothing
 
   -- Let binding
-  TmLet x _ t1 t2
+  TmLet x m t1 t2
     | isValue t1 -> Just $ substVar x t1 t2
-    | otherwise -> TmLet x One <$> evalStep t1 <*> pure t2
+    | otherwise -> TmLet x m <$> evalStep t1 <*> pure t2
 
 -- =============================================================================
 -- Multi-Step Evaluation

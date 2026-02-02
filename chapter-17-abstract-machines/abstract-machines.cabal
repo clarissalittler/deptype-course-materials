@@ -37,6 +37,7 @@ library
 executable abstract-machines-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_abstract_machines
   hs-source-dirs:
       app

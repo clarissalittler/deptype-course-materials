@@ -39,7 +39,7 @@ step = \case
   TmPred (TmSucc v) | isValue v -> Just v
   TmPred t -> TmPred <$> step t
   TmIsZero TmZero -> Just TmTrue
-  TmIsZero (TmSucc _) -> Just TmFalse
+  TmIsZero (TmSucc v) | isValue v -> Just TmFalse
   TmIsZero t -> TmIsZero <$> step t
 
   _ -> Nothing

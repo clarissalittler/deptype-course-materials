@@ -16,8 +16,6 @@ module TypeCheck
 import Syntax
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map)
-import qualified Data.Set as Set
-import Data.List (intercalate)
 
 -- =============================================================================
 -- Usage Tracking
@@ -53,6 +51,15 @@ addUsage = Map.unionWith sumUsage
     sumUsage Unused u = u
     sumUsage u Unused = u
     sumUsage _ _ = UsedMany  -- UsedOnce + UsedOnce = UsedMany
+
+-- | Scale usage by multiplicity (for function application)
+scaleUsage :: Mult -> UsageEnv -> UsageEnv
+scaleUsage One = id
+scaleUsage Many = Map.map scale
+  where
+    scale Unused = Unused
+    scale UsedOnce = UsedMany
+    scale UsedMany = UsedMany
 
 -- | Increment usage of a variable
 useVar :: Var -> UsageEnv -> UsageEnv
@@ -149,6 +156,16 @@ checkFinalUsage usage =
     [] -> Right ()
     ((x, _):_) -> Left $ LinearVariableUnused x
 
+-- | Ensure linear variables are used consistently across branches
+checkBranchUsage :: TypeContext -> UsageEnv -> UsageEnv -> Either TypeError ()
+checkBranchUsage ctx usageLeft usageRight =
+  case [x | (x, (_, One)) <- Map.toList ctx
+          , used usageLeft x /= used usageRight x] of
+    (x:_) -> Left $ LinearVariableUsedInBranch x
+    [] -> Right ()
+  where
+    used env x = Map.findWithDefault Unused x env
+
 -- | Type check a term in a context, returning type and usage
 typeOf :: TypeContext -> Term -> TypeResult
 typeOf ctx = \case
@@ -182,9 +199,9 @@ typeOf ctx = \case
     (ty1, usage1) <- typeOf ctx t1
     (ty2, usage2) <- typeOf ctx t2
     case ty1 of
-      TyFun _m argTy resTy ->
+      TyFun m argTy resTy ->
         if ty2 == argTy
-          then Right (resTy, addUsage usage1 usage2)
+          then Right (resTy, addUsage usage1 (scaleUsage m usage2))
           else Left $ ArgumentTypeMismatch argTy ty2
       _ -> Left $ NotAFunction ty1
 
@@ -202,6 +219,7 @@ typeOf ctx = \case
         (ty3, usage3) <- typeOf ctx t3
         if ty2 == ty3
           then do
+            checkBranchUsage ctx usage2 usage3
             -- Branches: take max (only one executes)
             -- Condition: add to result (always evaluates)
             let combinedBranch = combineUsage usage2 usage3
@@ -272,10 +290,15 @@ typeOf ctx = \case
   TmBang t -> do
     (ty, usage) <- typeOf ctx t
     -- Check no linear variables are used
-    let linearUsed = Map.filter (/= Unused) usage
-    if Map.null linearUsed
+    let linearUsed =
+          [ x
+          | (x, u) <- Map.toList usage
+          , u /= Unused
+          , Just (_, One) <- [Map.lookup x ctx]
+          ]
+    if null linearUsed
       then Right (TyBang ty, Map.empty)
-      else Left $ TypeError "Cannot use linear variables under !"
+      else Left $ TypeError ("Cannot use linear variables under !: " ++ head linearUsed)
 
   -- Bang elimination
   -- Γ ⊢ t₁ : !τ₁ ; Δ₁    Γ, x:τ₁ (unrestricted) ⊢ t₂ : τ₂ ; Δ₂

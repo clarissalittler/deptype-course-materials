@@ -12,6 +12,8 @@ module Syntax
   , Term(..)
     -- * Module Expressions
   , ModExpr(..)
+    -- * Declarations
+  , Decl(..)
     -- * Signatures
   , Signature(..)
   , Spec(..)

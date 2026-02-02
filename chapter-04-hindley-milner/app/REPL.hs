@@ -14,6 +14,7 @@ import Pretty
 import Infer
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map)
+import qualified Data.Set as Set
 import qualified Data.Text as T
 import Data.Text (Text)
 import System.IO (hFlush, stdout)
@@ -228,7 +229,7 @@ generateEvalSteps t = t : case step t of
 
 -- | Show the type of a term
 showTermType :: Term -> REPLState -> IO ()
-showTermType term state = do
+showTermType term _state = do
   case infer term of
     Left _ -> return ()
     Right ty -> putStrLn $ "  : " ++ prettyType ty
@@ -255,6 +256,19 @@ expandBindings env = go
     go (TmHead t) = TmHead (go t)
     go (TmTail t) = TmTail (go t)
     go t = t
+
+freeTyVarsScheme :: TypeScheme -> Set.Set TyVar
+freeTyVarsScheme (TypeScheme vars ty) =
+  freeTyVars ty Set.\\ Set.fromList vars
+
+freeTyVarsEnv :: Map String TypeScheme -> Set.Set TyVar
+freeTyVarsEnv env =
+  Set.unions (map freeTyVarsScheme (Map.elems env))
+
+generalizeEnv :: Map String TypeScheme -> Type -> TypeScheme
+generalizeEnv env ty =
+  let vars = Set.toList (freeTyVars ty Set.\\ freeTyVarsEnv env)
+  in TypeScheme vars ty
 
 -- | Pretty print type errors
 prettyTypeError :: TypeError -> String
@@ -283,8 +297,7 @@ handleLet name termText state = do
           putStrLn $ "Type error: " ++ prettyTypeError err
           loop state
         Right ty -> do
-          -- Generalize to type scheme
-          let scheme = TypeScheme [] ty  -- Simple generalization
+          let scheme = generalizeEnv (typeBindings state) ty
           putStrLn $ "  " ++ name ++ " : " ++ prettyScheme scheme
           putStrLn $ "  " ++ name ++ " = " ++ pretty term'
           loop state
@@ -328,7 +341,7 @@ handleLoad filename state = do
       (name:"=":rest) -> case parseTerm (T.pack $ unwords rest) of
         Right term -> case infer term of
           Right ty ->
-            let scheme = TypeScheme [] ty
+            let scheme = generalizeEnv (typeBindings st) ty
             in processLines ls st
               { termBindings = Map.insert name term (termBindings st)
               , typeBindings = Map.insert name scheme (typeBindings st)
@@ -470,9 +483,9 @@ showExamples = putStrLn $ unlines
   , "  if 0 then true else false"
   , "  Type error: Cannot unify Nat and Bool"
   , ""
-  , "=== Recursive Functions (using let) ==="
+  , "=== Recursive Functions (not built-in) ==="
   , "  :let length = \\l. if isnil l then 0 else succ (length (tail l))"
-  , "  Note: Recursion works through let!"
+  , "  Note: This requires a fixpoint operator or let-rec (not in this chapter)."
   , ""
   , "Try these to explore type inference:"
   , "  :type \\x. x"

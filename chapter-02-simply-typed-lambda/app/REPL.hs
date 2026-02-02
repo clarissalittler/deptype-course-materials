@@ -165,20 +165,21 @@ handleTerm input state = do
       let term' = expandBindings (termBindings state) (typeBindings state) term
           ctx = typeBindings state
 
-      -- Type check if enabled
-      when (typeCheckMode state) $ do
-        case typeOf ctx term' of
+      if typeCheckMode state
+        then case typeOf ctx term' of
           Left err -> do
             putStrLn $ "Type error: " ++ prettyTypeError err
             loop state
-            return ()
           Right ty -> do
             when (showTypes state) $
               putStrLn $ "  : " ++ prettyType ty
-
-      if stepMode state
-        then handleStepMode term' state
-        else handleEvalMode term' state
+            evalTerm term' state
+        else evalTerm term' state
+  where
+    evalTerm t st =
+      if stepMode st
+        then handleStepMode t st
+        else handleEvalMode t st
 
 -- | Handle evaluation in step mode
 handleStepMode :: Term -> REPLState -> IO ()
@@ -230,26 +231,16 @@ showTermType term state = do
 
 -- | Expand term bindings
 expandBindings :: Map String Term -> Map String Type -> Term -> Term
-expandBindings termEnv _typeEnv = go
-  where
-    go (Var x) = case Map.lookup x termEnv of
-      Just t -> t
-      Nothing -> Var x
-    go (Lam x ty t) = Lam x ty (go t)
-    go (App t1 t2) = App (go t1) (go t2)
-    go (TmIf t1 t2 t3) = TmIf (go t1) (go t2) (go t3)
-    go (TmSucc t) = TmSucc (go t)
-    go (TmPred t) = TmPred (go t)
-    go (TmIsZero t) = TmIsZero (go t)
-    go t = t
+expandBindings termEnv _typeEnv term =
+  Map.foldrWithKey (\name bound acc -> substVar name bound acc) term termEnv
 
 -- | Pretty print type errors
 prettyTypeError :: TypeError -> String
 prettyTypeError (UnboundVariable x) =
   "Unbound variable: " ++ x
-prettyTypeError (TypeMismatch expected actual) =
-  "Type mismatch: expected " ++ prettyType expected ++
-  " but got " ++ prettyType actual
+prettyTypeError (TypeMismatch expectedTy actualTy) =
+  "Type mismatch: expected " ++ prettyType expectedTy ++
+  " but got " ++ prettyType actualTy
 prettyTypeError (NotAFunction ty) =
   "Not a function type: " ++ prettyType ty
 prettyTypeError (ConditionNotBool ty) =

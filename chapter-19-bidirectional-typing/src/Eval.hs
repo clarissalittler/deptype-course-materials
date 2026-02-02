@@ -87,10 +87,10 @@ eval env = \case
   TyLam a body ->
     VTyLam a (Closure env body)
 
-  TyApp e _ ->
+  TyApp e ty ->
     case eval env e of
       VTyLam _ (Closure env' body) -> eval env' body
-      VNeutral n -> VNeutral (NTyApp n undefined)
+      VNeutral n -> VNeutral (NTyApp n ty)
       v -> error $ "TyApp: non-forall " ++ show v
 
 -- | Apply a value to an argument

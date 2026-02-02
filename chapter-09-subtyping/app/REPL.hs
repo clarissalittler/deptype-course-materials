@@ -12,7 +12,6 @@ import Eval
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map)
 import qualified Data.Text as T
-import qualified Data.Text.IO as TIO
 import System.IO (hFlush, stdout)
 import Control.Exception (catch, IOException)
 import GHC.IO.Exception (IOErrorType(..))

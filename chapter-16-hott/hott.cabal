@@ -43,6 +43,7 @@ library
 executable hott-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_hott
   hs-source-dirs:
       app

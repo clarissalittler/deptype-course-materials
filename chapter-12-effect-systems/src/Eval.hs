@@ -163,8 +163,8 @@ evalStep = \case
   TmEffAbs {} -> Nothing
 
   -- Effect application
-  TmEffApp t _
-    | not (isValue t) -> (\t' -> TmEffApp t' undefined) <$> evalStep t
+  TmEffApp t eff
+    | not (isValue t) -> (\t' -> TmEffApp t' eff) <$> evalStep t
     | TmEffAbs _ body <- t -> Just body  -- Erase effect abstraction
     | otherwise -> Nothing
 

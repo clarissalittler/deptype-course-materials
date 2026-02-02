@@ -286,6 +286,8 @@ prettyTypeError (NotASum ty) =
   "Expected sum type but got: " ++ prettyType ty
 prettyTypeError (NotARecord ty) =
   "Expected record type but got: " ++ prettyType ty
+prettyTypeError (NotAVariant ty) =
+  "Expected variant type but got: " ++ prettyType ty
 prettyTypeError (NotAList ty) =
   "Expected list type but got: " ++ prettyType ty
 prettyTypeError (FieldNotFound l) =

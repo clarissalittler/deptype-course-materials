@@ -43,6 +43,7 @@ library
 executable refinement-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_refinement_types
   hs-source-dirs:
       app

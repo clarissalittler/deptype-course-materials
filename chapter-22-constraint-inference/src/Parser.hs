@@ -43,15 +43,15 @@ typeParser = makeTypeExpr typeAtom
       , try $ TyList <$> (symbol "List" *> typeAtom)
       , parens typeParser
       ]
-    makeTypeExpr atom = do
-      t <- prodType atom
+    makeTypeExpr atomParser = do
+      t <- prodType atomParser
       rest t
-    prodType atom = do
-      t <- atom
-      ts <- many (symbol "*" *> atom)
+    prodType atomParser = do
+      t <- atomParser
+      ts <- many (symbol "*" *> atomParser)
       return $ foldl TyProd t ts
     rest t = do
-      symbol "->"
+      void (symbol "->")
       t' <- typeParser
       return (TyArr t t')
       <|> return t
@@ -108,21 +108,21 @@ tmFalse = TmFalse <$ symbol "false"
 
 ifExpr :: Parser Term
 ifExpr = do
-  symbol "if"
+  void (symbol "if")
   t1 <- application
-  symbol "then"
+  void (symbol "then")
   t2 <- application
-  symbol "else"
+  void (symbol "else")
   t3 <- term
   return $ TmIf t1 t2 t3
 
 letExpr :: Parser Term
 letExpr = do
-  symbol "let"
+  void (symbol "let")
   x <- varName
-  symbol "="
+  void (symbol "=")
   t1 <- term
-  symbol "in"
+  void (symbol "in")
   t2 <- term
   return $ Let x t1 t2
 
@@ -141,7 +141,7 @@ tmIsZero = symbol "iszero" >> TmIsZero <$> atom
 pair :: Parser Term
 pair = parens $ do
   t1 <- term
-  symbol ","
+  void (symbol ",")
   t2 <- term
   return $ TmPair t1 t2
 

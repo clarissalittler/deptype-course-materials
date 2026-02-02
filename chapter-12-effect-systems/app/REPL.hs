@@ -43,22 +43,7 @@ initialState = REPLState
 
 -- | Standard effects available in the system
 standardEffects :: EffectEnv
-standardEffects = Map.fromList
-  [ ("State", Effect "State"
-      [ Operation "get" TyUnit TyNat
-      , Operation "put" TyNat TyUnit
-      ])
-  , ("Exception", Effect "Exception"
-      [ Operation "throw" TyUnit TyUnit
-      ])
-  , ("IO", Effect "IO"
-      [ Operation "print" TyNat TyUnit
-      , Operation "read" TyUnit TyNat
-      ])
-  , ("Choice", Effect "Choice"
-      [ Operation "choose" TyBool TyBool
-      ])
-  ]
+standardEffects = ctxEffects emptyContext
 
 -- | Main REPL loop
 runREPL :: IO ()
@@ -135,7 +120,7 @@ handleLetBinding x input state = do
     Left err -> putStrLn ("Parse error: " ++ show err) >> return state
     Right t -> do
       let ctx = buildContext state
-      case infer ctx (effectEnv state) t of
+      case infer ctx t of
         Left err -> putStrLn ("Type error: " ++ show err) >> return state
         Right (TypeAndEffect ty eff) -> do
           let v = eval t
@@ -155,7 +140,7 @@ handleTypeOf input state = do
     Left err -> putStrLn $ "Parse error: " ++ show err
     Right t -> do
       let ctx = buildContext state
-      case infer ctx (effectEnv state) t of
+      case infer ctx t of
         Left err -> putStrLn $ "Type error: " ++ show err
         Right (TypeAndEffect ty eff) ->
           putStrLn $ "  : " ++ prettyType ty ++
@@ -199,7 +184,7 @@ handleInput input state = do
       let ctx = buildContext state
 
       -- Type check and display type
-      case infer ctx (effectEnv state) t of
+      case infer ctx t of
         Left err -> putStrLn $ "Type error: " ++ show err
         Right (TypeAndEffect ty eff) -> do
           when (showTypes state) $
@@ -218,7 +203,10 @@ handleInput input state = do
 
 -- | Build context from bindings
 buildContext :: REPLState -> Context
-buildContext state = typeBindings state
+buildContext state =
+  emptyContext { ctxTypes = typeBindings state
+               , ctxEffects = effectEnv state
+               }
 
 -- | Show environment
 showEnv :: REPLState -> IO ()
@@ -243,9 +231,9 @@ showEffects env = do
   putStrLn ""
   mapM_ showEffect (Map.toList env)
   where
-    showEffect (name, eff) = do
-      putStrLn $ "  " ++ effectName eff ++ ":"
-      mapM_ showOp (effectOps eff)
+    showEffect (name, ops) = do
+      putStrLn $ "  " ++ name ++ ":"
+      mapM_ showOp ops
       putStrLn ""
     showOp op =
       putStrLn $ "    " ++ opName op ++ " : " ++

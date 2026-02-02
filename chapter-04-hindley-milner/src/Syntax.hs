@@ -117,6 +117,10 @@ substVar x s = \case
   App t1 t2 -> App (substVar x s t1) (substVar x s t2)
   Let y t1 t2
     | y == x -> Let y (substVar x s t1) t2
+    | y `Set.member` freeVars s ->
+        let y' = freshVar y (freeVars s `Set.union` freeVars t2)
+            t2' = substVar y (Var y') t2
+        in Let y' (substVar x s t1) (substVar x s t2')
     | otherwise -> Let y (substVar x s t1) (substVar x s t2)
   TmTrue -> TmTrue
   TmFalse -> TmFalse

@@ -35,7 +35,7 @@ varName = lexeme $ try $ do
     else return name
 
 typeParser :: Parser Type
-typeParser = makeTypeExpr typeAtom
+typeParser = makeTypeExpr
   where
     typeAtom = choice
       [ TyBool <$ symbol "Bool"
@@ -43,21 +43,28 @@ typeParser = makeTypeExpr typeAtom
       , try $ TyList <$> (symbol "List" *> typeAtom)
       , parens typeParser
       ]
-    makeTypeExpr atom = do
-      t <- prodType atom
+    makeTypeExpr = do
+      t <- prodType
       rest t
-    prodType atom = do
-      t <- atom
-      ts <- many (symbol "*" *> atom)
+    prodType = do
+      t <- typeAtom
+      ts <- many (symbol "*" *> typeAtom)
       return $ foldl TyProd t ts
-    rest t = do
-      symbol "->"
-      t' <- typeParser
-      return (TyArr t t')
-      <|> return t
+    rest t =
+      (TyArr t <$> (void (symbol "->") *> typeParser))
+        <|> return t
 
 term :: Parser Term
-term = choice [ifExpr, letExpr, application]
+term = choice [ifExpr, letExpr, consExpr]
+
+consExpr :: Parser Term
+consExpr = do
+  t <- application
+  rest t
+  where
+    rest t =
+      (symbol "::" >> (TmCons t <$> consExpr))
+        <|> return t
 
 application :: Parser Term
 application = do
@@ -108,21 +115,21 @@ tmFalse = TmFalse <$ symbol "false"
 
 ifExpr :: Parser Term
 ifExpr = do
-  symbol "if"
-  t1 <- application
-  symbol "then"
-  t2 <- application
-  symbol "else"
+  void (symbol "if")
+  t1 <- term
+  void (symbol "then")
+  t2 <- term
+  void (symbol "else")
   t3 <- term
   return $ TmIf t1 t2 t3
 
 letExpr :: Parser Term
 letExpr = do
-  symbol "let"
+  void (symbol "let")
   x <- varName
-  symbol "="
+  void (symbol "=")
   t1 <- term
-  symbol "in"
+  void (symbol "in")
   t2 <- term
   return $ Let x t1 t2
 
@@ -141,7 +148,7 @@ tmIsZero = symbol "iszero" >> TmIsZero <$> atom
 pair :: Parser Term
 pair = parens $ do
   t1 <- term
-  symbol ","
+  void (symbol ",")
   t2 <- term
   return $ TmPair t1 t2
 

@@ -61,10 +61,6 @@ emptyEnv = TypeEnv Map.empty
 extendEnv :: Var -> TypeScheme -> TypeEnv -> TypeEnv
 extendEnv x scheme (TypeEnv env) = TypeEnv (Map.insert x scheme env)
 
--- | Remove variable from environment
-removeEnv :: Var -> TypeEnv -> TypeEnv
-removeEnv x (TypeEnv env) = TypeEnv (Map.delete x env)
-
 -- | Apply substitution to environment
 applySubstEnv :: Subst -> TypeEnv -> TypeEnv
 applySubstEnv s (TypeEnv env) = TypeEnv (Map.map (applySubstScheme s) env)
@@ -153,71 +149,73 @@ inferType env = \case
     tv <- fresh
     let env' = extendEnv x (TypeScheme [] tv) env
     (s, bodyTy) <- inferType env' body
-    return (s, TyArr (applySubst s tv) bodyTy)
+    return (s, TyArr (applySubst s tv) (applySubst s bodyTy))
 
   -- Application
   App t1 t2 -> do
     (s1, ty1) <- inferType env t1
     (s2, ty2) <- inferType (applySubstEnv s1 env) t2
     tv <- fresh
-    s3 <- unify (applySubst s2 ty1) (TyArr ty2 tv)
+    let ty1' = applySubst s2 ty1
+        ty2' = applySubst s2 ty2
+    s3 <- unify ty1' (TyArr ty2' tv)
     return (s3 `composeSubst` s2 `composeSubst` s1, applySubst s3 tv)
 
   -- Let (with polymorphism!)
   Let x t1 t2 -> do
     (s1, ty1) <- inferType env t1
     let env' = applySubstEnv s1 env
-        scheme = generalize env' ty1
+        scheme = generalize env' (applySubst s1 ty1)
         env'' = extendEnv x scheme env'
     (s2, ty2) <- inferType env'' t2
-    return (s2 `composeSubst` s1, ty2)
+    return (s2 `composeSubst` s1, applySubst s2 ty2)
 
   -- Booleans
   TmTrue -> return (emptySubst, TyBool)
   TmFalse -> return (emptySubst, TyBool)
   TmIf t1 t2 t3 -> do
     (s1, ty1) <- inferType env t1
-    s2 <- unify ty1 TyBool
+    s2 <- unify (applySubst s1 ty1) TyBool
     let s = s2 `composeSubst` s1
     (s3, ty2) <- inferType (applySubstEnv s env) t2
     (s4, ty3) <- inferType (applySubstEnv (s3 `composeSubst` s) env) t3
-    s5 <- unify (applySubst s4 ty2) ty3
+    s5 <- unify (applySubst s4 ty2) (applySubst s4 ty3)
     let finalSubst = s5 `composeSubst` s4 `composeSubst` s3 `composeSubst` s
-    return (finalSubst, applySubst s5 ty3)
+    return (finalSubst, applySubst finalSubst ty3)
 
   -- Natural numbers
   TmZero -> return (emptySubst, TyNat)
   TmSucc t -> do
     (s, ty) <- inferType env t
-    s' <- unify ty TyNat
+    s' <- unify (applySubst s ty) TyNat
     return (s' `composeSubst` s, TyNat)
   TmPred t -> do
     (s, ty) <- inferType env t
-    s' <- unify ty TyNat
+    s' <- unify (applySubst s ty) TyNat
     return (s' `composeSubst` s, TyNat)
   TmIsZero t -> do
     (s, ty) <- inferType env t
-    s' <- unify ty TyNat
+    s' <- unify (applySubst s ty) TyNat
     return (s' `composeSubst` s, TyBool)
 
   -- Pairs
   TmPair t1 t2 -> do
     (s1, ty1) <- inferType env t1
     (s2, ty2) <- inferType (applySubstEnv s1 env) t2
-    return (s2 `composeSubst` s1, TyProd (applySubst s2 ty1) ty2)
+    return (s2 `composeSubst` s1, TyProd (applySubst s2 ty1) (applySubst s2 ty2))
 
   TmFst t -> do
     (s, ty) <- inferType env t
     tv1 <- fresh
     tv2 <- fresh
-    s' <- unify ty (TyProd tv1 tv2)
+    s' <- unify (applySubst s ty) (TyProd tv1 tv2)
     return (s' `composeSubst` s, applySubst s' tv1)
 
   TmSnd t -> do
     (s, ty) <- inferType env t
     tv1 <- fresh
     tv2 <- fresh
-    s' <- unify ty (TyProd tv1 tv2)
+    s' <- unify (applySubst s ty) (TyProd tv1 tv2)
     return (s' `composeSubst` s, applySubst s' tv2)
 
   -- Lists
@@ -229,28 +227,28 @@ inferType env = \case
     (s1, ty1) <- inferType env t1
     (s2, ty2) <- inferType (applySubstEnv s1 env) t2
     tv <- fresh
-    s3 <- unify ty2 (TyList tv)
-    s4 <- unify (applySubst s3 ty1) (applySubst s3 tv)
+    s3 <- unify (applySubst s2 ty2) (TyList tv)
+    s4 <- unify (applySubst s3 (applySubst s2 ty1)) (applySubst s3 tv)
     let s = s4 `composeSubst` s3 `composeSubst` s2 `composeSubst` s1
-    return (s, applySubst s4 ty2)
+    return (s, applySubst s (TyList tv))
 
   TmIsNil t -> do
     (s, ty) <- inferType env t
     tv <- fresh
-    s' <- unify ty (TyList tv)
+    s' <- unify (applySubst s ty) (TyList tv)
     return (s' `composeSubst` s, TyBool)
 
   TmHead t -> do
     (s, ty) <- inferType env t
     tv <- fresh
-    s' <- unify ty (TyList tv)
+    s' <- unify (applySubst s ty) (TyList tv)
     return (s' `composeSubst` s, applySubst s' tv)
 
   TmTail t -> do
     (s, ty) <- inferType env t
     tv <- fresh
-    s' <- unify ty (TyList tv)
-    return (s' `composeSubst` s, ty)
+    s' <- unify (applySubst s ty) (TyList tv)
+    return (s' `composeSubst` s, applySubst s' (TyList tv))
 
 -- | Main inference function for closed terms
 infer :: Term -> Either TypeError Type

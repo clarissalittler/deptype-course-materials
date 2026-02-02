@@ -100,10 +100,10 @@ evalStep = \case
 
   -- J eliminator: J C base a a refl ≡ base a
   -- This is the computation rule for path induction
-  TmJ _ base a b p
-    | not (isValue a) -> (\a' -> TmJ undefined base a' b p) <$> evalStep a
-    | not (isValue b) -> (\b' -> TmJ undefined base a b' p) <$> evalStep b
-    | not (isValue p) -> (\p' -> TmJ undefined base a b p') <$> evalStep p
+  TmJ ty base a b p
+    | not (isValue a) -> (\a' -> TmJ ty base a' b p) <$> evalStep a
+    | not (isValue b) -> (\b' -> TmJ ty base a b' p) <$> evalStep b
+    | not (isValue p) -> (\p' -> TmJ ty base a b p') <$> evalStep p
     | TmRefl _ a' <- p, a == b, a == a' ->
         -- J C base a a refl ≡ base a
         Just $ App base a

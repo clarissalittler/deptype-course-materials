@@ -4,7 +4,6 @@ module ExerciseSpec (spec) where
 
 import Test.Hspec
 import Syntax
-import TypeCheck
 import Eval
 import qualified Solutions as S
 import qualified Data.Map.Strict as Map
@@ -27,12 +26,6 @@ listToInts (TmCons h t) = do
   t' <- listToInts t
   return (h' : t')
 listToInts _ = Nothing
-
--- Helper to count list length (for verification)
-countList :: Term -> Int
-countList (TmNil _) = 0
-countList (TmCons _ t) = 1 + countList t
-countList _ = 0
 
 spec :: Spec
 spec = do

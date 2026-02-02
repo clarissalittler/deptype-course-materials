@@ -13,8 +13,8 @@ module TypeCheck
 import Syntax
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map)
-import Control.Monad (unless, when)
-import Data.List (nub)
+import Control.Monad (unless)
+import qualified Data.Set as Set
 
 -- | Type checking context
 type TypeContext = Map Var Type
@@ -30,14 +30,15 @@ extendContext = Map.insert
 -- | Type errors
 data TypeError
   = UnboundVariable Var
-  | TypeMismatch { tmExpected :: Type, tmActual :: Type }
+  | TypeMismatch Type Type
   | NotAFunction Type
   | ConditionNotBool Type
-  | ArgumentTypeMismatch { paramTy :: Type, argTy :: Type }
+  | ArgumentTypeMismatch Type Type
   | NotANat Type
   | NotAProduct Type
   | NotASum Type
   | NotARecord Type
+  | NotAVariant Type
   | NotAList Type
   | FieldNotFound Label
   | VariantLabelNotFound Label
@@ -143,10 +144,6 @@ typeOf ctx = \case
 
   -- Records
   TmRecord fields -> do
-    -- Check for duplicate labels
-    let labels = Map.keys fields
-    when (length labels /= length (nub labels)) $
-      Left (DuplicateLabel (head $ labels \\ nub labels))
     -- Type check each field
     fieldTypes <- traverse (typeOf ctx) fields
     return $ TyRecord fieldTypes
@@ -171,21 +168,24 @@ typeOf ctx = \case
               then return variantTy
               else Left (TypeMismatch expectedTy ty)
           Nothing -> Left (VariantLabelNotFound label)
-      _ -> Left (NotARecord variantTy)
+      _ -> Left (NotAVariant variantTy)
 
   TmCaseVariant t cases -> do
     ty <- typeOf ctx t
     case ty of
       TyVariant variantFields -> do
-        -- Check each case
-        caseTys <- mapM checkCase cases
-        -- Ensure all cases return the same type
-        case caseTys of
-          [] -> Left NonExhaustivePatterns
-          (ty1:tys) -> do
-            unless (all (== ty1) tys) $
-              Left (TypeMismatch ty1 (head $ filter (/= ty1) tys))
-            return ty1
+        case firstDuplicateLabel (map (\(label, _, _) -> label) cases) of
+          Just dup -> Left (DuplicateLabel dup)
+          Nothing -> do
+            -- Check each case
+            caseTys <- mapM checkCase cases
+            -- Ensure all cases return the same type
+            case caseTys of
+              [] -> Left NonExhaustivePatterns
+              (ty1:tys) -> do
+                unless (all (== ty1) tys) $
+                  Left (TypeMismatch ty1 (head $ filter (/= ty1) tys))
+                return ty1
         where
           checkCase (label, x, ti) =
             case Map.lookup label variantFields of
@@ -193,7 +193,7 @@ typeOf ctx = \case
                 let ctx' = extendContext x fieldTy ctx
                 typeOf ctx' ti
               Nothing -> Left (VariantLabelNotFound label)
-      _ -> Left (NotARecord ty)
+      _ -> Left (NotAVariant ty)
 
   -- Lists
   TmNil ty -> Right (TyList ty)
@@ -241,13 +241,12 @@ typeOf ctx = \case
       checkPatternCase :: Type -> (Pattern, Term) -> Either TypeError Type
       checkPatternCase scrutTy (pat, body) = do
         patCtx <- typeOfPattern pat scrutTy
-        -- Check for duplicate pattern variables
-        let patVars = Map.keys patCtx
-        when (length patVars /= length (nub patVars)) $
-          Left (DuplicatePatternVar (head $ patVars \\ nub patVars))
-        -- Type check body with pattern bindings
-        let ctx' = Map.union patCtx ctx
-        typeOf ctx' body
+        case firstDuplicateVar (patternVarList pat) of
+          Just dup -> Left (DuplicatePatternVar dup)
+          Nothing -> do
+            -- Type check body with pattern bindings
+            let ctx' = Map.union patCtx ctx
+            typeOf ctx' body
 
 -- | Get type bindings from a pattern
 typeOfPattern :: Pattern -> Type -> Either TypeError TypeContext
@@ -290,6 +289,32 @@ typeOfPattern pat ty = case (pat, ty) of
 typeCheck :: Term -> Either TypeError Type
 typeCheck = typeOf emptyContext
 
--- | List difference (\\)
-(\\) :: Eq a => [a] -> [a] -> [a]
-xs \\ ys = filter (`notElem` ys) xs
+patternVarList :: Pattern -> [Var]
+patternVarList = \case
+  PatVar x -> [x]
+  PatWild -> []
+  PatUnit -> []
+  PatTrue -> []
+  PatFalse -> []
+  PatZero -> []
+  PatSucc p -> patternVarList p
+  PatPair p1 p2 -> patternVarList p1 ++ patternVarList p2
+  PatInl p -> patternVarList p
+  PatInr p -> patternVarList p
+  PatVariant _ p -> patternVarList p
+  PatNil -> []
+  PatCons p ps -> patternVarList p ++ patternVarList ps
+
+firstDuplicateVar :: [Var] -> Maybe Var
+firstDuplicateVar = firstDuplicate
+
+firstDuplicateLabel :: [Label] -> Maybe Label
+firstDuplicateLabel = firstDuplicate
+
+firstDuplicate :: Ord a => [a] -> Maybe a
+firstDuplicate = go Set.empty
+  where
+    go _ [] = Nothing
+    go seen (x:xs)
+      | Set.member x seen = Just x
+      | otherwise = go (Set.insert x seen) xs

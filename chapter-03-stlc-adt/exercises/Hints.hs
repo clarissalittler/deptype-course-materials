@@ -1,11 +1,8 @@
 {-# LANGUAGE LambdaCase #-}
 
-module Hints where
+module Hints (module Hints) where
 
 import Syntax
-import TypeCheck
-import Eval
-import qualified Data.Map.Strict as Map
 
 {-|
 CHAPTER 3 EXERCISE HINTS

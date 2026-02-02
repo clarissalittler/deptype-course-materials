@@ -53,10 +53,15 @@ This guide helps you navigate the course materials based on your background, goa
 → [Chapter 6: System F-omega](chapter-06-system-f-omega/)
 
 **"I want to learn dependent types"**
-→ [Chapter 7](chapter-07-dependent-types/) & [Chapter 8](chapter-08-full-dependent-types/)
+→ [Chapter 7](chapter-07-dependent-types/) then the staged series:
+[08a](chapter-08a-dependent-types-toy/),
+[08b](chapter-08b-dependent-types-core/),
+[08c](chapter-08c-dependent-types-eliminators/),
+[08d](chapter-08d-dependent-types-patterns/),
+[08e](chapter-08e-dependent-types-full/)
 
 **"I want to build a proof assistant"**
-→ Complete all chapters, focusing on [Chapter 8](chapter-08-full-dependent-types/)
+→ Complete all chapters, focusing on [Chapter 08e](chapter-08e-dependent-types-full/)
 
 ## Learning Paths
 

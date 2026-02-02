@@ -1,7 +1,6 @@
-module Solutions where
+module Solutions (module Solutions) where
 
 import Syntax
-import Eval
 
 -- | Helper to create lambda abstractions more easily
 lam :: Var -> Term -> Term

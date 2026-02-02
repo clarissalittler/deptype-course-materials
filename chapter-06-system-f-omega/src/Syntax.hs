@@ -158,6 +158,10 @@ substTyVar a s = \case
   App t1 t2 -> App (substTyVar a s t1) (substTyVar a s t2)
   TyAbs b k t
     | b == a -> TyAbs b k t
+    | b `Set.member` freeTyVars s ->
+        let b' = freshTyVar b (freeTyVars s `Set.union` freeTyVarsTerm t)
+            t' = substTyVar b (TyVar b') t
+        in TyAbs b' k (substTyVar a s t')
     | otherwise -> TyAbs b k (substTyVar a s t)
   TyAppTerm t ty -> TyAppTerm (substTyVar a s t) (substTyVarType a s ty)
   TmTrue -> TmTrue

@@ -63,7 +63,7 @@ evalStep = \case
   TmLet x t1 t2 | not (isValue t1) -> (\t' -> TmLet x t' t2) <$> evalStep t1
                 | otherwise -> Just $ substVar x t1 t2
   TmFold ty t | not (isValue t) -> TmFold ty <$> evalStep t | otherwise -> Nothing
-  TmUnfold _ t | not (isValue t) -> TmUnfold undefined <$> evalStep t
+  TmUnfold ty t | not (isValue t) -> TmUnfold ty <$> evalStep t
                | TmFold _ v <- t, isValue v -> Just v
                | otherwise -> Nothing
   _ -> Nothing

@@ -36,6 +36,7 @@ library
 executable denotational-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_denotational
   hs-source-dirs:
       app

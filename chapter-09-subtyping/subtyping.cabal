@@ -43,6 +43,7 @@ library
 executable subtyping-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_subtyping
   hs-source-dirs:
       app

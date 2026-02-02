@@ -669,18 +669,18 @@ fn concat<T, const N: usize, const M: usize>(
     [ACM DL](https://dl.acm.org/doi/10.1145/2699407) |
     [Google Scholar](https://scholar.google.com/scholar?cluster=14430234472936129425)
 
-## Next Chapter
+## Next Chapters
 
-In [Chapter 8](../chapter-08-full-dependent-types), we extend to **full dependent types** with:
+The dependent-types material now progresses through a staged series:
 
-- **Inductive Families**: Vec, Fin, List
-- **Pattern Matching**: Structural recursion
-- **Equality Types**: Propositional equality
-- **Universe Hierarchy**: Fix Type-in-Type
-- **Real Theorem Proving**: Verified programs!
+- [08a: Toy dependent types](../chapter-08a-dependent-types-toy/)
+- [08b: Bidirectional core](../chapter-08b-dependent-types-core/)
+- [08c: Sound eliminators](../chapter-08c-dependent-types-eliminators/)
+- [08d: Typed pattern matching](../chapter-08d-dependent-types-patterns/)
+- [08e: Full checker](../chapter-08e-dependent-types-full/)
 
-This is where dependent types truly shine—we'll prove properties about programs and write programs that carry their own correctness proofs!
+This sequence moves from the simplest possible checker to a logically sound implementation with a stronger normalization story and universe discipline.
 
 ---
 
-**Implementation Note**: This chapter uses Type-in-Type for pedagogical simplicity. Production systems use universe hierarchies to maintain consistency.
+**Implementation Note**: Early stages are intentionally permissive. The final stage includes a universe hierarchy and notes on why positivity checks are required for full consistency.

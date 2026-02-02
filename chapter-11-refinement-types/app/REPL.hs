@@ -157,7 +157,7 @@ handleSubtype input = do
   case parseSubtypeArgs (T.pack input) of
     Left err -> putStrLn err
     Right (t1, t2) ->
-      if isSubtype t1 t2
+      if isSubtype emptyContext t1 t2
         then putStrLn $ "  " ++ prettyType t1 ++ " <: " ++ prettyType t2 ++ "  ✓"
         else putStrLn $ "  " ++ prettyType t1 ++ " <: " ++ prettyType t2 ++ "  ✗"
 

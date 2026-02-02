@@ -33,26 +33,26 @@ step = \case
   TmPred (TmSucc v) | isValue v -> Just v
   TmPred t -> TmPred <$> step t
   TmIsZero TmZero -> Just TmTrue
-  TmIsZero (TmSucc _) -> Just TmFalse
+  TmIsZero (TmSucc v) | isValue v -> Just TmFalse
   TmIsZero t -> TmIsZero <$> step t
   TmPair t1 t2
     | not (isValue t1) -> TmPair <$> step t1 <*> pure t2
     | not (isValue t2) -> TmPair t1 <$> step t2
     | otherwise -> Nothing
-  TmFst (TmPair v1 _) | isValue v1 -> Just v1
+  TmFst (TmPair v1 v2) | isValue v1 && isValue v2 -> Just v1
   TmFst t -> TmFst <$> step t
-  TmSnd (TmPair _ v2) | isValue v2 -> Just v2
+  TmSnd (TmPair v1 v2) | isValue v1 && isValue v2 -> Just v2
   TmSnd t -> TmSnd <$> step t
   TmCons t1 t2
     | not (isValue t1) -> TmCons <$> step t1 <*> pure t2
     | not (isValue t2) -> TmCons t1 <$> step t2
     | otherwise -> Nothing
   TmIsNil TmNil -> Just TmTrue
-  TmIsNil (TmCons _ _) -> Just TmFalse
+  TmIsNil (TmCons v1 v2) | isValue v1 && isValue v2 -> Just TmFalse
   TmIsNil t -> TmIsNil <$> step t
-  TmHead (TmCons v _) -> Just v
+  TmHead (TmCons v1 v2) | isValue v1 && isValue v2 -> Just v1
   TmHead t -> TmHead <$> step t
-  TmTail (TmCons _ vs) -> Just vs
+  TmTail (TmCons v1 v2) | isValue v1 && isValue v2 -> Just v2
   TmTail t -> TmTail <$> step t
   _ -> Nothing
 

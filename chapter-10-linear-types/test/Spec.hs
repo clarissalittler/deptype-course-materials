@@ -6,7 +6,6 @@ import Syntax
 import TypeCheck
 import Eval
 import Parser
-import Pretty
 
 main :: IO ()
 main = hspec $ do
@@ -39,6 +38,19 @@ linearitySpec = describe "Linearity Checking" $ do
       case typeCheck (Lam "x" One TyNat (TmPair (Var "x") (Var "x"))) of
         Left (LinearVariableUsedTwice "x") -> True `shouldBe` True
         _ -> expectationFailure "Expected LinearVariableUsedTwice"
+
+    it "linear variable used in only one branch is error" $
+      -- λx :1 Nat. if true then x else 0
+      case typeCheck (Lam "x" One TyNat (TmIf TmTrue (Var "x") TmZero)) of
+        Left (LinearVariableUsedInBranch "x") -> True `shouldBe` True
+        _ -> expectationFailure "Expected LinearVariableUsedInBranch"
+
+    it "linear variable passed to unrestricted function is error" $
+      -- λy :1 Nat. (λx :ω Nat. x) y
+      let term = Lam "y" One TyNat (App (Lam "x" Many TyNat (Var "x")) (Var "y"))
+      in case typeCheck term of
+           Left (LinearVariableUsedTwice "y") -> True `shouldBe` True
+           _ -> expectationFailure "Expected LinearVariableUsedTwice"
 
   describe "Unrestricted variable usage" $ do
     it "unrestricted variable used once is OK" $
@@ -116,6 +128,10 @@ typeCheckSpec = describe "Type Checking" $ do
     it "bang of value" $
       typeCheck (TmBang TmZero) `shouldBe` Right (TyBang TyNat)
 
+    it "bang allows unrestricted variables" $
+      typeCheck (Lam "u" Many TyNat (TmBang (Var "u")))
+        `shouldBe` Right (TyFun Many TyNat (TyBang TyNat))
+
     it "let-bang makes variable unrestricted" $
       -- let !x = !0 in (x, x)
       let term = TmLetBang "x" (TmBang TmZero) (TmPair (Var "x") (Var "x"))
@@ -151,6 +167,11 @@ evalSpec = describe "Evaluation" $ do
     it "unrestricted function application" $
       eval (App (Lam "x" Many TyNat (TmPair (Var "x") (Var "x"))) TmZero)
         `shouldBe` TmPair TmZero TmZero
+
+  describe "Let" $ do
+    it "preserves multiplicity while stepping" $
+      evalStep (TmLet "x" Many (TmPred (TmSucc TmZero)) (Var "x"))
+        `shouldBe` Just (TmLet "x" Many TmZero (Var "x"))
 
   describe "Let-pair" $ do
     it "let-pair elimination" $
@@ -217,6 +238,9 @@ parserSpec = describe "Parser" $ do
     it "parses 0" $
       parseTerm "0" `shouldBe` Right TmZero
 
+    it "parses numeric literals" $
+      parseTerm "2" `shouldBe` Right (TmSucc (TmSucc TmZero))
+
     it "parses unit" $
       parseTerm "()" `shouldBe` Right TmUnit
 
@@ -225,6 +249,9 @@ parserSpec = describe "Parser" $ do
 
     it "parses bang" $
       parseTerm "!0" `shouldBe` Right (TmBang TmZero)
+
+    it "parses omega multiplicity" $
+      parseTerm "\\x:ω Nat. x" `shouldBe` Right (Lam "x" Many TyNat (Var "x"))
 
     it "parses linear lambda" $
       parseTerm "\\x :1 Nat. x"

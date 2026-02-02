@@ -683,11 +683,31 @@ deptype-course-materials/
 │   ├── exercises/                    # ✓ Complete solutions
 │   ├── test/                         # ✓ 39 tests
 │   └── README.md                     # ✓ Dependent types theory
-├── chapter-08-full-dependent-types/
-│   ├── src/                          # ✓ Universe hierarchy, equality types
+├── chapter-08a-dependent-types-toy/
+│   ├── src/                          # ✓ Toy dependent types (baseline)
 │   ├── exercises/                    # ✓ Complete solutions
-│   ├── test/                         # ✓ 41 tests
-│   └── README.md                     # ✓ Full dependent types, proof theory
+│   ├── test/                         # ✓ Tests for toy checker
+│   └── README.md                     # ✓ Intro & limitations
+├── chapter-08b-dependent-types-core/
+│   ├── src/                          # ✓ Bidirectional core + definitional equality
+│   ├── exercises/                    # ✓ Complete solutions
+│   ├── test/                         # ✓ Core checker tests
+│   └── README.md                     # ✓ Sound core rules
+├── chapter-08c-dependent-types-eliminators/
+│   ├── src/                          # ✓ Sound eliminators (Nat/Bool/Unit/Empty/J)
+│   ├── exercises/                    # ✓ Complete solutions
+│   ├── test/                         # ✓ Eliminator typing tests
+│   └── README.md                     # ✓ Eliminator rules
+├── chapter-08d-dependent-types-patterns/
+│   ├── src/                          # ✓ Typed patterns (non-dependent)
+│   ├── exercises/                    # ✓ Complete solutions
+│   ├── test/                         # ✓ Pattern typing tests
+│   └── README.md                     # ✓ Pattern typing & limits
+├── chapter-08e-dependent-types-full/
+│   ├── src/                          # ✓ NBE + universe discipline
+│   ├── exercises/                    # ✓ Complete solutions
+│   ├── test/                         # ✓ Full checker tests
+│   └── README.md                     # ✓ Full dependent types (notes on positivity)
 ├── chapter-09-subtyping/
 │   ├── src/                          # ✓ Subtyping, join/meet, records
 │   ├── exercises/                    # ✓ Complete exercises

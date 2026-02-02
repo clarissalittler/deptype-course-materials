@@ -43,6 +43,7 @@ library
 executable gradual-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_gradual_typing
   hs-source-dirs:
       app

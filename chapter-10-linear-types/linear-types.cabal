@@ -43,6 +43,7 @@ library
 executable linear-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_linear_types
   hs-source-dirs:
       app

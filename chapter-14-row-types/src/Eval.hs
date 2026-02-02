@@ -122,8 +122,8 @@ evalStep = \case
 
   TmRowAbs {} -> Nothing
 
-  TmRowApp t _
-    | not (isValue t) -> (\t' -> TmRowApp t' undefined) <$> evalStep t
+  TmRowApp t row
+    | not (isValue t) -> (\t' -> TmRowApp t' row) <$> evalStep t
     | TmRowAbs _ body <- t -> Just body
     | otherwise -> Nothing
 

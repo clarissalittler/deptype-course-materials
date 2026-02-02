@@ -8,31 +8,32 @@ import Infer
 import Eval
 import Parser
 import Pretty
+import Data.Text (Text)
 
 main :: IO ()
 main = hspec $ do
   describe "Constraint Generation" $ do
     it "generates no constraints for identity" $ do
-      let Right term = parseTerm "\\x. x"
+      term <- parseTermOrFail "\\x. x"
       case generateConstraints term of
         Right ([], _) -> return ()
         Right (cs, _) -> expectationFailure $ "Expected no constraints, got: " ++ show cs
         Left err -> expectationFailure $ show err
 
     it "generates Nat constraint for succ" $ do
-      let Right term = parseTerm "\\x. succ x"
+      term <- parseTermOrFail "\\x. succ x"
       case generateConstraints term of
         Right (cs, _) -> cs `shouldSatisfy` (not . null)
         Left err -> expectationFailure $ show err
 
     it "generates function constraint for application" $ do
-      let Right term = parseTerm "\\f. \\x. f x"
+      term <- parseTermOrFail "\\f. \\x. f x"
       case generateConstraints term of
         Right (cs, _) -> cs `shouldSatisfy` (not . null)
         Left err -> expectationFailure $ show err
 
     it "generates constraints for if expression" $ do
-      let Right term = parseTerm "\\x. \\y. if x then y else 0"
+      term <- parseTermOrFail "\\x. \\y. if x then y else 0"
       case generateConstraints term of
         Right (cs, _) -> cs `shouldSatisfy` (\l -> length l >= 2)
         Left err -> expectationFailure $ show err
@@ -99,7 +100,7 @@ main = hspec $ do
 
   describe "Type Inference - Basic" $ do
     it "infers identity function" $ do
-      let Right term = parseTerm "\\x. x"
+      term <- parseTermOrFail "\\x. x"
       case infer term of
         Right ty -> ty `shouldSatisfy` \t -> case t of
           TyArr (TyVar a) (TyVar b) -> a == b
@@ -107,27 +108,27 @@ main = hspec $ do
         Left err -> expectationFailure $ show err
 
     it "infers const function" $ do
-      let Right term = parseTerm "\\x. \\y. x"
+      term <- parseTermOrFail "\\x. \\y. x"
       case infer term of
         Right ty -> do
           prettyType ty `shouldSatisfy` \s -> "->" `elem` words s
         Left err -> expectationFailure $ show err
 
     it "infers boolean functions" $ do
-      let Right term = parseTerm "\\x. if x then false else true"
+      term <- parseTermOrFail "\\x. if x then false else true"
       infer term `shouldBe` Right (TyArr TyBool TyBool)
 
     it "infers function application" $ do
-      let Right term = parseTerm "(\\x. x) true"
+      term <- parseTermOrFail "(\\x. x) true"
       infer term `shouldBe` Right TyBool
 
   describe "Type Inference - Let Polymorphism" $ do
     it "allows polymorphic let bindings" $ do
-      let Right term = parseTerm "let id = \\x. x in (id true, id 0)"
+      term <- parseTermOrFail "let id = \\x. x in (id true, id 0)"
       infer term `shouldBe` Right (TyProd TyBool TyNat)
 
     it "generalizes let-bound variables" $ do
-      let Right term = parseTerm "let const = \\x. \\y. x in const"
+      term <- parseTermOrFail "let const = \\x. \\y. x in const"
       case infer term of
         Right ty -> ty `shouldSatisfy` \t -> case t of
           TyArr _ (TyArr _ _) -> True
@@ -135,7 +136,7 @@ main = hspec $ do
         Left err -> expectationFailure $ show err
 
     it "does not generalize lambda-bound variables" $ do
-      let Right term = parseTerm "\\f. (f true, f 0)"
+      term <- parseTermOrFail "\\f. (f true, f 0)"
       case infer term of
         Left (SolveErr (UnificationFail TyBool TyNat)) -> return ()
         Left err -> expectationFailure $ "Wrong error: " ++ show err
@@ -143,12 +144,12 @@ main = hspec $ do
 
   describe "Type Inference - Pairs" $ do
     it "infers pair types" $ do
-      let Right term = parseTerm "(true, 0)"
+      term <- parseTermOrFail "(true, 0)"
       infer term `shouldBe` Right (TyProd TyBool TyNat)
 
     it "infers fst/snd correctly" $ do
-      let Right fstTerm = parseTerm "\\p. fst p"
-      let Right sndTerm = parseTerm "\\p. snd p"
+      fstTerm <- parseTermOrFail "\\p. fst p"
+      sndTerm <- parseTermOrFail "\\p. snd p"
       case (infer fstTerm, infer sndTerm) of
         (Right ty1, Right ty2) -> do
           ty1 `shouldSatisfy` \t -> case t of
@@ -162,14 +163,14 @@ main = hspec $ do
 
   describe "Type Inference - Lists" $ do
     it "infers polymorphic empty list" $ do
-      let Right term = parseTerm "[]"
+      term <- parseTermOrFail "[]"
       case infer term of
         Right (TyList (TyVar _)) -> return ()
         Right ty -> expectationFailure $ "Expected polymorphic list, got: " ++ prettyType ty
         Left err -> expectationFailure $ show err
 
     it "infers homogeneous lists" $ do
-      let Right nilTerm = parseTerm "[]"
+      nilTerm <- parseTermOrFail "[]"
       case infer nilTerm of
         Right (TyList _) -> return ()
         Right ty -> expectationFailure $ "Expected list type, got: " ++ prettyType ty
@@ -177,7 +178,7 @@ main = hspec $ do
 
   describe "Type Inference - Complex Examples" $ do
     it "compose function" $ do
-      let Right term = parseTerm "\\f. \\g. \\x. f (g x)"
+      term <- parseTermOrFail "\\f. \\g. \\x. f (g x)"
       case infer term of
         Right ty -> ty `shouldSatisfy` \t -> case t of
           TyArr _ (TyArr _ (TyArr _ _)) -> True
@@ -185,7 +186,7 @@ main = hspec $ do
         Left err -> expectationFailure $ show err
 
     it "map-like function" $ do
-      let Right term = parseTerm "\\f. \\x. f x"
+      term <- parseTermOrFail "\\f. \\x. f x"
       case infer term of
         Right (TyArr (TyArr t1 t2) (TyArr t3 t4)) ->
           (t1 == t3 && t2 == t4) `shouldBe` True
@@ -194,7 +195,7 @@ main = hspec $ do
 
   describe "Full Inference Process" $ do
     it "shows constraints for simple term" $ do
-      let Right term = parseTerm "\\x. succ x"
+      term <- parseTermOrFail "\\x. succ x"
       case inferType term of
         Right (cs, _, ty) -> do
           cs `shouldSatisfy` (not . null)
@@ -202,9 +203,9 @@ main = hspec $ do
         Left err -> expectationFailure $ show err
 
     it "shows constraints for complex term" $ do
-      let Right term = parseTerm "\\f. \\g. \\x. f (g x)"
+      term <- parseTermOrFail "\\f. \\g. \\x. f (g x)"
       case inferType term of
-        Right (cs, subst, ty) -> do
+        Right (cs, _subst, ty) -> do
           cs `shouldSatisfy` (not . null)
           ty `shouldSatisfy` \t -> case t of
             TyArr _ (TyArr _ (TyArr _ _)) -> True
@@ -213,15 +214,15 @@ main = hspec $ do
 
   describe "Evaluation" $ do
     it "evaluates identity application" $ do
-      let Right term = parseTerm "(\\x. x) true"
+      term <- parseTermOrFail "(\\x. x) true"
       eval term `shouldBe` TmTrue
 
     it "evaluates let bindings" $ do
-      let Right term = parseTerm "let x = true in x"
+      term <- parseTermOrFail "let x = true in x"
       eval term `shouldBe` TmTrue
 
     it "evaluates polymorphic let" $ do
-      let Right term = parseTerm "let id = \\x. x in id true"
+      term <- parseTermOrFail "let id = \\x. x in id true"
       eval term `shouldBe` TmTrue
 
   describe "Parser" $ do
@@ -250,3 +251,10 @@ main = hspec $ do
     it "pretty prints terms" $ do
       pretty (Lam "x" (Var "x")) `shouldBe` "λx. x"
       pretty (App (Var "f") (Var "x")) `shouldBe` "f x"
+
+-- | Parse a term or fail the test with a readable error.
+parseTermOrFail :: Text -> IO Term
+parseTermOrFail input =
+  case parseTerm input of
+    Left err -> expectationFailure err >> fail "parseTerm failed"
+    Right t -> return t

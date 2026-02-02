@@ -43,6 +43,7 @@ library
 executable recursive-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_recursive_types
   hs-source-dirs:
       app

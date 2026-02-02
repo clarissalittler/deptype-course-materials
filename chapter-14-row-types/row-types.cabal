@@ -43,6 +43,7 @@ library
 executable row-repl
   main-is: Main.hs
   other-modules:
+      REPL
       Paths_row_types
   hs-source-dirs:
       app

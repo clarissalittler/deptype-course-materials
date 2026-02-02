@@ -21,6 +21,7 @@ module TypeCheck
 import Syntax
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map)
+import qualified Data.Set as Set
 import Control.Monad (foldM)
 
 -- | Type context for value-level variables
@@ -45,6 +46,25 @@ lookupMod m (_, mctx, _) = Map.lookup m mctx
 -- | Look up a type name
 lookupType :: TypeName -> ModuleContext -> Maybe Type
 lookupType t (_, _, tctx) = Map.lookup t tctx
+
+-- | Resolve named types using the current type context.
+-- Falls back to the original name if it is unbound or recursive.
+resolveType :: ModuleContext -> Type -> Type
+resolveType ctx = go Set.empty
+  where
+    go seen ty = case ty of
+      TyNamed name
+        | name `Set.member` seen -> TyNamed name
+        | otherwise -> case lookupType name ctx of
+            Just ty' -> go (Set.insert name seen) ty'
+            Nothing -> TyNamed name
+      TyArr t1 t2 -> TyArr (go seen t1) (go seen t2)
+      TyRecord fields -> TyRecord (Map.map (go seen) fields)
+      _ -> ty
+
+-- | Type equivalence with named type expansion.
+equivType :: ModuleContext -> Type -> Type -> Bool
+equivType ctx t1 t2 = resolveType ctx t1 == resolveType ctx t2
 
 -- | Extend context with a variable
 extendVar :: Var -> Type -> ModuleContext -> ModuleContext
@@ -73,9 +93,9 @@ typeOf ctx = \case
   App t1 t2 -> do
     ty1 <- typeOf ctx t1
     ty2 <- typeOf ctx t2
-    case ty1 of
+    case resolveType ctx ty1 of
       TyArr tyArg tyRes ->
-        if tyArg == ty2
+        if equivType ctx tyArg ty2
         then Right tyRes
         else Left $ "Type mismatch in application: expected " ++ show tyArg ++ ", got " ++ show ty2
       _ -> Left $ "Expected function type, got " ++ show ty1
@@ -85,11 +105,11 @@ typeOf ctx = \case
 
   TmIf t1 t2 t3 -> do
     ty1 <- typeOf ctx t1
-    case ty1 of
+    case resolveType ctx ty1 of
       TyBool -> do
         ty2 <- typeOf ctx t2
         ty3 <- typeOf ctx t3
-        if ty2 == ty3
+        if equivType ctx ty2 ty3
         then Right ty2
         else Left $ "Branches have different types: " ++ show ty2 ++ " vs " ++ show ty3
       _ -> Left "Condition must be Bool"
@@ -98,19 +118,19 @@ typeOf ctx = \case
 
   TmSucc t -> do
     ty <- typeOf ctx t
-    case ty of
+    case resolveType ctx ty of
       TyNat -> Right TyNat
       _ -> Left $ "succ expects Nat, got " ++ show ty
 
   TmPred t -> do
     ty <- typeOf ctx t
-    case ty of
+    case resolveType ctx ty of
       TyNat -> Right TyNat
       _ -> Left $ "pred expects Nat, got " ++ show ty
 
   TmIsZero t -> do
     ty <- typeOf ctx t
-    case ty of
+    case resolveType ctx ty of
       TyNat -> Right TyBool
       _ -> Left $ "iszero expects Nat, got " ++ show ty
 
@@ -120,7 +140,7 @@ typeOf ctx = \case
 
   TmProj t label -> do
     ty <- typeOf ctx t
-    case ty of
+    case resolveType ctx ty of
       TyRecord fields ->
         case Map.lookup label fields of
           Nothing -> Left $ "Record does not have field: " ++ label
@@ -136,7 +156,7 @@ typeOf ctx = \case
 
 -- | Resolve a module path to a signature
 resolveModPath :: ModuleContext -> [ModName] -> Either String Signature
-resolveModPath ctx [] = Left "Empty module path"
+resolveModPath _ [] = Left "Empty module path"
 resolveModPath ctx [m] =
   case lookupMod m ctx of
     Nothing -> Left $ "Unbound module: " ++ m
@@ -147,7 +167,7 @@ resolveModPath ctx (m:ms) = do
     Just s -> Right s
   case lookupModSpec (head ms) sig of
     Nothing -> Left $ "Module " ++ m ++ " does not have submodule: " ++ head ms
-    Just subsig -> resolveModPath ctx ms
+    Just _ -> resolveModPath ctx ms
 
 -- | Look up a value specification in a signature
 lookupValSpec :: Var -> Signature -> Maybe Type
@@ -198,7 +218,7 @@ typeCheckMod ctx = \case
     -- Type check the functor
     sigf <- typeCheckMod ctx mf
     -- Type check the argument
-    sigarg <- typeCheckMod ctx marg
+    _ <- typeCheckMod ctx marg
 
     -- For functor application, we need to extract the parameter signature
     -- and result signature from the functor, then check that sigarg matches
@@ -220,7 +240,7 @@ checkDecl (Sig specs, ctx) decl = case decl of
   ValDecl x ty t -> do
     -- Type check the term
     ty' <- typeOf ctx t
-    if ty == ty'
+    if equivType ctx ty ty'
     then let spec = ValSpec x ty
              ctx' = extendVar x ty ctx
          in Right (Sig (specs ++ [spec]), ctx')

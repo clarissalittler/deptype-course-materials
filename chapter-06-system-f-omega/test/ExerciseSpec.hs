@@ -33,16 +33,16 @@ spec = do
       kinding Map.empty listType `shouldBe` Right (KArr KStar KStar)
 
     it "2b. List Bool has kind *" $ do
-      let listBool = TyApp listType TyBool
-      kinding Map.empty listBool `shouldBe` Right KStar
+      let listBoolTy = TyApp listType TyBool
+      kinding Map.empty listBoolTy `shouldBe` Right KStar
 
     it "2c. Nil has polymorphic type" $ do
-      typeOf Map.empty Map.empty nil `shouldSatisfy` isRight
-      let Right nilTy = typeOf Map.empty Map.empty nil
-      -- Should be ∀A::*. ∀R::*. ...
-      case nilTy of
-        TyForall "A" KStar (TyForall "R" KStar _) -> return ()
-        _ -> expectationFailure $ "nil should have nested forall type, got: " ++ show nilTy
+      case typeOf Map.empty Map.empty nil of
+        Right nilTy ->
+          case nilTy of
+            TyForall "A" KStar (TyForall "R" KStar _) -> return ()
+            _ -> expectationFailure $ "nil should have nested forall type, got: " ++ show nilTy
+        Left err -> expectationFailure $ "nil should type check, got: " ++ show err
 
     it "2d. Cons has correct type" $ do
       -- Note: cons uses (TyApp listType (TyVar "A")) which requires type normalization
@@ -68,8 +68,8 @@ spec = do
         Right (KArr KStar (KArr KStar KStar))
 
     it "4b. Either Bool Nat has kind *" $ do
-      let eitherBoolNat = TyApp (TyApp eitherType TyBool) TyNat
-      kinding Map.empty eitherBoolNat `shouldBe` Right KStar
+      let eitherBoolNatTy = TyApp (TyApp eitherType TyBool) TyNat
+      kinding Map.empty eitherBoolNatTy `shouldBe` Right KStar
 
     it "4c. Left has correct type" $ do
       typeOf Map.empty Map.empty leftInj `shouldSatisfy` isRight
@@ -103,11 +103,6 @@ spec = do
 
     it "7b. Type sum" $ do
       kinding Map.empty tySum `shouldBe` Right (KArr KStar (KArr KStar KStar))
-
--- Helper functions
-isListType :: Type -> Bool
-isListType (TyApp t _) = t == listType
-isListType _ = False
 
 isRight :: Either a b -> Bool
 isRight (Right _) = True

@@ -9,10 +9,13 @@ module Eval
     -- * Single-step reduction
   , step
   , stepNormal
+  , stepCallByName
   , stepCallByValue
     -- * Normalization
   , normalize
+  , normalizeWith
   , normalizeSteps
+  , normalizeStepsWith
   , isValue
   , isNormalForm
   ) where
@@ -34,18 +37,28 @@ isNormalForm = \case
   App t1 t2 -> isNormalForm t1 && isNormalForm t2
 
 -- | Call-by-value single-step evaluation
--- Reduces the leftmost-innermost redex
+-- Reduces the leftmost-innermost redex (does not reduce under lambdas)
 stepCallByValue :: Term -> Maybe Term
 stepCallByValue = \case
   Var _ -> Nothing
-  Lam x t -> Lam x <$> stepCallByValue t
-  App (Lam x t) v
-    | isValue v -> Just (substVar x v t)  -- β-reduction
-    | otherwise -> App (Lam x t) <$> stepCallByValue v  -- Evaluate argument first
-  App t1 t2 ->
-    case stepCallByValue t1 of
-      Just t1' -> Just (App t1' t2)
-      Nothing -> App t1 <$> stepCallByValue t2
+  Lam _ _ -> Nothing
+  App t1 t2
+    | not (isValue t1) ->
+        (\t1' -> App t1' t2) <$> stepCallByValue t1
+    | Lam x t <- t1, isValue t2 ->
+        Just (substVar x t2 t)  -- β-reduction
+    | Lam _ _ <- t1 ->
+        App t1 <$> stepCallByValue t2  -- Evaluate argument after function
+    | otherwise -> Nothing
+
+-- | Call-by-name single-step evaluation
+-- Reduces the leftmost-outermost redex without reducing under lambdas
+stepCallByName :: Term -> Maybe Term
+stepCallByName = \case
+  Var _ -> Nothing
+  Lam _ _ -> Nothing
+  App (Lam x t) t2 -> Just (substVar x t2 t)  -- β-reduction
+  App t1 t2 -> App <$> stepCallByName t1 <*> pure t2
 
 -- | Normal order reduction (leftmost-outermost redex)
 -- This is guaranteed to find a normal form if one exists
@@ -53,7 +66,7 @@ stepNormal :: Term -> Maybe Term
 stepNormal = \case
   Var _ -> Nothing
   Lam x t -> Lam x <$> stepNormal t
-  App (Lam x t) t2 -> Just (substVar x t2 t)  -- β-reduction (eager)
+  App (Lam x t) t2 -> Just (substVar x t2 t)  -- β-reduction
   App t1 t2 ->
     case stepNormal t1 of
       Just t1' -> Just (App t1' t2)
@@ -79,11 +92,14 @@ normalize = normalizeWith 1000 stepNormal
 
 -- | Normalize and return all intermediate steps
 normalizeSteps :: Term -> [Term]
-normalizeSteps = go (1000 :: Int)
+normalizeSteps = normalizeStepsWith 1000 stepNormal
+
+-- | Normalize with a specific step function and collect steps
+normalizeStepsWith :: Int -> (Term -> Maybe Term) -> Term -> [Term]
+normalizeStepsWith maxSteps stepFn = go maxSteps
   where
-    go :: Int -> Term -> [Term]
-    go 0 _ = []
-    go n t = case stepNormal t of
+    go 0 t = [t]
+    go n t = case stepFn t of
       Nothing -> [t]
       Just t' -> t : go (n - 1) t'
 
@@ -95,7 +111,7 @@ evalNormal t = case normalize t of
 
 -- | Evaluate using call-by-name
 evalCallByName :: Term -> Term
-evalCallByName t = case normalizeWith 1000 stepNormal t of
+evalCallByName t = case normalizeWith 1000 stepCallByName t of
   Just t' -> t'
   Nothing -> t
 

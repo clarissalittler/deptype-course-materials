@@ -1,7 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 
 import Test.Hspec
-import Test.QuickCheck
 import qualified Data.Map.Strict as Map
 
 import Syntax
@@ -285,6 +284,9 @@ parserSpec = describe "Parser" $ do
     it "parses 0" $
       parseTerm "0" `shouldBe` Right TmZero
 
+    it "parses numeric literals" $
+      parseTerm "2" `shouldBe` Right (TmSucc (TmSucc TmZero))
+
     it "parses lambda" $
       parseTerm "\\x:Bool. x" `shouldBe` Right (Lam "x" TyBool (Var "x"))
 
@@ -334,3 +336,7 @@ prettySpec = describe "Pretty Printer" $ do
 
     it "prints natural numbers" $
       prettyTerm (TmSucc (TmSucc TmZero)) `shouldBe` "2"
+
+    it "prints ascription with parentheses" $
+      prettyTerm (TmAscribe (Lam "x" TyBool (Var "x")) TyTop)
+        `shouldBe` "(λx:Bool. x) as Top"

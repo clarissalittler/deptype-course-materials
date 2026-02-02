@@ -119,10 +119,10 @@ evalStep = \case
 
   -- Ascription: strip it when the term is a value
   -- (t as T) → t  when t is a value
-  TmAscribe t _ ->
+  TmAscribe t ty ->
     if isValue t
       then Just t
-      else TmAscribe <$> evalStep t <*> pure undefined
+      else TmAscribe <$> evalStep t <*> pure ty
 
 -- | Evaluate the first non-value field in a record
 evalFirstField :: [(Label, Term)] -> Maybe [(Label, Term)]

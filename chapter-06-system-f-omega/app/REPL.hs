@@ -11,8 +11,7 @@ import Eval
 import qualified Data.Map.Strict as Map
 import Data.Map.Strict (Map)
 import System.IO (hFlush, stdout)
-import Control.Monad (when, unless)
-import Data.List (isPrefixOf, intercalate)
+import Control.Monad (when)
 import Control.Exception (catch, IOException)
 import GHC.IO.Exception (IOErrorType(..))
 import System.IO.Error (ioeGetErrorType)
@@ -204,7 +203,7 @@ handleNormalize input state = do
 
 -- | Handle :step command
 handleStep :: String -> REPLState -> IO ()
-handleStep input state = do
+handleStep input _state = do
   case parseTerm input of
     Left err -> putStrLn $ "Parse error: " ++ err
     Right t -> do

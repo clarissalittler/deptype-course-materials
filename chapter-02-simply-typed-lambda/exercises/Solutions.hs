@@ -54,12 +54,19 @@ termToInt _ = Nothing
 
 -- Exercise 1a: Addition
 -- add m n = if iszero m then n else succ (add (pred m) n)
+--
+-- NOTE (important for students):
+-- This definition uses *Haskell recursion* to build a term. STLC itself
+-- does NOT have general recursion (no fixpoint), so you cannot define
+-- add purely inside the language without extending it. We use meta-level
+-- recursion here only to construct examples for small inputs.
 addNat :: Term -> Term -> Term
 addNat m n = TmIf (TmIsZero m) n (TmSucc (addNat (TmPred m) n))
 
 -- Helper: Create an addition function as a lambda term
 -- λm:Nat. λn:Nat. <recursive addition>
--- Since STLC doesn't have fix, we'll use direct recursion for small examples
+-- Since STLC doesn't have fix, this is *not* a valid closed STLC term.
+-- It is a meta-level (Haskell) definition that unrolls for small examples.
 exampleAdd :: Term
 exampleAdd = Lam "m" TyNat $ Lam "n" TyNat $
   TmIf (TmIsZero (Var "m"))
@@ -68,11 +75,16 @@ exampleAdd = Lam "m" TyNat $ Lam "n" TyNat $
 
 -- Exercise 1b: Multiplication by repeated addition
 -- mult m n = if iszero m then 0 else add n (mult (pred m) n)
+--
+-- NOTE: This also uses meta-level recursion for term construction,
+-- not an in-language STLC definition.
 multNat :: Term -> Term -> Term
 multNat m n = TmIf (TmIsZero m) TmZero (addNat n (multNat (TmPred m) n))
 
 -- Exercise 1c: Less than
 -- lt m n = if iszero m then (not (iszero n)) else (if iszero n then false else lt (pred m) (pred n))
+--
+-- NOTE: Meta-level recursion (not definable in plain STLC).
 ltNat :: Term -> Term -> Term
 ltNat m n = TmIf (TmIsZero m)
                  (TmIf (TmIsZero n) TmFalse TmTrue)
@@ -80,6 +92,8 @@ ltNat m n = TmIf (TmIsZero m)
 
 -- Exercise 1d: Equality
 -- eq m n = if iszero m then iszero n else (if iszero n then false else eq (pred m) (pred n))
+--
+-- NOTE: Meta-level recursion (not definable in plain STLC).
 eqNat :: Term -> Term -> Term
 eqNat m n = TmIf (TmIsZero m)
                  (TmIsZero n)

@@ -106,9 +106,9 @@ evalStep = \case
     | otherwise -> Just $ substVar x t1 t2
 
   -- Ascription (just strip it if value)
-  TmAscribe t _
+  TmAscribe t ty
     | isValue t -> Just t
-    | otherwise -> (\t' -> TmAscribe t' undefined) <$> evalStep t
+    | otherwise -> (\t' -> TmAscribe t' ty) <$> evalStep t
 
 -- | Evaluate arithmetic operations
 evalArith :: ArithOp -> Term -> Term -> Maybe Term

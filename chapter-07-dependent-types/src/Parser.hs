@@ -49,7 +49,10 @@ varP = identifier
 termP :: Parser Term
 termP = makeExprParser termAtom termOps
   where
-    termOps = [[InfixL (return App)]]
+    termOps =
+      [ [InfixL (return App)]
+      , [InfixR (piArrow <$ (symbol "->" <|> symbol "→"))]
+      ]
 
     termAtom = pairP
            <|> parens termP
@@ -64,9 +67,12 @@ termP = makeExprParser termAtom termOps
            <|> (symbol "Bool" >> return Bool)
            <|> (symbol "true" >> return TmTrue)
            <|> (symbol "false" >> return TmFalse)
+           <|> (symbol "0" >> return Zero)
            <|> (symbol "zero" >> return Zero)
            <|> succP
            <|> (Var <$> varP)
+
+    piArrow a b = Pi "_" a b
 
     -- λ(x:A). t
     lambdaP = do

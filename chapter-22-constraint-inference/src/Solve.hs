@@ -13,6 +13,7 @@ module Solve
 
 import Syntax
 import Constraint
+import qualified Data.Map.Strict as Map
 import qualified Data.Set as Set
 import Control.Monad.Except
 
@@ -65,11 +66,6 @@ bindVar a t
   | t == TyVar a = return emptySubst
   | a `Set.member` freeTyVars t = throwError $ OccursCheck a t
   | otherwise = return $ Map.singleton a t
-  where
-    Map = Data.Map.Strict
-
--- Import needed for Map.singleton
-import qualified Data.Map.Strict as Map
 
 -- | Most general unifier
 -- This is just an alias for unify for compatibility

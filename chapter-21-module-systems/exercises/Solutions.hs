@@ -6,7 +6,31 @@ This module contains reference solutions for all exercises in EXERCISES.md.
 These are meant to be studied AFTER attempting the exercises yourself.
 -}
 
-module Solutions where
+module Solutions
+  ( exercise1
+  , exercise1Sig
+  , exercise2
+  , exercise3Sig
+  , exercise3
+  , exercise4
+  , exercise5
+  , exercise5Test
+  , exercise6
+  , exercise7
+  , exercise8
+  , exercise9
+  , exercise10Sig
+  , exercise10
+  , functorF
+  , functorG
+  , exercise11
+  , exercise12
+  , exercise13
+  , exercise14
+  , exercise15
+  , checkExercise
+  , runAllExercises
+  ) where
 
 import Syntax
 import TypeCheck

@@ -9,6 +9,7 @@ module Pretty
 
 import Syntax
 import Semantic
+import NbE (quote)
 
 -- | Pretty print a term
 prettyTerm :: [String] -> Term -> String
@@ -84,6 +85,3 @@ prettyNe = prettyNe'
 -- | Pretty print a semantic value (for debugging)
 prettyVal :: Int -> Val -> String
 prettyVal l v = prettyNf l (quote l v)
-  where
-    quote :: Int -> Val -> Nf
-    quote = undefined  -- Would need to import from NbE
